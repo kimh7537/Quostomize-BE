@@ -15,6 +15,7 @@ public class CardApplication extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "application_id")
     private Long applicationId;
 
     @Column(name = "residence_number", length = 13, nullable = false)

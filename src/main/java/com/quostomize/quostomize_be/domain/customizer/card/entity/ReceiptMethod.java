@@ -13,8 +13,9 @@ public class ReceiptMethod extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "receipt_type_id")
+    private Long receiptTypeId;
 
-    @Column (name = "method_name", nullable = false)
+    @Column (name = "method_name", length = 20, nullable = false)
     private String methodName;
 }

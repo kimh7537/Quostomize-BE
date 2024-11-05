@@ -4,9 +4,11 @@ import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.Card;
 import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor
 @Table(name = "customers")
 public class Customer extends BaseTimeEntity {
@@ -14,15 +16,13 @@ public class Customer extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
-    private Long customer_id;
+    private Long customerId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    
-    // TODO: card id 수정 필요
-    @OneToOne
-    @JoinColumn(name = "id")
-    private Card card;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "card_id")
+    private Card card;
 }

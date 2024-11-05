@@ -9,27 +9,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "stocks_accounts")
-public class StocksAccount extends BaseTimeEntity {
+@Table(name = "stock_accounts")
+public class StockAccount extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stock_account_id")
     private Long stockAccountId;
 
-    @Column(name = "stock_account_number" )
+    @Column(name = "stock_account_number", nullable = false)
     private Long stockAccountNumber;
 
-    @Column (name = "stock_account_name")
+    @Column(name = "stock_account_name", length = 30, nullable = false)
     private String stockAccountName;
 
-    @Column(name = "stock_account")
-    private Boolean stockAccount;
+    @Column(name = "stock_account_active", nullable = false)
+    private Boolean stockAccountActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
-
-
 }

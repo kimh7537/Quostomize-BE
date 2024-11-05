@@ -11,24 +11,23 @@ import java.net.URI;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "stocks_info")
-public class StocksInfo extends BaseTimeEntity {
+@Table(name = "stock_informations")
+public class StockInformation extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stock_information_id")
     private Long stockInformationId;
 
-    @Column(name = "stock_code")
+    @Column(name = "stock_code", nullable = false)
     private Integer stockCode;
 
-    @Column(name = "stock_name")
+    @Column(name = "stock_name", length = 30, nullable = false)
     private String stockName;
 
-    @Column(name="stock_present_price")
+    @Column(name = "stock_present_price", nullable = false)
     private Integer stockPresentPrice;
 
-    @Column(name = "stock_image")
-    private URI stockImage;
-
+    @Column(name = "stock_image", nullable = false)
+    private String stockImage;
 }

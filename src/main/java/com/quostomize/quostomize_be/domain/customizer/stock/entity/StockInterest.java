@@ -9,26 +9,22 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "stocks_interests")
-public class StocksInterest extends BaseTimeEntity {
+@Table(name = "stock_interests")
+public class StockInterest extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stock_interest_id")
     private Long stockInterestId;
 
+    @Column(name = "priority")
+    private Integer priority;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stock_information_id")
+    private StockInformation stockInformation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stock_information_id")
-    private StocksInfo stocksInfo;
-
-    @Column(name = "priority")
-    private Integer priority;
-
-
 }

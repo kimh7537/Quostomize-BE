@@ -9,19 +9,19 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "stocks_holdings")
-public class StocksHolding extends BaseTimeEntity {
+@Table(name = "stock_holdings")
+public class StockHolding extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stock_holdings")
-    private Long stockHoldings;
+    @Column(name = "stock_holding_id")
+    private Long stockHoldingId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stock_account_id")
-    private StocksAccount stocksAccount;
+    @JoinColumn(name = "stock_account_id", nullable = false)
+    private StockAccount stockAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stock_information_id")
-    private StocksInfo stocksInfo;
+    @JoinColumn(name = "stock_information_id", nullable = false)
+    private StockInformation stockInformation;
 }

@@ -8,26 +8,27 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table (name = "terms")
+@Table(name = "terms")
 public class Term extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "term_id")
+    private Long termId;
 
-    @Column (name = "term_title", nullable = false)
-    String termTitle;
+    @Column(name = "term_title", nullable = false)
+    private String termTitle;
 
-    @Column (name = "term_context", nullable = false)
-    String termContext;
+    @Column(name = "term_context", columnDefinition = "TEXT", nullable = false)
+    private String termContext;
 
-    @Column (name = "is_essential", nullable = false)
-    String isEssential;
+    @Column(name = "is_essential", nullable = false)
+    private String isEssential;
 
-    @Column (name = "is_agree", nullable = false)
-    String isAgree;
+    @Column(name = "is_agree", nullable = false)
+    private String isAgree;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
 }

@@ -19,52 +19,54 @@ public class Card extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "card_id")
+    private Long cardId;
 
-    @Column (name = "name", nullable = false)
+    @Column(name = "name", length = 17, nullable = false)
     private String name;
 
-    @Column (name = "card_number", nullable = false)
+    @Column(name = "card_number", length = 16, nullable = false)
     private String cardNumber;
 
-    @Column (name = "brand", nullable = false)
+    @Column(name = "brand", nullable = false)
     private Long brand;
 
-    @Column (name = "is_app_card", nullable = false)
+    @Column(name = "is_app_card", nullable = false)
     private Boolean isAppCard;
 
-    @Column (name = "is_foreign_blocked", nullable = false)
+    @Column(name = "is_foreign_blocked", nullable = false)
     private Boolean isForeignBlocked;
 
-    @Column (name = "is_transport", nullable = false)
+    @Column(name = "is_transport", nullable = false)
     private Boolean isTransport;
 
-    @Column (name = "card_password", nullable = false)
+    @Column(name = "card_password", length = 4, nullable = false)
     private String cardPassword;
 
-    @Column (name = "point", nullable = false)
+    @Column(name = "point", nullable = false)
     private Long point;
 
-    @Column (name = "cvc", nullable = false)
+    @Column(name = "cvc", length = 3, nullable = false)
     private String cvc;
 
-    @Column (name = "expire_at", nullable = false)
+    @Column(name = "expire_at", nullable = false)
+    @Temporal(TemporalType.DATE)
     private LocalDate expireAt;
 
-    @Column (name = "lotto", nullable = false)
+    @Column(name = "lotto", nullable = false)
     private Boolean lotto;
 
-    @Column (name = "payback", nullable = false)
+    @Column(name = "payback", nullable = false)
     private Boolean payback;
 
-    @Column (name = "piece_stock", nullable = false)
+    @Column(name = "piece_stock", nullable = false)
     private Boolean pieceStock;
 
-    @OneToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "receipt_type_id")
-    private ReceiptMethod receiptType;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receipt_type_id", nullable = false)
+    private ReceiptMethod receiptMethod;
 
-    @OneToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "color_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "color_id", nullable = false)
     private Color color;
 }
