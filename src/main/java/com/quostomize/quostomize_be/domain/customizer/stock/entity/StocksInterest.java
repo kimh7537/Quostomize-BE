@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.domain.customizer.stock;
+package com.quostomize.quostomize_be.domain.customizer.stock.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
