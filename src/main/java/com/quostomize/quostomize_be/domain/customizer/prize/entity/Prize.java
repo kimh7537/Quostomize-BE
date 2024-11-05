@@ -23,4 +23,5 @@ public class Prize extends BaseTimeEntity {
 
     @Column(name = "lotto_date")
     private LocalDate lottoDate;
+
 }
