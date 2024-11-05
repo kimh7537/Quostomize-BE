@@ -24,4 +24,5 @@ public class Customer extends BaseTimeEntity {
     @OneToOne
     @JoinColumn(name = "id")
     private Card card;
+
 }
