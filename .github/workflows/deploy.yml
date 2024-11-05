@@ -29,7 +29,7 @@ jobs:
         with:
           files: ${{ env.BASE_RESOURCE_PATH }}
         env:
-          spring.datasource.url: ${{ secrets.DB_URI }}
+          spring.datasource.url: ${{ secrets.DB_URL }}
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
           #        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
