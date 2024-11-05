@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.net.URI;
+
 
 @Entity
 @Getter
@@ -26,7 +28,7 @@ public class StocksInfo extends BaseTimeEntity {
     @Column(name="stock_present_price")
     private Integer stockPresentPrice;
 
-//    @Column(name = "stock_image")
-//    private URI stockImage;
+    @Column(name = "stock_image")
+    private URI stockImage;
 
 }

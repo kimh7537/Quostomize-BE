@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.stock;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
+import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +17,10 @@ public class StocksInterest extends BaseTimeEntity {
     @Column(name = "stock_interest_id")
     private Long stockInterestId;
 
-    // 고객 정보
-//    @ManyToOne(fetch = FetchType.LAZY)
-////    @JoinColumn(name = "customer_id")
-////    private Customer customer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,11 +29,6 @@ public class StocksInterest extends BaseTimeEntity {
 
     @Column(name = "priority")
     private Integer priority;
-
-
-
-
-
 
 
 }

@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.stock;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
+import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +26,9 @@ public class StocksAccount extends BaseTimeEntity {
     @Column(name = "stock_account")
     private Boolean stockAccount;
 
-    // 고객 정보
-//    @JoinColumn(name = "customer_id")
-//    private Customer customer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 
 
