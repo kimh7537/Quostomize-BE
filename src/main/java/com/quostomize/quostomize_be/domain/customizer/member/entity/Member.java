@@ -46,4 +46,5 @@ public class Member extends BaseTimeEntity {
     @Column(name = "secondary_auth_code", length = 6, nullable = false)
     private String secondary_auth_code;
 
+
 }
