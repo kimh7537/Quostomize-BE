@@ -1,5 +1,6 @@
 package com.quostomize.quostomize_be.domain.customizer.card.entity;
 
+import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table (name = "terms")
-public class Term {
+public class Term extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
