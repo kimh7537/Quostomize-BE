@@ -52,13 +52,13 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Docker 이미지 생성
-        run: docker build -t cicd-server .
+        run: docker build -t quostomize-ecr .
 
       - name: Docker 이미지에 Tag 붙이기
-        run: docker tag cicd-server ${{ steps.login-ecr.outputs.registry }}/cicd-server:latest
+        run: docker tag quostomize-ecr ${{ steps.login-ecr.outputs.registry }}/quostomize-ecr:latest
 
       - name: ECR에 Docker 이미지 Push하기
-        run: docker push ${{ steps.login-ecr.outputs.registry }}/cicd-server:latest
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/quostomize-ecr:latest
 
       - name: SSH로 EC2에 접속하기
         uses: appleboy/ssh-action@v1.0.3
@@ -68,7 +68,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            docker stop cicd-server || true
-            docker rm cicd-server || true
-            docker pull ${{ steps.login-ecr.outputs.registry }}/cicd-server:latest
-            docker run -d --name cicd-server -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/cicd-server:latest
+            docker stop quostomize-ecr || true
+            docker rm quostomize-ecr || true
+            docker pull ${{ steps.login-ecr.outputs.registry }}/quostomize-ecr:latest
+            docker run -d --name quostomize-ecr -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/quostomize-ecr:latest
