@@ -13,5 +13,5 @@ spring:
         format_sql: true
   data:
     redis:
-      host: quostomize-cache-server.c7xwkf.ng.0001.apn2.cache.amazonaws.com
+      host: ${REDIS_URL}
       port: 6379
