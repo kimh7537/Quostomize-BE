@@ -69,7 +69,7 @@ jobs:
             echo "No parent branch found. Using default branch (dev)."
             PARENT_BRANCH="origin/dev"
           fi
-          git checkout $PARENT_BRANCH
+          git checkout "$PARENT_BRANCH"
 
       - name: Create branch with Ticket number
         run: |
