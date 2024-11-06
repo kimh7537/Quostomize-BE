@@ -69,8 +69,8 @@ jobs:
           # 모든 원격 브랜치 정보를 가져옵니다
           git fetch --all
           
-          # 원격 브랜치 중에서 JIRA 키로 시작하는 브랜치를 찾습니다
-          PARENT_BRANCH=$(git branch -r | grep "origin/${PARENT_KEY}-" | head -n 1 | sed 's/origin\///')
+          # awk를 사용하여 정확한 브랜치 이름 추출
+          PARENT_BRANCH=$(git branch -r | grep "origin/${PARENT_KEY}-" | head -n 1 | awk '{print $1}')
           
           if [ -z "$PARENT_BRANCH" ]; then
             echo "No parent branch found. Using default branch (dev)."
@@ -78,21 +78,12 @@ jobs:
             git checkout -b dev origin/dev
           else
             echo "Found parent branch: $PARENT_BRANCH"
-            # 공백을 제거하고 'origin/' 제거
-            BRANCH_NAME=$(echo "$PARENT_BRANCH" | sed 's/^origin\///')
+            # origin/ 제거
+            BRANCH_NAME=$(echo "$PARENT_BRANCH" | sed 's#^origin/##')
+            echo "Creating branch from: $BRANCH_NAME"
             # 원격 브랜치를 로컬 브랜치로 체크아웃
             git checkout -b "$BRANCH_NAME" "$PARENT_BRANCH"
           fi
-
-
-      - name: Create branch with Ticket number
-        run: |
-          ISSUE_NUMBER="${{ steps.create.outputs.issue }}"
-          ISSUE_TITLE="${{ steps.issue-parser.outputs.issueparser_branch }}"
-          BRANCH_NAME="${ISSUE_NUMBER}-$(echo ${ISSUE_TITLE} | sed 's/ /-/g')"
-          git checkout $PARENT_BRANCH
-          git checkout -b "${BRANCH_NAME}"
-          git push origin "${BRANCH_NAME}"
 
       - name: Update issue title
         uses: actions-cool/issues-helper@v3
