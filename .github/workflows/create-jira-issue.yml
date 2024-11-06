@@ -61,18 +61,23 @@ jobs:
       - name: Log created issue
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
 
-      - name: Checkout develop code
-        uses: actions/checkout@v4
-        with:
-          ref: dev
-
-      - name: Fetch Parent Branch
+      - name: Checkout parent branch
+        if: steps.issue-parser.outputs.issueparser_parentKey != ''
         run: |
-          # 상위 이슈 키로부터 관련 브랜치를 가져오는 API 호출 로직을 작성합니다.
-          PARENT_BRANCH=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/git/refs/heads" | jq -r '.[] | select(.ref | contains("${{ steps.issue-parser.outputs.issueparser_parentKey }}")) | .ref' | sed 's/refs\/heads\///')
+          PARENT_BRANCH=$(git branch -r | grep "${{ steps.issue-parser.outputs.issueparser_parentKey }}" | head -n 1 | awk '{print $1}')
+          if [ -z "$PARENT_BRANCH" ]; then
+            echo "No parent branch found. Using default branch (dev)."
+            PARENT_BRANCH="origin/dev"
+          fi
+          git checkout $PARENT_BRANCH
 
-          echo "parent_branch=$PARENT_BRANCH" >> $GITHUB_ENV
+      - name: Create branch with Ticket number
+        run: |
+          ISSUE_NUMBER="${{ steps.create.outputs.issue }}"
+          ISSUE_TITLE="${{ steps.issue-parser.outputs.issueparser_branch }}"
+          BRANCH_NAME="${ISSUE_NUMBER}-$(echo ${ISSUE_TITLE} | sed 's/ /-/g')"
+          git checkout -b "${BRANCH_NAME}" "${PARENT_BRANCH:-dev}"
+          git push origin "${BRANCH_NAME}"
 
       - name: Create branch with Ticket number
         run: |
