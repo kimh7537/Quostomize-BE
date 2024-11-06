@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
-        info = @Info(title = "Squadus 프로젝트 API 명세서",
-                description = "Squadus API 명세서",
+        info = @Info(title = "커스텀 프로젝트 API 명세서",
+                description = "커스텀 API 명세서",
                 version = "v1")
 )
 @Configuration
@@ -42,6 +42,8 @@ public class SwaggerConfig {
 //                        .name(refreshHeaderName));
 
         return new OpenAPI()
+                .addServersItem(new Server().url("https://quostomize.site").description("운영 서버"))
+                .addServersItem(new Server().url("http://13.124.43.174:8080").description("AWS Server"))
                 .addServersItem(new Server().url("http://localhost:8080").description("Local Server"))
 //                .addSecurityItem(securityRequirement)
 //                .components(components);
