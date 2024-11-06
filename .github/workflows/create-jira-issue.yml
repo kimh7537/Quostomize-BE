@@ -65,14 +65,28 @@ jobs:
         if: steps.issue-parser.outputs.issueparser_parentKey != ''
         run: |
           PARENT_KEY="${{ steps.issue-parser.outputs.issueparser_parentKey }}"
+          
+          # 모든 원격 브랜치 정보를 가져옵니다
+          git fetch --all
+          
+          # 원격 브랜치 중에서 JIRA 키로 시작하는 브랜치를 찾습니다
           PARENT_BRANCH=$(git branch -r | grep "origin/${PARENT_KEY}-" | head -n 1 | sed 's/origin\///')
+          
           if [ -z "$PARENT_BRANCH" ]; then
             echo "No parent branch found. Using default branch (dev)."
+            git fetch origin dev
             PARENT_BRANCH="dev"
           else
             echo "Found parent branch: $PARENT_BRANCH"
           fi
-          git checkout "$PARENT_BRANCH"
+          
+          if git show-ref --verify --quiet "refs/remotes/origin/$PARENT_BRANCH"; then
+            git checkout "$PARENT_BRANCH"
+          else
+            echo "Branch $PARENT_BRANCH does not exist. Falling back to dev branch."
+            git fetch origin dev
+            git checkout dev || git checkout -b dev origin/dev
+          fi
 
 
       - name: Create branch with Ticket number
