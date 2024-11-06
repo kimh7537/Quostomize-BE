@@ -64,20 +64,16 @@ jobs:
       - name: Checkout parent branch
         if: steps.issue-parser.outputs.issueparser_parentKey != ''
         run: |
-          PARENT_BRANCH=$(git branch -r | grep "${{ steps.issue-parser.outputs.issueparser_parentKey }}" | head -n 1 | awk '{print $1}')
+          PARENT_KEY="${{ steps.issue-parser.outputs.issueparser_parentKey }}"
+          PARENT_BRANCH=$(git branch -r | grep "origin/${PARENT_KEY}-" | head -n 1 | sed 's/origin\///')
           if [ -z "$PARENT_BRANCH" ]; then
             echo "No parent branch found. Using default branch (dev)."
-            PARENT_BRANCH="origin/dev"
+            PARENT_BRANCH="dev"
+          else
+            echo "Found parent branch: $PARENT_BRANCH"
           fi
           git checkout "$PARENT_BRANCH"
 
-      - name: Create branch with Ticket number
-        run: |
-          ISSUE_NUMBER="${{ steps.create.outputs.issue }}"
-          ISSUE_TITLE="${{ steps.issue-parser.outputs.issueparser_branch }}"
-          BRANCH_NAME="${ISSUE_NUMBER}-$(echo ${ISSUE_TITLE} | sed 's/ /-/g')"
-          git checkout -b "${BRANCH_NAME}" "${PARENT_BRANCH:-dev}"
-          git push origin "${BRANCH_NAME}"
 
       - name: Create branch with Ticket number
         run: |
