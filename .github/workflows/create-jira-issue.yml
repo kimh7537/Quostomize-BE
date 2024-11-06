@@ -61,17 +61,41 @@ jobs:
       - name: Log created issue
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
 
-      - name: Checkout develop code
-        uses: actions/checkout@v4
-        with:
-          ref: dev
+      - name: Checkout parent branch
+        if: steps.issue-parser.outputs.issueparser_parentKey != ''
+        run: |
+          PARENT_KEY="${{ steps.issue-parser.outputs.issueparser_parentKey }}"
+          
+          # 모든 원격 브랜치 정보를 가져옵니다
+          git fetch --all
+          
+          # awk를 사용하여 정확한 브랜치 이름 추출
+          PARENT_BRANCH=$(git branch -r | grep "origin/${PARENT_KEY}-" | head -n 1 | awk '{print $1}')
+          
+          if [ -z "$PARENT_BRANCH" ]; then
+            echo "No parent branch found. Using default branch (dev)."
+            git fetch origin dev
+            git checkout -b dev origin/dev
+          else
+            echo "Found parent branch: $PARENT_BRANCH"
+            # origin/ 제거
+            BRANCH_NAME=$(echo "$PARENT_BRANCH" | sed 's#^origin/##')
+            echo "Creating branch from: $BRANCH_NAME"
+            # 원격 브랜치를 로컬 브랜치로 체크아웃
+            git checkout -b "$BRANCH_NAME" "$PARENT_BRANCH"
+          fi
 
       - name: Create branch with Ticket number
         run: |
           ISSUE_NUMBER="${{ steps.create.outputs.issue }}"
-          ISSUE_TITLE="${{ steps.issue-parser.outputs.issueparser_branch}}"
+          ISSUE_TITLE="${{ steps.issue-parser.outputs.issueparser_branch }}"
           BRANCH_NAME="${ISSUE_NUMBER}-$(echo ${ISSUE_TITLE} | sed 's/ /-/g')"
+          
+          # 현재 체크아웃된 브랜치(부모 브랜치)에서 새 브랜치 생성
+          echo "Creating new branch: $BRANCH_NAME"
           git checkout -b "${BRANCH_NAME}"
+          
+          # 새 브랜치를 원격 저장소에 푸시
           git push origin "${BRANCH_NAME}"
 
       - name: Update issue title
