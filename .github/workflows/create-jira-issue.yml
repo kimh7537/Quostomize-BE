@@ -75,17 +75,13 @@ jobs:
           if [ -z "$PARENT_BRANCH" ]; then
             echo "No parent branch found. Using default branch (dev)."
             git fetch origin dev
-            PARENT_BRANCH="dev"
+            git checkout -b dev origin/dev
           else
             echo "Found parent branch: $PARENT_BRANCH"
-          fi
-          
-          if git show-ref --verify --quiet "refs/remotes/origin/$PARENT_BRANCH"; then
-            git checkout "$PARENT_BRANCH"
-          else
-            echo "Branch $PARENT_BRANCH does not exist. Falling back to dev branch."
-            git fetch origin dev
-            git checkout dev || git checkout -b dev origin/dev
+            # PARENT_BRANCH에서 'origin/' 제거
+            BRANCH_NAME=$(echo "$PARENT_BRANCH" | sed 's/^[[:space:]]*origin\///')
+            # 원격 브랜치를 로컬 브랜치로 체크아웃
+            git checkout -b "$BRANCH_NAME" "$PARENT_BRANCH"
           fi
 
 
