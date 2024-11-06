@@ -78,8 +78,8 @@ jobs:
             git checkout -b dev origin/dev
           else
             echo "Found parent branch: $PARENT_BRANCH"
-            # PARENT_BRANCH에서 'origin/' 제거
-            BRANCH_NAME=$(echo "$PARENT_BRANCH" | sed 's/^[[:space:]]*origin\///')
+            # 공백을 제거하고 'origin/' 제거
+            BRANCH_NAME=$(echo "$PARENT_BRANCH" | sed 's/^origin\///')
             # 원격 브랜치를 로컬 브랜치로 체크아웃
             git checkout -b "$BRANCH_NAME" "$PARENT_BRANCH"
           fi
