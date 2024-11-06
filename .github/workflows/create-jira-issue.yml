@@ -85,6 +85,19 @@ jobs:
             git checkout -b "$BRANCH_NAME" "$PARENT_BRANCH"
           fi
 
+      - name: Create branch with Ticket number
+        run: |
+          ISSUE_NUMBER="${{ steps.create.outputs.issue }}"
+          ISSUE_TITLE="${{ steps.issue-parser.outputs.issueparser_branch }}"
+          BRANCH_NAME="${ISSUE_NUMBER}-$(echo ${ISSUE_TITLE} | sed 's/ /-/g')"
+          
+          # 현재 체크아웃된 브랜치(부모 브랜치)에서 새 브랜치 생성
+          echo "Creating new branch: $BRANCH_NAME"
+          git checkout -b "${BRANCH_NAME}"
+          
+          # 새 브랜치를 원격 저장소에 푸시
+          git push origin "${BRANCH_NAME}"
+
       - name: Update issue title
         uses: actions-cool/issues-helper@v3
         with:
