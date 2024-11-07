@@ -1,7 +1,6 @@
 package com.quostomize.quostomize_be.domain.customizer.registration.service;
 
 
-import com.quostomize.quostomize_be.api.registration.dto.MemberFormDto;
 import com.quostomize.quostomize_be.api.registration.dto.MemberRequestDto;
 import com.quostomize.quostomize_be.api.registration.dto.MemberResponseDto;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
@@ -20,7 +19,7 @@ public class MemberServiceImpl implements MemberService {
 
     public void validateDuplicateMember(MemberRequestDto memberRequestDto) {
         // 이메일 중복 확인
-        Member findMemberByEmail = memberRepository.findByEmail(memberRequestDto.email());
+        Member findMemberByEmail = memberRepository.findByMemberEmail(memberRequestDto.memberEmail());
         if (findMemberByEmail != null) {
             throw new AppException(ErrorCode.EMAIL_DUPLICATED);
         }
@@ -54,14 +53,16 @@ public class MemberServiceImpl implements MemberService {
 
     private Member createMember(MemberRequestDto memberRequestDto) {
         Member member = new Member();
-        member.setMemberName(memberRequestDto.name());
-        member.setMemberEmail(memberRequestDto.email());
+        member.setMemberName(memberRequestDto.memberName());
+        member.setMemberEmail(memberRequestDto.memberEmail());
         member.setMemberLoginId(memberRequestDto.memberLoginId());
         member.setMemberPassword(memberRequestDto.memberPassword()); // 비밀번호 해시 처리 passwordEncoder.encode(memberFormDto.getMemberPassword())
+        member.setResidenceNumber(memberRequestDto.residenceNumber());
         member.setZipCode(memberRequestDto.zipCode());
         member.setMemberAddress(memberRequestDto.memberAddress());
         member.setMemberDetailAddress(memberRequestDto.memberDetailAddress());
         member.setMemberPhoneNumber(memberRequestDto.memberPhoneNumber());
+        member.setSecondaryAuthCode(memberRequestDto.secondaryAuthCode());
         return member;
     }
 
