@@ -22,7 +22,8 @@ public class CardBenefitService {
     public List<CardBenefitResponse> findAll() {
         // TODO: 하드코딩된 customer 정보 변경 필요
         Long cardId = 1L;
-        Set<CardBenefit> cardBenefits = cardBenefitRepository.findCardBenefitsByCardCardId(cardId);
+        boolean isActive = true;
+        Set<CardBenefit> cardBenefits = cardBenefitRepository.findCardBenefitsByCardCardIdAndIsActive(cardId, isActive);
         return cardBenefits.stream().map(CardBenefitResponse::from).collect(Collectors.toList());
     }
 }

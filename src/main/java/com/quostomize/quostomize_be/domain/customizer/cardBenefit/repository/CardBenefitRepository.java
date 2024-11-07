@@ -8,5 +8,5 @@ import java.util.Set;
 
 @Repository
 public interface CardBenefitRepository extends JpaRepository<CardBenefit, Long> {
-    Set<CardBenefit> findCardBenefitsByCardCardId(Long cardId);
+    Set<CardBenefit> findCardBenefitsByCardCardIdAndIsActive(Long cardId, boolean isActive);
 }
