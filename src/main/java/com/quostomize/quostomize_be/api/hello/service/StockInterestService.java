@@ -25,14 +25,14 @@ public class StockInterestService {
         stockInterestRepository.DeleteStockById(id);
     }
 
-//    // 위시리스트 중 해당 id에 해당 특정항목을 특정 순서(order)로 변경합니다.
-//    public void switchStock(int order){
-//        if(order == 3) {
-//            stockInterestRepository.switchStock1(3, 3);
-//        } else{
-//            stockInterestRepository.switchStock2(2);
-//            stockInterestRepository.switchStock3(4);
-//        }
-//
-//    }
+    // 위시리스트 중 해당 id에 해당 특정항목을 특정 순서(order)로 변경합니다.
+    public void switchStock(int order){
+        if(order == 3) {
+            stockInterestRepository.switchStock1(3, 3);
+        } else{
+            stockInterestRepository.switchStock2(2);
+            stockInterestRepository.switchStock3(4);
+        }
+
+    }
 }

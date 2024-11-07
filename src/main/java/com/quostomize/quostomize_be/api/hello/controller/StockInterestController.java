@@ -26,9 +26,9 @@ public class StockInterestController {
     public void deleteStock(@RequestParam Long id){
         stockInterestService.deleteStock(id);
     }
-//
-//    @PatchMapping("/api/stocks/select/change-rank")
-//    public void switchingStock(@RequestParam int order){
-//        stockInterestService.switchStock(order);
-//}
+
+    @PatchMapping("/api/stocks/select/change-rank")
+    public void switchingStock(@RequestParam int order){
+        stockInterestService.switchStock(order);
+}
 }
