@@ -20,11 +20,11 @@ public class StockInterestService {
         return allStockInterestDto;
     }
 
-//    // 위시리스트 중 해당 id에 해당하는 특정항목을 제거합니다.
-//    public void deleteStock(Long id){
-//        stockInterestRepository.DeleteStockById(id);
-//    }
-//
+    // 위시리스트 중 해당 id에 해당하는 특정항목을 제거합니다.
+    public void deleteStock(Long id){
+        stockInterestRepository.DeleteStockById(id);
+    }
+
 //    // 위시리스트 중 해당 id에 해당 특정항목을 특정 순서(order)로 변경합니다.
 //    public void switchStock(int order){
 //        if(order == 3) {

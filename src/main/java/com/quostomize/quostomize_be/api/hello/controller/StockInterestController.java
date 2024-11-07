@@ -22,10 +22,10 @@ public class StockInterestController {
         return ResponseEntity.ok(stockWishList);
     }
 
-//    @DeleteMapping("/api/stocks/select")
-//    public void deleteStock(@RequestParam Long id){
-//        stockInterestService.deleteStock(id);
-//    }
+    @DeleteMapping("/api/stocks/select")
+    public void deleteStock(@RequestParam Long id){
+        stockInterestService.deleteStock(id);
+    }
 //
 //    @PatchMapping("/api/stocks/select/change-rank")
 //    public void switchingStock(@RequestParam int order){
