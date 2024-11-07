@@ -1,6 +1,6 @@
 package com.quostomize.quostomize_be.api.hello.service;
 
-import com.quostomize.quostomize_be.api.hello.repository.StockInterestRepository;
+import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInterestRepository;
 import com.quostomize.quostomize_be.api.hello.dto.StockInterestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.api.hello.repository;
+package com.quostomize.quostomize_be.domain.customizer.stock.repository;
 
 import com.quostomize.quostomize_be.api.hello.dto.StockInterestDto;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInterest;
