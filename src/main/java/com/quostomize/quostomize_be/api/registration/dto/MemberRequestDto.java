@@ -1,0 +1,32 @@
+package com.quostomize.quostomize_be.api.registration.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+
+@Getter
+@Setter
+public record MemberRequestDto(
+        @NotBlank(message = "이름은 필수 입력 값입니다.") String name,
+        @NotBlank(message = "이메일은 필수 입력 값입니다.") @Email(message = "이메일 형식으로 입력해주세요.") String email,
+        @NotBlank String memberLoginId,
+        @NotBlank @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.") String memberPassword,
+        @NotBlank @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.") String memberPasswordConfirm,
+        @NotBlank String residenceNumber,
+        @NotBlank String zipCode,
+        @NotBlank String memberAddress,
+        @NotBlank(message = "상세주소를 입력하세요.") String memberDetailAddress,
+        @NotBlank String memberPhoneNumber,
+        @NotBlank String secondaryAuthCode,
+        @NotBlank String secondaryAuthCodeConfirm
+) {}
+
+
+// 관리자 추가하면 필요할 수도 있음.
+//    public enum Role {
+//        USER, ADMIN
+//    }
+//    @Enumerated(EnumType.STRING)
+//    private Role role;//
