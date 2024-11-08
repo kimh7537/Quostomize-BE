@@ -22,14 +22,17 @@ public class Card extends BaseTimeEntity {
     @Column(name = "card_id")
     private Long cardId;
 
-    @Column(name = "name", length = 17, nullable = false)
+    @Column(name = "card_name", length = 17, nullable = false)
     private String cardName;
 
     @Column(name = "card_number", length = 16, nullable = false)
     private String cardNumber;
 
-    @Column(name = "brand", nullable = false)
-    private Long cardBrand;
+    @Column(name = "card_brand", nullable = false)
+    private int cardBrand;
+
+    @Column(name = "card_color", nullable = false)
+    private int cardColor;
 
     @Column(name = "is_app_card", nullable = false)
     private Boolean isAppCard;
@@ -65,8 +68,4 @@ public class Card extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receipt_type_id", nullable = false)
     private ReceiptMethod receiptMethod;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "color_id", nullable = false)
-    private Color color;
 }

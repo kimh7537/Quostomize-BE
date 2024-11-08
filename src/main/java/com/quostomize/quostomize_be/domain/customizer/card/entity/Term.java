@@ -23,10 +23,10 @@ public class Term extends BaseTimeEntity {
     private String termContext;
 
     @Column(name = "is_essential", nullable = false)
-    private String isEssential;
+    private Boolean isEssential;
 
     @Column(name = "is_agree", nullable = false)
-    private String isAgree;
+    private Boolean isAgree;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
