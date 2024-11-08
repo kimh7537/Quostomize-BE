@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "members")
+@Table(name = "members",
+        uniqueConstraints = {@UniqueConstraint(name = "MEMBER_EMAIL_MEMBER_LOGIN_ID_RESIDENCE_NUMBER_MEMBER_PHONE_NUMBER_UNIQUE",
+                columnNames = {"MEMBER_EMAIL", "MEMBER_LOGIN_ID", "RESIDENCE_NUMBER", "MEMBER_PHONE_NUMBER"})})
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -34,10 +36,10 @@ public class Member extends BaseTimeEntity {
     @Column(name = "zip_code", length = 10, nullable = false)
     private String zipCode;
 
-    @Column(name = "member_address", nullable = false)
+    @Column(name = "member_address", length = 100, nullable = false)
     private String memberAddress;
 
-    @Column(name = "member_detail_address", nullable = false)
+    @Column(name = "member_detail_address", length = 100, nullable = false)
     private String memberDetailAddress;
 
     @Column(name = "member_phone_number", length = 20, nullable = false)
