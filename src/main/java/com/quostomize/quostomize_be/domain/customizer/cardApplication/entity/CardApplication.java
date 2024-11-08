@@ -18,7 +18,7 @@ public class CardApplication extends BaseTimeEntity {
     @Column(name = "application_id")
     private Long applicationId;
 
-    @Column(name = "residence_number", length = 13, nullable = false)
+    @Column(name = "residence_number", length = 20, nullable = false)
     private String residenceNumber;
 
     @Column(name = "applicant_name", length = 40, nullable = false)
@@ -42,10 +42,10 @@ public class CardApplication extends BaseTimeEntity {
     @Column(name = "phone_number", length = 20, nullable = false)
     private String phoneNumber;
 
-    @Column(name = "home_address", length = 100)
+    @Column(name = "home_address", length = 100, nullable = false)
     private String homeAddress;
 
-    @Column(name = "home_detail_address", length = 100)
+    @Column(name = "home_detail_address", length = 100, nullable = false)
     private String homeDetailAddress;
 
     @OneToOne(fetch = FetchType.LAZY)
