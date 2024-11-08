@@ -49,7 +49,7 @@ public class CardApplication extends BaseTimeEntity {
     private String homeDetailAddress;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", nullable = false)
+    @JoinColumn(name = "card_id")
     private Card card;
 
     @Builder
