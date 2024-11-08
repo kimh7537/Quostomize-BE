@@ -29,6 +29,6 @@ public class Term extends BaseTimeEntity {
     private Boolean isAgree;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
+    @JoinColumn(name = "card_id", nullable = false)
     private Card card;
 }
