@@ -21,8 +21,15 @@ public class StockInterestService {
     }
 
     // 위시리스트 중 해당 id에 해당하는 특정항목을 제거합니다.
-    public void deleteStock(Long id){
-        stockInterestRepository.DeleteStockById(id);
+    public void deleteStock(int order){
+
+        if(order == 1){
+        stockInterestRepository.DeleteStockById(order);
+        stockInterestRepository.switchStockDeleteOrder1();
+        } else {
+            stockInterestRepository.DeleteStockById(order);
+            stockInterestRepository.switchStockDeleteOrder2();
+        }
     }
 
     // 위시리스트 중 해당 id에 해당 특정항목을 특정 순서(order)로 변경합니다.
