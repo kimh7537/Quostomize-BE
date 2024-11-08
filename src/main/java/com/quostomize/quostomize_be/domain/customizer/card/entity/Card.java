@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "cards")
+@Table(name = "cards", uniqueConstraints = {@UniqueConstraint(name = "CARD_NUMBER_UNIQUE", columnNames = {"CARD_NUMBER"})})
 public class Card extends BaseTimeEntity {
 
     @Id
@@ -43,17 +43,16 @@ public class Card extends BaseTimeEntity {
     @Column(name = "is_transport", nullable = false)
     private Boolean isTransport;
 
-    @Column(name = "card_password", length = 4, nullable = false)
+    @Column(name = "card_password", length = 255, nullable = false)
     private String cardPassword;
 
     @Column(name = "point", nullable = false)
     private Long point;
 
-    @Column(name = "cvc", length = 3, nullable = false)
-    private String cvc;
+    @Column(name = "cvc_number", length = 255, nullable = false)
+    private String cvcNumber;
 
     @Column(name = "expire_at", nullable = false)
-    @Temporal(TemporalType.DATE)
     private LocalDate expireAt;
 
     @Column(name = "is_lotto", nullable = false)
