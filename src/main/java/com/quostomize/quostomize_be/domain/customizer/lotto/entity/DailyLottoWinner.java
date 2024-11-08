@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.domain.customizer.prize.entity;
+package com.quostomize.quostomize_be.domain.customizer.lotto.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
@@ -11,13 +11,13 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "prizes")
-public class Prize extends BaseTimeEntity {
+@Table(name = "daily_lotto_winners")
+public class DailyLottoWinner extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "prize_id")
-    private Long prizeId;
+    @Column(name = "daily_lotto_winner_id")
+    private Long dailyLottoWinnerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
@@ -25,5 +25,4 @@ public class Prize extends BaseTimeEntity {
 
     @Column(name = "lotto_date", nullable = false)
     private LocalDate lottoDate;
-
 }
