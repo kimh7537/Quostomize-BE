@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity;
+package com.quostomize.quostomize_be.domain.customizer.benefit.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.BenefitCommonCode;
@@ -33,6 +33,6 @@ public class CardBenefit extends BaseTimeEntity {
     private BenefitCommonCode upperCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lower_category_id", nullable = true)
+    @JoinColumn(name = "lower_category_id")
     private BenefitCommonCode lowerCategory;
 }
