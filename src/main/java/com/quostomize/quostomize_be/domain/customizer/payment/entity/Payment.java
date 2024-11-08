@@ -8,7 +8,6 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Builder
 @Table(name = "payments")
 public class Payment extends BaseTimeEntity {
     @Id
@@ -25,4 +24,11 @@ public class Payment extends BaseTimeEntity {
 
     @Column(name="business_registration_number")
     String businessRegistrationNumber;
+
+    @Builder
+    public Payment(Card card, String products, String businessRegistrationNumber) {
+        this.card = card;
+        this.products = products;
+        this.businessRegistrationNumber = businessRegistrationNumber;
+    }
 }
