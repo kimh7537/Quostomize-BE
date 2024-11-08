@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "benefit_common_code")
+@Table(name = "benefit_common_codes")
 public class BenefitCommonCode extends BaseTimeEntity {
 
     @Id
