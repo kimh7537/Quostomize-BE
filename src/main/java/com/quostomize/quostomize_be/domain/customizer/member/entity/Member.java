@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "members",
-        uniqueConstraints = {@UniqueConstraint(name = "MEMBER_NAME_MEMBER_LOGIN_ID_RESIDENCE_NUMBER_MEMBER_PHONE_NUMBER_UNIQUE",
-                columnNames = {"MEMBER_NAME", "MEMBER_LOGIN_ID", "RESIDENCE_NUMBER", "MEMBER_PHONE_NUMBER"})})
+        uniqueConstraints = {@UniqueConstraint(name = "MEMBER_EMAIL_MEMBER_LOGIN_ID_RESIDENCE_NUMBER_MEMBER_PHONE_NUMBER_UNIQUE",
+                columnNames = {"MEMBER_EMAIL", "MEMBER_LOGIN_ID", "RESIDENCE_NUMBER", "MEMBER_PHONE_NUMBER"})})
 public class Member extends BaseTimeEntity {
 
     @Id
