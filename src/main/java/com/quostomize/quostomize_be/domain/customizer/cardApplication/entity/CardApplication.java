@@ -18,7 +18,7 @@ public class CardApplication extends BaseTimeEntity {
     @Column(name = "application_id")
     private Long applicationId;
 
-    @Column(name = "residence_number", length = 20, nullable = false)
+    @Column(name = "residence_number", nullable = false)
     private String residenceNumber;
 
     @Column(name = "applicant_name", length = 40, nullable = false)

@@ -29,10 +29,10 @@ public class Card extends BaseTimeEntity {
     private String cardNumber;
 
     @Column(name = "card_brand", nullable = false)
-    private Integer cardBrand;
+    private int cardBrand;
 
     @Column(name = "card_color", nullable = false)
-    private Integer cardColor;
+    private int cardColor;
 
     @Column(name = "is_app_card", nullable = false)
     private Boolean isAppCard;
