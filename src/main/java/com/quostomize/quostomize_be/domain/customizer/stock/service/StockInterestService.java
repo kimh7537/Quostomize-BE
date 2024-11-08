@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.api.hello.service;
+package com.quostomize.quostomize_be.domain.customizer.stock.service;
 
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInterestRepository;
 import com.quostomize.quostomize_be.api.hello.dto.StockInterestDto;
@@ -28,10 +28,11 @@ public class StockInterestService {
     // 위시리스트 중 해당 id에 해당 특정항목을 특정 순서(order)로 변경합니다.
     public void switchStock(int order){
         if(order == 3) {
-            stockInterestRepository.switchStock1(3, 3);
+            // 3순위를 1순위로 변경, 1순위 2순위로 변경, 2순위를 3순위로 변경
+            stockInterestRepository.switchStock1(3);
         } else{
+            // 2순위를 1순위로 변경, 1순위를 2순위로 변경
             stockInterestRepository.switchStock2(2);
-            stockInterestRepository.switchStock3(4);
         }
 
     }
