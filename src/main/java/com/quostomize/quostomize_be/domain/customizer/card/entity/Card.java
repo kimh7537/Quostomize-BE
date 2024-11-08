@@ -43,13 +43,13 @@ public class Card extends BaseTimeEntity {
     @Column(name = "is_transport", nullable = false)
     private Boolean isTransport;
 
-    @Column(name = "card_password", length = 255, nullable = false)
+    @Column(name = "card_password", nullable = false)
     private String cardPassword;
 
     @Column(name = "point", nullable = false)
     private Long point;
 
-    @Column(name = "cvc_number", length = 255, nullable = false)
+    @Column(name = "cvc_number", nullable = false)
     private String cvcNumber;
 
     @Column(name = "expire_at", nullable = false)
