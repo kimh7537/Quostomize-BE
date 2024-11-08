@@ -15,8 +15,8 @@ public record MemberRequestDto(
         @NotBlank String memberAddress,
         @NotBlank(message = "상세주소를 입력하세요.") String memberDetailAddress,
         @NotBlank String memberPhoneNumber,
-        @NotBlank String secondaryAuthCode,
-        @NotBlank String secondaryAuthCodeConfirm
+        @NotBlank @Length(min = 6, max = 6, message = "2차 인증번호 6자리를 입력해주세요.") String secondaryAuthCode,
+        @NotBlank @Length(min = 6, max = 6, message = "2차 인증번호 6자리를 입력해주세요.") String secondaryAuthCodeConfirm
 ) {}
 
 
