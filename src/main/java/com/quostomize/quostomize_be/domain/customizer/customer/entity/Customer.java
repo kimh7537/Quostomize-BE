@@ -19,10 +19,10 @@ public class Customer extends BaseTimeEntity {
     private Long customerId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
+    @JoinColumn(name = "card_id", nullable = false)
     private Card card;
 }
