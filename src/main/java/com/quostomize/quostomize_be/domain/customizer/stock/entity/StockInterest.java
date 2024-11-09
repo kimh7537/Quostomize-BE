@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.domain.customizer.stock.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
+import com.quostomize.quostomize_be.domain.customizer.stockInformation.entity.StockInformation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

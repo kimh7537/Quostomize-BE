@@ -15,3 +15,14 @@ spring:
     redis:
       host: ${REDIS_URL}
       port: 6379
+    elasticsearch:
+      repositories:
+        enabled: true
+  elasticsearch:
+    uris: http://localhost:9200
+logging:
+  level:
+    root: debug
+appkey: PSoEpBL7Q42Xvtq61xm7iEvHcDoIA4tT1uFE
+appsecret: HxRYm2m8jIwrkaHSDcY8wBETUK9ORf0OSuT6EQz8QJ5KY7ySkJEXJyXLJz5USELNlTqdMelckQvKjuWFDzYATi+QGp5uT9sjnMg2SC23PlXFuQeKe5n+eACL4MjuhTCwzGgWAk13/C0NEEp4JCg4VupDM3aEUWR7QwOKAy3fQz3Hr0tZcfM=
+access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjkwMWY1NmRmLTUwODUtNDJkNi1iYzc3LWVjNjQ0NmQyMTIxMiIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTczMTA0Nzc1MywiaWF0IjoxNzMwOTYxMzUzLCJqdGkiOiJQU29FcEJMN1E0Mlh2dHE2MXhtN2lFdkhjRG9JQTR0VDF1RkUifQ.nllsY7BPkzkOCfPuozPm9LT_C3BitN2FeDsjuUL9UN7qMMYXounKqkdGCfOVOsdTnmRay6M4_9FOPFJ0DnPTtQ

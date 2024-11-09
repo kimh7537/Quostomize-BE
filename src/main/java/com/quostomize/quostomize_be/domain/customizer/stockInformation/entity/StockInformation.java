@@ -1,11 +1,9 @@
-package com.quostomize.quostomize_be.domain.customizer.stock.entity;
+package com.quostomize.quostomize_be.domain.customizer.stockInformation.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.net.URI;
 
 
 @Entity
