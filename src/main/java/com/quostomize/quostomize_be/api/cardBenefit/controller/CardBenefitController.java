@@ -1,5 +1,6 @@
 package com.quostomize.quostomize_be.api.cardBenefit.controller;
 
+import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,9 +22,13 @@ public class CardBenefitController {
         List<CardBenefitResponse> benefits = cardBenefitService.findAll();
         return ResponseEntity.ok(benefits);
     }
-
-    // TODO: 혜택 변경 적용하기
     
-    // TODO: 혜택 변경 예약하기 -> 테이블 분리여부 결정 필요
+    // TODO: 카드 헤택 변경 적용하기
+    @PatchMapping()
+    public ResponseEntity<CardBenefitResponse> updateCardBenefitStatus(@RequestBody CardBenefitRequest request) {
+
+    }
+
+    // TODO: 혜택 변경 예약하기
 
 }

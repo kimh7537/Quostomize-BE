@@ -4,14 +4,18 @@ import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.BenefitCommonCode;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.Card;
 import jakarta.persistence.*;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Table(name = "card_benefits")
 public class CardBenefit extends BaseTimeEntity {
+
+    public CardBenefit() {
+
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
