@@ -40,4 +40,5 @@ public class CardBenefit extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lower_category_id")
     private BenefitCommonCode lowerCategory;
+
 }
