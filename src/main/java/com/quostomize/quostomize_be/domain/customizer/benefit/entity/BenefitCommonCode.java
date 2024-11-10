@@ -23,6 +23,6 @@ public class BenefitCommonCode extends BaseTimeEntity {
     private String benefitCategoryType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parents_code_id")
+    @JoinColumn(name = "benefit_parents_code_id")
     private BenefitCommonCode parentsCode;
 }
