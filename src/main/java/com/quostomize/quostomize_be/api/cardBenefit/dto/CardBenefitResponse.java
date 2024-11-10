@@ -2,7 +2,6 @@ package com.quostomize.quostomize_be.api.cardBenefit.dto;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
 import java.time.LocalDateTime;
 
-// TODO: validation 적용하기
 public record CardBenefitResponse(
         Long benefitId,
         Integer benefitRate,

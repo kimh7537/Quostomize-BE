@@ -3,7 +3,6 @@ package com.quostomize.quostomize_be.api.cardBenefit.dto;
 
 import java.util.List;
 
-// TODO: validation 적용하기
 public record CardBenefitRequest(
         Integer benefitRate,
         Boolean isActive,
