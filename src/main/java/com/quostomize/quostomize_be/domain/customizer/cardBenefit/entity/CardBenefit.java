@@ -4,7 +4,8 @@ import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.BenefitCommonCode;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.Card;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 
 @Entity
 @Getter

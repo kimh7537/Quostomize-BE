@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.api.cardBenefit.controller;
 
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
+import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
