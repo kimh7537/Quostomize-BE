@@ -14,25 +14,22 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "cards", uniqueConstraints = {@UniqueConstraint(name = "CARD_NUMBER_UNIQUE", columnNames = {"CARD_NUMBER"})})
-public class Card extends BaseTimeEntity {
+@Table(name = "card_details", uniqueConstraints = {@UniqueConstraint(name = "CARD_NUMBER_UNIQUE", columnNames = {"card_number"})})
+public class CardDetail extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "card_id")
-    private Long cardId;
-
-    @Column(name = "card_name", length = 17, nullable = false)
-    private String cardName;
+    @Column(name = "card_sequence_id")
+    private Long cardSequenceId;
 
     @Column(name = "card_number", length = 16, nullable = false)
     private String cardNumber;
 
-    @Column(name = "card_brand", nullable = false)
-    private int cardBrand;
-
     @Column(name = "card_color", nullable = false)
     private int cardColor;
+
+    @Column(name = "card_brand", nullable = false)
+    private int cardBrand;
 
     @Column(name = "is_app_card", nullable = false)
     private Boolean isAppCard;
@@ -40,31 +37,21 @@ public class Card extends BaseTimeEntity {
     @Column(name = "is_foreign_blocked", nullable = false)
     private Boolean isForeignBlocked;
 
-    @Column(name = "is_transport", nullable = false)
-    private Boolean isTransport;
+    @Column(name = "is_postpaid_transport", nullable = false)
+    private Boolean isPostpaidTransport;
 
     @Column(name = "card_password", nullable = false)
     private String cardPassword;
 
-    @Column(name = "point", nullable = false)
-    private Long point;
-
     @Column(name = "cvc_number", nullable = false)
     private String cvcNumber;
 
-    @Column(name = "expire_at", nullable = false)
-    private LocalDate expireAt;
+    @Column(name = "expiration_date", nullable = false)
+    private LocalDate expirationDate;
 
-    @Column(name = "is_lotto", nullable = false)
-    private Boolean isLotto;
+    @Column(name = "optional_terms", nullable = false)
+    private int optionalTerms;
 
-    @Column(name = "is_payback", nullable = false)
-    private Boolean isPayback;
-
-    @Column(name = "is_piece_stock", nullable = false)
-    private Boolean isPieceStock;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receipt_type_id", nullable = false)
-    private ReceiptMethod receiptMethod;
+    @Column(name = "payment_receipt_methods", nullable = false)
+    private int paymentReceiptMethods;
 }
