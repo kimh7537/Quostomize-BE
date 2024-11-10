@@ -13,4 +13,8 @@ import java.util.Set;
 @Repository
 public interface CardBenefitRepository extends JpaRepository<CardBenefit, Long> {
     Set<CardBenefit> findCardBenefitsByCardDetailCardSequenceIdAndIsActive(Long cardId, boolean isActive);
+
+    @Modifying
+    @Query("UPDATE CardBenefit cb SET cb.isActive = false WHERE cb.cardDetail.cardSequenceId = :cardSequenceId AND cb.isActive = true AND cb.createdAt < :recentTime")
+    CardBenefit deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") Long cardSequenceId, @Param("recentTime") LocalDateTime recentTime);
 }
