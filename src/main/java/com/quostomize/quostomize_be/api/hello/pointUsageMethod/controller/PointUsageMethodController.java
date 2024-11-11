@@ -24,25 +24,31 @@ public class PointUsageMethodController {
             @PathVariable Long cardSequenceId
     ) {
         PointUsageMethod pointUsageMethod = pointUsageMethodServiceImpl.getPointUsageMethod(cardSequenceId);
-        PointUsageMethodResponseDto responseDto = new PointUsageMethodResponseDto(
+        PointUsageMethodResponseDto pointUsageMethodResponseDto = new PointUsageMethodResponseDto(
                 pointUsageMethod.getPointUsageTypeId(),
                 pointUsageMethod.getIsLotto(),
                 pointUsageMethod.getIsPayback(),
                 pointUsageMethod.getIsPieceStock()
         );
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.ok(pointUsageMethodResponseDto);
     }
 
     @PostMapping(value = "/{cardSequenceId}")
     @Operation(summary = "포인트 사용 옵션 변경", description = "포인트 사용 옵션 활성 상태를 변경합니다.(on/off)")
-    public ResponseEntity<PointUsageMethod> togglePoingUsage(
+    public ResponseEntity<PointUsageMethodResponseDto> togglePoingUsage(
             @PathVariable Long cardSequenceId,
             @RequestBody PointUsageMethodRequestDto pointUsageMethodRequestDto
     ) {
         PointUsageMethod updatedPointUsageMethod = pointUsageMethodServiceImpl.togglePointUsage(
                 cardSequenceId, pointUsageMethodRequestDto.usageType(), pointUsageMethodRequestDto.isActive());
 
-        return ResponseEntity.ok(updatedPointUsageMethod);
+        PointUsageMethodResponseDto pointUsageMethodResponseDto = new PointUsageMethodResponseDto(
+                updatedPointUsageMethod.getPointUsageTypeId(),
+                updatedPointUsageMethod.getIsLotto(),
+                updatedPointUsageMethod.getIsPayback(),
+                updatedPointUsageMethod.getIsPieceStock()
+        );
+        return ResponseEntity.ok(pointUsageMethodResponseDto);
     }
 
 
