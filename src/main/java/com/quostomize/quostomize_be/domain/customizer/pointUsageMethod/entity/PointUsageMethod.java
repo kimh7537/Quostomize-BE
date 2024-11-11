@@ -10,7 +10,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "point_usage_methods")
 public class PointUsageMethod extends BaseTimeEntity {
@@ -33,4 +32,13 @@ public class PointUsageMethod extends BaseTimeEntity {
     @JoinColumn(name = "card_sequence_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private CardDetail cardDetail;
+
+    public void setIsLotto(boolean isActive) {
+    }
+
+    public void setIsPayback(boolean isActive) {
+    }
+
+    public void setIsPieceStock(boolean isActive) {
+    }
 }
