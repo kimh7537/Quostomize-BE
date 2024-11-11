@@ -1,13 +1,15 @@
-package com.quostomize.quostomize_be.domain.customizer.point.entity;
+package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "point_usage_methods")
 public class PointUsageMethod extends BaseTimeEntity {
