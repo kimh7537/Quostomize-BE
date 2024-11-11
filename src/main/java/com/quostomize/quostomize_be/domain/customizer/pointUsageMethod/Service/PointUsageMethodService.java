@@ -4,5 +4,6 @@ import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.Po
 
 public interface PointUsageMethodService {
     PointUsageMethod togglePointUsage(Long cardSequenceId, String usageType, boolean isActive);
+ // usageType : 포인트 사용방법의 타입(Lotto, Payback, PieceStock)
 
 }
