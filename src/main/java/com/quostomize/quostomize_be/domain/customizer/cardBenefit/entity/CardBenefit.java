@@ -6,6 +6,8 @@ import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Builder
@@ -20,6 +22,9 @@ public class CardBenefit extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "benefit_id")
     private Long benefitId;
+
+    @Column(name = "benefit_effective_date", nullable = false)
+    private LocalDate benefitEffectiveDate;
 
     @Column(name = "benefit_rate", nullable = false)
     private Integer benefitRate;
