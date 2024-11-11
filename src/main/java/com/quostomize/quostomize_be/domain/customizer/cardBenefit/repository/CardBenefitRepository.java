@@ -16,5 +16,5 @@ public interface CardBenefitRepository extends JpaRepository<CardBenefit, Long> 
 
     @Modifying
     @Query("UPDATE CardBenefit cb SET cb.isActive = false WHERE cb.cardDetail.cardSequenceId = :cardSequenceId AND cb.isActive = true AND cb.createdAt < :recentTime")
-    CardBenefit deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") Long cardSequenceId, @Param("recentTime") LocalDateTime recentTime);
+    int deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") Long cardSequenceId, @Param("recentTime") LocalDateTime recentTime);
 }
