@@ -1,5 +1,7 @@
 package com.quostomize.quostomize_be.api.cardBenefit.controller;
 
+import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
+import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
@@ -7,6 +9,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/benefit-change")
@@ -25,4 +29,21 @@ public class CardBenefitController {
         String buttonLabel = cardBenefitService.getBenefitChangeButtonLabel(cardBenefit);
         return ResponseEntity.ok(buttonLabel);
     }
+
+    @GetMapping()
+    @Operation(summary = "카드 혜택 내역 조회", description = "로그인한 고객의 현재 적용된 카드 혜택을 조회합니다.")
+    public ResponseEntity<List<CardBenefitResponse>> getCardBenefitStatus() {
+        List<CardBenefitResponse> benefits = cardBenefitService.findAll();
+        return ResponseEntity.ok(benefits);
+    }
+
+    @PatchMapping()
+    @Operation(summary = "카드 혜택 상세 변경", description = "선택한 항목을 반영하여 카드 혜택을 변경합니다.")
+    public ResponseEntity<Void> updateCardBenefitStatus(@RequestBody List<CardBenefitRequest> requests) {
+        cardBenefitService.updateCardBenefits(requests);
+        return ResponseEntity.ok().build();
+    }
+
+    // TODO: 혜택 변경 예약하기
+
 }

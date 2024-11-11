@@ -1,9 +1,12 @@
 package com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
+
+import com.quostomize.quostomize_be.domain.customizer.benefit.entity.BenefitCommonCode;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 
 @Entity
@@ -14,7 +17,6 @@ import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 public class CardBenefit extends BaseTimeEntity {
 
     public CardBenefit() {
-
     }
 
     @Id
@@ -22,6 +24,9 @@ public class CardBenefit extends BaseTimeEntity {
     @Column(name = "benefit_id")
     private Long benefitId;
 
+    @Column(name = "benefit_effective_date", nullable = false)
+    private LocalDate benefitEffectiveDate;
+  
     @Column(name = "benefit_rate", nullable = false)
     private Integer benefitRate;
 

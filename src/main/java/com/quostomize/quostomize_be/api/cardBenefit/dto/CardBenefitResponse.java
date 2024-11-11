@@ -17,7 +17,7 @@ public record CardBenefitResponse(
                 cardBenefit.getBenefitId(),
                 cardBenefit.getBenefitRate(),
                 cardBenefit.getIsActive(),
-                cardBenefit.getCard().getCardId(),
+                cardBenefit.getCardDetail().getCardSequenceId(),
                 cardBenefit.getUpperCategory().getBenefitCommonId(),
                 cardBenefit.getLowerCategory().getBenefitCommonId(),
                 cardBenefit.getCreatedAt(),
