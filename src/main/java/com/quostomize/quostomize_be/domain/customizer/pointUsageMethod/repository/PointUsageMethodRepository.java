@@ -2,9 +2,12 @@ package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.reposito
 
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface PointUsageMethodRepository extends JpaRepository <PointUsageMethod, Long> {
-    Optional<PointUsageMethod> findByCardSequenceId(Long cardSequenceId);
+    Optional<PointUsageMethod> findByCardDetail_CardSequenceId(Long cardSequenceId);
+
 }

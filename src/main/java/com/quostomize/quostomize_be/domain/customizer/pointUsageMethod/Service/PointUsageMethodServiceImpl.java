@@ -14,22 +14,29 @@ public class PointUsageMethodServiceImpl implements PointUsageMethodService {
     private final PointUsageMethodRepository pointUsageMethodRepository;
 
     @Override
+    public PointUsageMethod getPointUsageMethod(Long cardSequenceId) {
+
+        return pointUsageMethodRepository.findByCardDetail_CardSequenceId(cardSequenceId)
+                .orElseThrow(()-> new AppException(ErrorCode.CARD_NOT_FOUND));
+    }
+
+    @Override
     public PointUsageMethod togglePointUsage(Long cardSequenceId, String usageType, boolean isActive) {
-        PointUsageMethod pointUsageMethod = pointUsageMethodRepository.findByCardSequenceId(cardSequenceId)
+        PointUsageMethod pointUsageMethod = pointUsageMethodRepository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
 
         // 사용 유형에 따른 필드 변경
         switch (usageType) {
-            case "isLotto":
+            case "lotto":
                 pointUsageMethod.setIsLotto(isActive);
                 break;
-            case "isPayback":
+            case "payback":
                 if (isActive && pointUsageMethod.getIsPieceStock()) {
                     throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
                 }
                 pointUsageMethod.setIsPayback(isActive);
                 break;
-            case "isPieceStock":
+            case "pieceStock":
                 if (isActive && pointUsageMethod.getIsPayback()) {
                     throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
                 }
@@ -39,5 +46,6 @@ public class PointUsageMethodServiceImpl implements PointUsageMethodService {
 
         return pointUsageMethodRepository.save(pointUsageMethod);
     }
+
 
 }
