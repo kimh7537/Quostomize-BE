@@ -11,18 +11,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PointUsageMethodServiceImpl implements PointUsageMethodService {
 
-    private final PointUsageMethodRepository pointUsageMethodRepository;
+    private final PointUsageMethodRepository repository;
 
     @Override
     public PointUsageMethod getPointUsageMethod(Long cardSequenceId) {
 
-        return pointUsageMethodRepository.findByCardDetail_CardSequenceId(cardSequenceId)
+        return repository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(()-> new AppException(ErrorCode.CARD_NOT_FOUND));
     }
 
     @Override
     public PointUsageMethod togglePointUsage(Long cardSequenceId, String usageType, boolean isActive) {
-        PointUsageMethod pointUsageMethod = pointUsageMethodRepository.findByCardDetail_CardSequenceId(cardSequenceId)
+        PointUsageMethod pointUsageMethod = repository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
 
         // 사용 유형에 따른 필드 변경
@@ -44,7 +44,7 @@ public class PointUsageMethodServiceImpl implements PointUsageMethodService {
                 break;
         }
 
-        return pointUsageMethodRepository.save(pointUsageMethod);
+        return repository.save(pointUsageMethod);
     }
 
 
