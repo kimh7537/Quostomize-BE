@@ -4,9 +4,11 @@ import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.BenefitCommonCode;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
-import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
+import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
+
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,12 +55,13 @@ public class CardBenefitService {
         return daysDifference >= 30 ? "변경하기" : "예약하기";
     }
 
+    // 혜택 변경 적용하기
     public void updateCardBenefits(List<CardBenefitRequest> cardBenefitRequests) {
         // cardId와 isActive로 CardBenefit 목록 검색
         for (CardBenefitRequest request : cardBenefitRequests) {
             Long cardSequenceId = request.cardSequenceId();
 
-            // 1. 동일한 card_ssequence_id를 가진 모든 CardBenefit의 is_active를 false로 설정
+            // 1. 동일한 card_sequence_id를 가진 모든 CardBenefit의 is_active를 false로 설정
             int existingBenefit = cardBenefitRepository.deactivateCardBenefitsByCardSequenceId(cardSequenceId, recentTime);
 
             // 2. 새로운 CardBenefit으로 업데이트
@@ -75,6 +78,57 @@ public class CardBenefitService {
                                         BenefitCommonCode.builder().benefitCommonId(request.lowerCategoryId()).build() : null)
                                 .build()
                 );
+        }
+    }
+    
+    // 혜택 변경 예약하기
+    public void reserveCardBenefits(List<CardBenefitRequest> cardBenefitRequests) {
+        for (CardBenefitRequest request : cardBenefitRequests) {
+            Long cardSequenceId = request.cardSequenceId();
+
+            // 1. benefitEffectiveDate 구하기
+            Set<CardBenefit> existingBenefit = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true);
+            if (existingBenefit != null && !existingBenefit.isEmpty()) {
+                CardBenefit existingCardBenefit = existingBenefit.iterator().next();
+                LocalDateTime modifiedAt = existingCardBenefit.getCreatedAt();
+                long daysDifference = ChronoUnit.DAYS.between(modifiedAt, recentTime);
+
+                if (daysDifference < 30) {
+                    LocalDate benefitEffectiveDate = modifiedAt.toLocalDate().plusDays(30);
+
+                    // 2. 예약 혜택을 새로운 혜택으로 저장하기
+                    CardDetail cardDetail = cardDetailRepository.findById(request.cardSequenceId())
+                            .orElseThrow(() -> new RuntimeException("Card Detail을 찾을 수 없습니다."));
+                    cardBenefitRepository.save(
+                            CardBenefit.builder()
+                                    .cardDetail(cardDetail)
+                                    .benefitEffectiveDate(benefitEffectiveDate)
+                                    .benefitRate(request.benefitRate())
+                                    .isActive(false)
+                                    .upperCategory(BenefitCommonCode.builder().benefitCommonId(request.upperCategoryId()).build())
+                                    .lowerCategory(request.lowerCategoryId() != null ?
+                                            BenefitCommonCode.builder().benefitCommonId(request.lowerCategoryId()).build() : null)
+                                    .build()
+                    );
+                }
+            }
+        }
+    }
+    
+    // 예약한 혜택을 반영하는 스케줄러
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void updateActiveBenefits() {
+        LocalDate today = LocalDate.now();
+
+        // 1. 활성화될 예약 혜택 조회
+        Set<CardBenefit> benefitsToActivate = cardBenefitRepository.findCardBenefitsByBenefitEffectiveDateAndIsActive(today, false);
+
+        for (CardBenefit benefit : benefitsToActivate) {
+            Long cardSequenceid = benefit.getCardDetail().getCardSequenceId();
+            // 2. 기존 활성화된 혜택 비활성화
+            cardBenefitRepository.deactivateCardBenefitsByCardSequenceId(cardSequenceid, recentTime);
+            // 3. 예약된 혜택 활성화 상태로 업데이트
+            cardBenefitRepository.activateCardBenefitById(benefit.getBenefitId());
         }
     }
 }
