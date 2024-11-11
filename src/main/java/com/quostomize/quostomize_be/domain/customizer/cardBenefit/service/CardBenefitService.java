@@ -43,15 +43,15 @@ public class CardBenefitService {
 
     // 혜택 변경 가능일자 계산
     public Boolean getBenefitChangeDate(CardBenefit cardBenefit) {
-        LocalDateTime createdAt = cardBenefit.getCreatedAt();
-        long daysDifference = ChronoUnit.DAYS.between(createdAt, recentTime);
+        LocalDateTime modifiedAt = cardBenefit.getModifiedAt();
+        long daysDifference = ChronoUnit.DAYS.between(modifiedAt, recentTime);
         return daysDifference >= 30;
     }
 
     // 변경 일자에 따른 버튼 내용
     public String getBenefitChangeButtonLabel(CardBenefit cardBenefit) {
-        LocalDateTime createdAt = cardBenefit.getCreatedAt();
-        long daysDifference = ChronoUnit.DAYS.between(createdAt, recentTime);
+        LocalDateTime modifiedAt = cardBenefit.getModifiedAt();
+        long daysDifference = ChronoUnit.DAYS.between(modifiedAt, recentTime);
         return daysDifference >= 30 ? "변경하기" : "예약하기";
     }
 
