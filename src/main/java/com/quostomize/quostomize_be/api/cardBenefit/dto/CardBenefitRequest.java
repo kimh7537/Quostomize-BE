@@ -1,6 +1,5 @@
 package com.quostomize.quostomize_be.api.cardBenefit.dto;
 
-
 import java.time.LocalDate;
 import java.util.List;
 
