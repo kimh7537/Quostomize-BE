@@ -10,6 +10,7 @@ import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.Car
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -58,15 +59,15 @@ public class CardBenefitService {
             Long cardSequenceId = request.cardSequenceId();
 
             // 1. 동일한 card_ssequence_id를 가진 모든 CardBenefit의 is_active를 false로 설정
-            CardBenefit existingBenefit = cardBenefitRepository.deactivateCardBenefitsByCardSequenceId(cardSequenceId, recentTime);
+            int existingBenefit = cardBenefitRepository.deactivateCardBenefitsByCardSequenceId(cardSequenceId, recentTime);
 
             // 2. 새로운 CardBenefit으로 업데이트
-            if (existingBenefit != null && getBenefitChangeDate(existingBenefit)) {
                 CardDetail cardDetail = cardDetailRepository.findById(request.cardSequenceId())
                         .orElseThrow(() -> new RuntimeException("Card Detail을 찾을 수 없습니다."));
                 cardBenefitRepository.save(
                         CardBenefit.builder()
                                 .cardDetail(cardDetail)
+                                .benefitEffectiveDate(request.benefitEffectiveDate())
                                 .benefitRate(request.benefitRate())
                                 .isActive(true)
                                 .upperCategory(BenefitCommonCode.builder().benefitCommonId(request.upperCategoryId()).build())
@@ -74,7 +75,6 @@ public class CardBenefitService {
                                         BenefitCommonCode.builder().benefitCommonId(request.lowerCategoryId()).build() : null)
                                 .build()
                 );
-            }
         }
     }
 }
