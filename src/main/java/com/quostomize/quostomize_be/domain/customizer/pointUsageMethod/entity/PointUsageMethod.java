@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "point_usage_methods")
 public class PointUsageMethod extends BaseTimeEntity {
 
@@ -34,12 +33,13 @@ public class PointUsageMethod extends BaseTimeEntity {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private CardDetail cardDetail;
 
-    @Builder
-    public PointUsageMethod(Boolean isLotto, Boolean isPayback, Boolean isPieceStock, CardDetail cardDetail) {
-        this.isLotto = isLotto;
-        this.isPayback = isPayback;
-        this.isPieceStock = isPieceStock;
-        this.cardDetail = cardDetail;
-    }
+    public PointUsageMethodBuilder toBuilder() {
+        return PointUsageMethod.builder()
+                .pointUsageTypeId(this.pointUsageTypeId)
+                .cardDetail(this.cardDetail)
+                .isLotto(this.isLotto)
+                .isPayback(this.isPayback)
+                .isPieceStock(this.isPieceStock);
 
+    }
 }

@@ -1,5 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.Service;
 
+import com.quostomize.quostomize_be.api.hello.pointUsageMethod.dto.PointUsageMethodRequestDto;
+import com.quostomize.quostomize_be.api.hello.pointUsageMethod.dto.PointUsageMethodResponseDto;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
@@ -14,54 +16,84 @@ public class PointUsageMethodService {
 
     private final PointUsageMethodRepository repository;
 
-    PointUsageMethod pointUsageMethod = PointUsageMethod.builder()
-            .isLotto(true)
-            .isPayback(false)
-            .isPieceStock(true)
-            .build();
-
-
     public PointUsageMethod getPointUsageMethod(Long cardSequenceId) {
-
         return repository.findByCardDetail_CardSequenceId(cardSequenceId)
-                .orElseThrow(()-> new AppException(ErrorCode.CARD_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
     }
 
+
+    public PointUsageMethodResponseDto updatedPointUsageMethod(PointUsageMethodRequestDto request) {
+        PointUsageMethod pointUsageMethod = request.toEntity();
+
+        PointUsageMethod existingPointUsage = repository.findByCardDetail_CardSequenceId(request.cardDetail().getCardSequenceId())
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
+
+        existingPointUsage = PointUsageMethod.builder()
+                .pointUsageTypeId(existingPointUsage.getPointUsageTypeId())
+                .cardDetail(existingPointUsage.getCardDetail())
+                .isLotto(request.isLotto())
+                .isPayback(request.isPayback())
+                .isPieceStock(request.isPieceStock())
+                .build();
+
+        PointUsageMethod savedPointUsageMethod = repository.save(existingPointUsage);
+
+        return PointUsageMethodResponseDto.from(savedPointUsageMethod);
+    }
 
     public PointUsageMethod togglePointUsage(Long cardSequenceId, String usageType, boolean isActive) {
         PointUsageMethod pointUsageMethod = repository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
 
-
-        PointUsageMethod updatedPointUsage;
+        PointUsageMethod updatedPointUsageMethod = PointUsageMethod.builder()
+                .pointUsageTypeId(pointUsageMethod.getPointUsageTypeId())
+                .cardDetail(pointUsageMethod.getCardDetail())
+                .isLotto(pointUsageMethod.getIsLotto())
+                .isPayback(pointUsageMethod.getIsPayback())
+                .isPieceStock(pointUsageMethod.getIsPieceStock())
+                .build();
 
         // 사용 유형에 따른 필드 변경
-        switch (usageType) {
+        switch (usageType.toLowerCase()) {
             case "lotto":
-                updatedPointUsage = PointUsageMethod.builder()
-                                                    .isLotto(isActive)
-                                                    .build();
+                updatedPointUsageMethod = updatedPointUsageMethod.toBuilder()
+                        .isLotto(isActive)
+                        .build();
                 break;
+
             case "payback":
-                if (isActive && pointUsageMethod.getIsPieceStock()) {
+                if (isActive && updatedPointUsageMethod.getIsPieceStock()) {
                     throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
                 }
-                updatedPointUsage = PointUsageMethod.builder()
-                                                    .isPayback(isActive)
-                                                    .build();
+                updatedPointUsageMethod = updatedPointUsageMethod.toBuilder()
+                        .isPayback(isActive)
+                        .build();
                 break;
-            case "pieceStock":
-                if (isActive && pointUsageMethod.getIsPayback()) {
+
+            case "piecestock":
+                if (isActive && updatedPointUsageMethod.getIsPayback()) {
                     throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
                 }
-                updatedPointUsage = PointUsageMethod.builder()
-                                                    .isPieceStock(isActive)
-                                                    .build();
+                updatedPointUsageMethod = updatedPointUsageMethod.toBuilder()
+                        .isPieceStock(isActive)
+                        .build();
                 break;
         }
 
-        return repository.save(pointUsageMethod);
-    }
+        // 활성화된 옵션 수 체크
+        int activeCount = (updatedPointUsageMethod.getIsLotto() ? 1 : 0) +
+                (updatedPointUsageMethod.getIsPayback() ? 1 : 0) +
+                (updatedPointUsageMethod.getIsPieceStock() ? 1 : 0);
 
+        if (activeCount < 1) {
+            throw new AppException(ErrorCode.MINIMUM_ONE_OPTION_REQUIRED);
+        }
+        if (activeCount > 2) {
+            throw new AppException(ErrorCode.MAXIMUM_TWO_OPTIONS_ALLOWED);
+        }
+
+        // 포인트 사용 방법 저장
+        return repository.save(updatedPointUsageMethod);
+    }
 
 }
