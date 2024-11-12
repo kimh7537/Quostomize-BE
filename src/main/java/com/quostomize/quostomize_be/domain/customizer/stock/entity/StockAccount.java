@@ -24,7 +24,7 @@ public class StockAccount extends BaseTimeEntity {
     @Column(name = "stock_account_name", length = 30, nullable = false)
     private String stockAccountName;
 
-    @Column(name = "stock_account_active", nullable = false)
+    @Column(name = "is_stock_account_active", nullable = false)
     private Boolean stockAccountActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
