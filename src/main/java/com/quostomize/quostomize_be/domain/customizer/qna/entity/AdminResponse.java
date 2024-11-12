@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.qna.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
+import com.quostomize.quostomize_be.memberQuestion.entity.MemberQuestion;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
