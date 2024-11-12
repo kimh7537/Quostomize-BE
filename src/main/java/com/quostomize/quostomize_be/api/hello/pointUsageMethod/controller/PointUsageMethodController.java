@@ -3,8 +3,6 @@ package com.quostomize.quostomize_be.api.hello.pointUsageMethod.controller;
 
 import com.quostomize.quostomize_be.api.hello.pointUsageMethod.dto.PointUsageMethodRequestDto;
 import com.quostomize.quostomize_be.api.hello.pointUsageMethod.dto.PointUsageMethodResponseDto;
-import com.quostomize.quostomize_be.common.error.ErrorCode;
-import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.Service.PointUsageMethodService;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
@@ -42,18 +40,16 @@ public class PointUsageMethodController {
             @PathVariable Long cardSequenceId,
             @RequestBody PointUsageMethodRequestDto pointUsageMethodRequestDto
     ) {
-        // 활성화 상태 결정
-        Boolean isActive = determineIsActive(pointUsageMethodRequestDto);
+        Boolean isActive = pointUsageMethodRequestDto.isActive();
+        String usageType = pointUsageMethodRequestDto.usageType();
 
-        // 포인트 사용 방법 업데이트
         PointUsageMethod updatedPointUsageMethod = pointUsageMethodService.togglePointUsage(
-                cardSequenceId, pointUsageMethodRequestDto.pointUsageTypeId(), isActive);
+                cardSequenceId, usageType, isActive);
 
-        // Response DTO 생성
         PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(updatedPointUsageMethod);
 
-        // ResponseEntity 반환
         return ResponseEntity.ok(responseDto);
     }
+
 
 }

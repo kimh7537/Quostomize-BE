@@ -31,9 +31,9 @@ public class PointUsageMethodService {
         existingPointUsage = PointUsageMethod.builder()
                 .pointUsageTypeId(existingPointUsage.getPointUsageTypeId())
                 .cardDetail(existingPointUsage.getCardDetail())
-                .isLotto(request.isLotto())
-                .isPayback(request.isPayback())
-                .isPieceStock(request.isPieceStock())
+                .isLotto(request.isActive())
+                .isPayback(request.isActive())
+                .isPieceStock(request.isActive())
                 .build();
 
         PointUsageMethod savedPointUsageMethod = repository.save(existingPointUsage);
@@ -54,7 +54,7 @@ public class PointUsageMethodService {
                 .build();
 
         // 사용 유형에 따른 필드 변경
-        switch (usageType.toLowerCase()) {
+        switch (usageType) {
             case "lotto":
                 updatedPointUsageMethod = updatedPointUsageMethod.toBuilder()
                         .isLotto(isActive)

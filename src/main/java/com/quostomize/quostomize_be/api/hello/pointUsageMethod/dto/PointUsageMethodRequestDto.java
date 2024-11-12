@@ -7,17 +7,15 @@ import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.Po
 public record PointUsageMethodRequestDto(
         Long pointUsageTypeId,
         CardDetail cardDetail,
-        Boolean isLotto,
-        Boolean isPayback,
-        Boolean isPieceStock
+        Boolean isActive,
+        String usageType
 ) {
     public static PointUsageMethodRequestDto from(PointUsageMethod pointUsageMethod) {
         return new PointUsageMethodRequestDto(
                 pointUsageMethod.getPointUsageTypeId(),
                 pointUsageMethod.getCardDetail(),
-                pointUsageMethod.getIsLotto(),
-                pointUsageMethod.getIsPayback(),
-                pointUsageMethod.getIsPieceStock()
+                pointUsageMethod.getIsLotto() || pointUsageMethod.getIsPayback() || pointUsageMethod.getIsPieceStock(),
+                pointUsageMethod.getIsLotto() ? "lotto" : pointUsageMethod.getIsPayback() ? "payback" : "piecestock"
         );
     }
 
@@ -25,9 +23,9 @@ public record PointUsageMethodRequestDto(
         return PointUsageMethod.builder()
                 .pointUsageTypeId(this.pointUsageTypeId())
                 .cardDetail(this.cardDetail())
-                .isLotto(this.isLotto())
-                .isPayback(this.isPayback())
-                .isPieceStock(this.isPieceStock())
+                .isLotto(this.isActive())
+                .isPayback(this.isActive())
+                .isPieceStock(this.isActive())
                 .build();
     }
 }
