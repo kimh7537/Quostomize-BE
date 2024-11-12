@@ -77,7 +77,7 @@ public class KisService {
         try {
             List<ResponseOutputDTO> responseDataList = new ArrayList<>();
             JsonNode rootNode = objectMapper.readTree(response);
-            JsonNode outputNode = rootNode.get("output");
+            JsonNode outputNode = rootNode.get("output1");
             if (outputNode != null) {
                 for (JsonNode node : outputNode) {
                     ResponseOutputDTO responseData = new ResponseOutputDTO();
