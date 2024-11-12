@@ -52,19 +52,20 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private Member createMember(MemberRequestDto memberRequestDto) {
-        Member member = new Member();
-        member.setMemberName(memberRequestDto.memberName());
-        member.setMemberEmail(memberRequestDto.memberEmail());
-        member.setMemberLoginId(memberRequestDto.memberLoginId());
-        member.setMemberPassword(memberRequestDto.memberPassword()); // 비밀번호 해시 처리 passwordEncoder.encode(memberFormDto.getMemberPassword())
-        member.setResidenceNumber(memberRequestDto.residenceNumber());
-        member.setZipCode(memberRequestDto.zipCode());
-        member.setMemberAddress(memberRequestDto.memberAddress());
-        member.setMemberDetailAddress(memberRequestDto.memberDetailAddress());
-        member.setMemberPhoneNumber(memberRequestDto.memberPhoneNumber());
-        member.setSecondaryAuthCode(memberRequestDto.secondaryAuthCode());
-        return member;
+        return Member.builder()
+                .memberName(memberRequestDto.memberName())
+                .memberEmail(memberRequestDto.memberEmail())
+                .memberLoginId(memberRequestDto.memberLoginId())
+                .memberPassword(memberRequestDto.memberPassword()) // 비밀번호 해시 처리 필요 시 passwordEncoder.encode(memberRequestDto.memberPassword())
+                .residenceNumber(memberRequestDto.residenceNumber())
+                .zipCode(memberRequestDto.zipCode())
+                .memberAddress(memberRequestDto.memberAddress())
+                .memberDetailAddress(memberRequestDto.memberDetailAddress())
+                .memberPhoneNumber(memberRequestDto.memberPhoneNumber())
+                .secondaryAuthCode(memberRequestDto.secondaryAuthCode())
+                .build();
     }
+
 
 
     @Override
