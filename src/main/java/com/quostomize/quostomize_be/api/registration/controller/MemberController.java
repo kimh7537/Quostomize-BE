@@ -25,7 +25,6 @@ public class MemberController {
     @PostMapping(value = "/register")
     @Operation(summary = "회원 등록", description = "새로운 회원을 등록합니다.")
     public ResponseEntity<String> registerMember(@Valid @RequestBody MemberRequestDto memberRequestDto) {
-        // MemberService의 saveMember 메서드를 호출
         memberService.saveMember(memberRequestDto);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
