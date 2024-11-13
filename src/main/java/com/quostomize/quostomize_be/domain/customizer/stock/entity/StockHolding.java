@@ -19,6 +19,9 @@ public class StockHolding extends BaseTimeEntity {
     @Column(name = "stock_holding_id")
     private Long stockHoldingId;
 
+    @Column(name = "stock_total_money", nullable = false)
+    private Long stockTotalMoney;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_account_id", nullable = false)
     private StockAccount stockAccount;

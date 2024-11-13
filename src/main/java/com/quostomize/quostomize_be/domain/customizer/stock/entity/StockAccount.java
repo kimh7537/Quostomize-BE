@@ -27,7 +27,7 @@ public class StockAccount extends BaseTimeEntity {
     private String stockAccountName;
 
     @Column(name = "is_stock_account_active", nullable = false)
-    private Boolean stockAccountActive;
+    private Boolean isStockAccountActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
@@ -41,14 +41,14 @@ public class StockAccount extends BaseTimeEntity {
     private LocalDateTime expiryDate;
 
     @Builder
-    public StockAccount(Long stockAccountNumber, String stockAccountName, Boolean stockAccountActive, Customer customer){
+    public StockAccount(Long stockAccountNumber, String stockAccountName, Boolean isStockAccountActive, Customer customer){
         this.stockAccountNumber = stockAccountNumber;
         this.stockAccountName = stockAccountName;
-        this.stockAccountActive = stockAccountActive;
+        this.isStockAccountActive = isStockAccountActive;
         this.customer = customer;
     }
 
     public void updateStockAccountActive(boolean stockAccountActive){
-        this.stockAccountActive = stockAccountActive;
+        this.isStockAccountActive = stockAccountActive;
     }
 }

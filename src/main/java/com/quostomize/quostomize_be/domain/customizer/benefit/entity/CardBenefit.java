@@ -1,7 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.benefit.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
-import com.quostomize.quostomize_be.domain.customizer.card.entity.Card;
+import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "card_benefit")
+@Table(name = "card_benefits")
 public class CardBenefit extends BaseTimeEntity {
 
     @Id
@@ -24,14 +24,14 @@ public class CardBenefit extends BaseTimeEntity {
     private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", nullable = false)
-    private Card card;
+    @JoinColumn(name = "card_sequence_id", nullable = false)
+    private CardDetail cardDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "upper_category_id", nullable = false)
     private BenefitCommonCode upperCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lower_category_id", nullable = false)
+    @JoinColumn(name = "lower_category_id")
     private BenefitCommonCode lowerCategory;
 }
