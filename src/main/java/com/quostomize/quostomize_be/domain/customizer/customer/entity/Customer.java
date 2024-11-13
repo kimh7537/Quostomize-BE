@@ -1,7 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.customer.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
-import com.quostomize.quostomize_be.domain.customizer.card.entity.Card;
+import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,6 +23,6 @@ public class Customer extends BaseTimeEntity {
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", nullable = false)
-    private Card card;
+    @JoinColumn(name = "card_sequence_id", nullable = false)
+    private CardDetail cardDetail;
 }
