@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    // 이게 필요한가?
-//    @GetMapping(value = "/register/{}")
-//    @Operation(summary = "회원 조회", description = "ID로 회원 정보를 조회합니다.")
-//    public ResponseEntity<MemberRequestDto> memberForm() {
-//        MemberRequestDto memberRequestDto = new MemberRequestDto("", "", "", "", "null", "", "", "", "", "","","null");
-//        return ResponseEntity.ok(memberRequestDto);
-//    }
+    @GetMapping(value = "/register/{}")
+    @Operation(summary = "회원 조회", description = "ID로 회원 정보를 조회합니다.")
+    public ResponseEntity<MemberRequestDto> memberForm() {
+        MemberRequestDto memberRequestDto = new MemberRequestDto("", "", "", "", "","null", "", "", "", "", "","","null");
+        return ResponseEntity.ok(memberRequestDto);
+    }
 
     @PostMapping(value = "/register")
     @Operation(summary = "회원 등록", description = "새로운 회원을 등록합니다.")
