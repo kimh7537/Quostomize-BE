@@ -54,4 +54,9 @@ public class StockAccount extends BaseTimeEntity {
     public void updateStockAccountActive(boolean isStockAccountActive){
         this.isStockAccountActive = isStockAccountActive;
     }
+
+    public void updateAccessTokenInfo(String openAPIToken, LocalDateTime expiryDate) {
+        this.openAPIToken = openAPIToken;
+        this.expiryDate = expiryDate;
+    }
 }

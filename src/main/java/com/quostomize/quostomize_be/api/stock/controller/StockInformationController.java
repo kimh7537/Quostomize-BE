@@ -18,19 +18,11 @@ public class StockInformationController {
 
     private final StockInformationService stockInformationService;
 
-    @PostMapping("/access")
-    public ResponseEntity<String> getOpenAPIAccessToken(){
-        String accessToken = stockInformationService.getOpenAPIAccessToken();
-        return ResponseEntity.status(HttpStatus.OK).body(accessToken);
-    }
-
     @GetMapping("/lists/{stockAccountId}")
     @Operation(summary = "계좌 정보로 보유 주식 가져오기", description = "연결된 게좌 정보를 OpenAPI를 활용해 보유한 주식 정보를 모두 가져옴")
     public ResponseEntity<StockInformationResponse> getStockBalance(@PathVariable long stockAccountId){
         StockInformationResponse response =  stockInformationService.showStockInformation(stockAccountId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
-
 
 }

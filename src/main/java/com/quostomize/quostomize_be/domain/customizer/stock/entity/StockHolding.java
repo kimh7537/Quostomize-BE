@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.domain.customizer.stock.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +31,15 @@ public class StockHolding extends BaseTimeEntity {
     @JoinColumn(name = "stock_information_id", nullable = false)
     private StockInformation stockInformation;
 
+    // StockHolding 클래스에 추가
+    @Builder
+    public StockHolding(Long stockTotalMoney, StockAccount stockAccount, StockInformation stockInformation) {
+        this.stockTotalMoney = stockTotalMoney;
+        this.stockAccount = stockAccount;
+        this.stockInformation = stockInformation;
+    }
+
+    public void updateStockTotalMoney(Long stockTotalMoney) {
+        this.stockTotalMoney = stockTotalMoney;
+    }
 }

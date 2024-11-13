@@ -6,22 +6,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quostomize.quostomize_be.api.stock.dto.StockInformationResponse;
 import com.quostomize.quostomize_be.common.error.exception.JsonProcessingAppException;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockAccount;
+import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockHolding;
+import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockAccountRepository;
-import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockHolldingRepository;
+import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockHoldingRepository;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInformationRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
+@Slf4j
 public class StockInformationService {
 
     @Value("${appkey}")
@@ -31,23 +42,43 @@ public class StockInformationService {
     private String appSecret;
 
     private final StockInformationRepository stockInformationRepository;
-    private final StockHolldingRepository stockHolldingRepository;
+    private final StockHoldingRepository stockHoldingRepository;
     private final StockAccountRepository stockAccountRepository;
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public StockInformationService(StockInformationRepository stockInformationRepository, StockHolldingRepository stockHolldingRepository, StockAccountRepository stockAccountRepository, ObjectMapper objectMapper) {
+    public StockInformationService(StockInformationRepository stockInformationRepository, StockHoldingRepository stockHoldingRepository, StockAccountRepository stockAccountRepository, ObjectMapper objectMapper) {
         this.stockInformationRepository = stockInformationRepository;
-        this.stockHolldingRepository = stockHolldingRepository;
+        this.stockHoldingRepository = stockHoldingRepository;
         this.stockAccountRepository = stockAccountRepository;
         this.restClient = RestClient.builder()
                 .baseUrl("https://openapi.koreainvestment.com:9443")
                 .build();
         this.objectMapper = objectMapper;
     }
+    
 
-    public String getOpenAPIAccessToken() {
+    @Transactional
+    public StockInformationResponse showStockInformation(Long stockAccountId) {
+        StockAccount stockAccount = stockAccountRepository.findById(stockAccountId)
+                .orElseThrow(() -> new EntityNotFoundException("주식 계좌 정보를 찾을 수 없음"));
+        String openAPIAccessToken = Optional.ofNullable(stockAccount.getOpenAPIToken())
+                .filter(token -> stockAccount.getExpiryDate() != null && LocalDateTime.now().isBefore(stockAccount.getExpiryDate()))
+                .orElseGet(() -> getOpenAPIAccessToken(stockAccountId));
+        String response = retrieveStockInformationFromAPI(openAPIAccessToken, stockAccount);
+
+        try {
+            saveStockInformationAndHolding(response, stockAccount);
+            return parseForStockInformation(response);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON 처리 중 오류 발생", e);
+        }
+    }
+
+    //OpenAPI로 access token값을 받기 위한 메서드
+    @Transactional
+    public String getOpenAPIAccessToken(Long stockAccountId) {
         Map<String, String> requestBody = Map.of(
                 "grant_type", "client_credentials",
                 "appkey", appkey,
@@ -60,59 +91,46 @@ public class StockInformationService {
                 .body(requestBody) // JSON 요청 바디 설정
                 .retrieve()
                 .body(String.class); // RestClientException 발생 시 GlobalExceptionHandler에서 처리
+
+        return parseAndSaveAccessToken(stockAccountId, response);
     }
 
-    private Long parseAndSaveAccessToken(String response){
+    private String parseAndSaveAccessToken(Long stockAccountId, String response){
         try{
             JsonNode rootNode = objectMapper.readTree(response);
             String openAPIToken = parseText(rootNode, "access_token");
-            String expiryDate = parseText(rootNode, "access_token_token_expired");
-
+            LocalDateTime expiryDate = LocalDateTime.parse(
+                    parseText(rootNode, "access_token_token_expired"),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            );
+            updateAccessToken(stockAccountId, openAPIToken, expiryDate);
+            return openAPIToken;
         }catch (JsonProcessingException e){
             throw new JsonProcessingAppException(e);
         }
     }
 
-
-    public StockInformationResponse showStockInformation(long stockAccountId){
-        
-        //TODO: access_key가 존재하는지 확인 1. 없으면 access_key 로직 호출 -> save 2. 있으면 넘어감
-        
-        //TODO: access_key가 만료 시간을 지났다면 다시 acess_key로직 호출
-        
+    @Transactional
+    protected void updateAccessToken(Long stockAccountId, String openAPIToken, LocalDateTime expiryDate) {
+        // 특정 stockAccountId로 StockAccount 조회
         StockAccount stockAccount = stockAccountRepository.findById(stockAccountId)
-                .orElseThrow(() -> new EntityNotFoundException("주식 계좌 정보를 찾을 수 없음"));
-
-        String stockAccountNumberStr = stockAccount.getStockAccountNumber().toString();
-        String cano = stockAccountNumberStr.substring(0, 8);
-        String acntPrdtCd = stockAccountNumberStr.substring(8, 10);
-
-        String response = retrieveStockInformation(cano, acntPrdtCd);
-        return parseForStockInformation(response);
+                .orElseThrow(() -> new EntityNotFoundException("Stock account not found"));
+        // 토큰과 만료 날짜 업데이트
+        stockAccount.updateAccessTokenInfo(openAPIToken, expiryDate);
+        // 업데이트된 정보 저장
+        stockAccountRepository.save(stockAccount);
     }
 
-    public String getValidAccessToken() {
-        AccessToken accessToken = accessTokenRepository.findById("ACCESS_TOKEN")
-                .orElseGet(this::requestAndSaveNewAccessToken);
 
-        if (LocalDateTime.now().isAfter(accessToken.getExpiry())) {
-            return requestAndSaveNewAccessToken().getToken();
-        }
-        return accessToken.getToken();
+    private String retrieveStockInformationFromAPI(String openAPIAccessToken, StockAccount stockAccount) {
+        String accountNumber = stockAccount.getStockAccountNumber().toString();
+        String cano = accountNumber.substring(0, 8);
+        String acntPrdtCd = accountNumber.substring(8, 10);
+        return retrieveStockInformation(openAPIAccessToken, cano, acntPrdtCd);
     }
 
-    private HttpHeaders showStockInformationHttpHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(accessToken);
-        headers.set("appkey", appkey);
-        headers.set("appSecret", appSecret);
-        headers.set("tr_id", "TTTC8434R");
-        headers.set("custtype", "P");
-        return headers;
-    }
 
-    private String retrieveStockInformation(String cano, String acntPrdtCd) {
+    private String retrieveStockInformation(String openAPIAccessToken, String cano, String acntPrdtCd) {
         return restClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/uapi/domestic-stock/v1/trading/inquire-balance")
                         .queryParam("CANO", cano)
@@ -127,28 +145,32 @@ public class StockInformationService {
                         .queryParam("CTX_AREA_FK100", "")
                         .queryParam("CTX_AREA_NK100", "")
                         .build())
-                .headers(httpHeaders -> httpHeaders.addAll(showStockInformationHttpHeaders()))
+                .headers(httpHeaders -> httpHeaders.addAll(showStockInformationHttpHeaders(openAPIAccessToken)))
                 .retrieve()
                 .body(String.class);
     }
 
+    private HttpHeaders showStockInformationHttpHeaders(String openAPIAccessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(openAPIAccessToken);
+        headers.set("appkey", appkey);
+        headers.set("appSecret", appSecret);
+        headers.set("tr_id", "TTTC8434R");
+        headers.set("custtype", "P");
+        return headers;
+    }
 
-    private StockInformationResponse parseForStockInformation(String response){
-        try {
+    private StockInformationResponse parseForStockInformation(String response) throws JsonProcessingException{
             JsonNode rootNode = objectMapper.readTree(response);
             // 상위 정보 파싱
             String rtCd = parseText(rootNode, "rt_cd");
-            String msgCd = parseText(rootNode, "msg_cd");
             String msg1 = parseText(rootNode, "msg1");
             // output 리스트 파싱
             List<StockInformationResponse.StockOneResponse> stockOneResponses = parseStockOneResponses(rootNode.path("output1"));
-            List<StockInformationResponse.StockAllResponse> stockAllResponses = parseStockAllResponses(rootNode.path("output2"));
+            Double resultRate = parseStockAllResponses(rootNode.path("output2"));
             // StockInformationResponse 객체를 생성하여 반환
-            return new StockInformationResponse(stockOneResponses, stockAllResponses, rtCd, msgCd, msg1);
-
-        }catch (JsonProcessingException e){
-            throw new JsonProcessingAppException(e);
-        }
+            return new StockInformationResponse(stockOneResponses, resultRate, rtCd, msg1);
     }
 
 
@@ -158,14 +180,14 @@ public class StockInformationService {
         if (output1Node.isArray()) {
             for (JsonNode node : output1Node) {
                 StockInformationResponse.StockOneResponse stockOne = new StockInformationResponse.StockOneResponse();
-                stockOne.setPdno(parseText(node, "pdno"));
-                stockOne.setPrdtName(parseText(node, "prdt_name"));
-                stockOne.setPchsAmt(parseText(node, "pchs_amt"));
-                stockOne.setPrpr(parseText(node, "prpr"));
-                stockOne.setEvluAmt(parseText(node, "evlu_amt"));
-                stockOne.setFlttRt(parseText(node, "fltt_rt"));
-                stockOne.setHldgQty(parseText(node, "hldg_qty"));
-                stockOne.setEvluPflsRt(parseText(node, "evlu_pfls_rt"));
+//                stockOne.setPdno(parseText(node, "pdno")); //종목코드
+                stockOne.setPrdtName(parseText(node, "prdt_name")); //종목이름
+//                stockOne.setPchsAmt(parseText(node, "pchs_amt")); //매수가
+                stockOne.setPrpr(parseText(node, "prpr")); //현재가 1개
+//                stockOne.setEvluAmt(parseText(node, "evlu_amt")); //현재가 여러개
+//                stockOne.setFlttRt(parseText(node, "fltt_rt")); //등략율
+                stockOne.setHldgQty(parseText(node, "hldg_qty")); //보유 주식 수
+                stockOne.setEvluPflsRt(parseText(node, "evlu_pfls_rt")); //매수가와 현재가 등략율
                 stockOneResponses.add(stockOne);
             }
         }
@@ -173,17 +195,101 @@ public class StockInformationService {
     }
 
     // Helper method to parse StockAllResponse list
-    private List<StockInformationResponse.StockAllResponse> parseStockAllResponses(JsonNode output2Node) {
-        List<StockInformationResponse.StockAllResponse> stockAllResponses = new ArrayList<>();
+    private Double parseStockAllResponses(JsonNode output2Node) {
         if (output2Node.isArray()) {
-            for (JsonNode node : output2Node) {
-                StockInformationResponse.StockAllResponse stockAll = new StockInformationResponse.StockAllResponse();
-                stockAll.setEvluAmtSmtlAmt(parseText(node, "evlu_amt_smtl_amt"));
-                stockAll.setPchsAmtSmtlAmt(parseText(node, "pchs_amt_smtl_amt"));
-                stockAllResponses.add(stockAll);
+            for(JsonNode node : output2Node){
+                int evluAmtSmtlAmt = Integer.parseInt(parseText(node, "evlu_amt_smtl_amt"));
+                int pchsAmtSmtlAmt = Integer.parseInt(parseText(node, "pchs_amt_smtl_amt"));
+                // 계산 후 소수점 두 자리로 반올림
+                double percentageChange = ((double) (evluAmtSmtlAmt - pchsAmtSmtlAmt) / pchsAmtSmtlAmt) * 100;
+                BigDecimal roundedPercentage = BigDecimal.valueOf(percentageChange).setScale(2, RoundingMode.HALF_UP);
+                return roundedPercentage.doubleValue();
             }
         }
-        return stockAllResponses;
+        return 0.0;
+    }
+
+    private void saveStockInformationAndHolding(String response, StockAccount stockAccount)
+            throws JsonProcessingException {
+        JsonNode rootNode = objectMapper.readTree(response);
+        JsonNode output1 = rootNode.get("output1");
+        for (JsonNode stock : output1) {
+            StockInformation stockInfo = processStockInformation(stock);
+            processStockHolding(stock, stockAccount, stockInfo);
+        }
+    }
+
+    private StockInformation processStockInformation(JsonNode stock) {
+        StockInformationData data = extractStockInformationData(stock);
+        return updateOrCreateStockInformation(data);
+    }
+
+    private StockInformationData extractStockInformationData(JsonNode stock) {
+        return StockInformationData.builder()
+                .stockCode(Integer.parseInt(parseText(stock, "pdno")))
+                .stockName(parseText(stock, "prdt_name"))
+                .presentPrice(Integer.parseInt(parseText(stock, "prpr")))
+                .build();
+    }
+
+
+    private synchronized StockInformation updateOrCreateStockInformation(StockInformationData data) {
+        return stockInformationRepository.findByStockCode(data.getStockCode())
+                .map(existing -> {
+                    existing.updatePresentPrice(data.getPresentPrice());
+                    return stockInformationRepository.save(existing); // 명시적 save 호출
+                })
+                .orElseGet(() -> createNewStockInformation(data));
+    }
+
+    private StockInformation createNewStockInformation(StockInformationData data) {
+        StockInformation newStock = StockInformation.builder()
+                .stockCode(data.getStockCode())
+                .stockName(data.getStockName())
+                .stockPresentPrice(data.getPresentPrice())
+                .stockImage("http://example.com")
+                .build();
+        return stockInformationRepository.save(newStock);
+    }
+
+    private void processStockHolding(JsonNode stock, StockAccount stockAccount, StockInformation stockInfo) {
+        int holdingQuantity = Integer.parseInt(parseText(stock, "hldg_qty"));
+
+        if (holdingQuantity > 0) {
+            updateOrCreateStockHolding(stock, stockAccount, stockInfo);
+        } else {
+            deleteStockHolding(stockAccount, stockInfo);
+        }
+    }
+
+    private void updateOrCreateStockHolding(JsonNode stock, StockAccount stockAccount, StockInformation stockInfo) {
+        long purchaseAmount = Long.parseLong(stock.get("pchs_amt").asText());
+        StockHolding stockHolding = findOrCreateStockHolding(stockAccount, stockInfo);
+        stockHolding.updateStockTotalMoney(purchaseAmount);
+        stockHoldingRepository.save(stockHolding);
+    }
+
+    private StockHolding findOrCreateStockHolding(StockAccount stockAccount, StockInformation stockInfo) {
+        return stockHoldingRepository
+                .findByStockAccountAndStockInformation(stockAccount, stockInfo)
+                .orElseGet(() -> StockHolding.builder()
+                        .stockAccount(stockAccount)
+                        .stockInformation(stockInfo)
+                        .build());
+    }
+
+    private void deleteStockHolding(StockAccount stockAccount, StockInformation stockInfo) {
+        stockHoldingRepository
+                .findByStockAccountAndStockInformation(stockAccount, stockInfo)
+                .ifPresent(stockHoldingRepository::delete);
+    }
+
+    @Getter
+    @Builder
+    private static class StockInformationData {
+        private final Integer stockCode;
+        private final String stockName;
+        private final Integer presentPrice;
     }
 
     private String parseText(JsonNode node, String fieldName) {
