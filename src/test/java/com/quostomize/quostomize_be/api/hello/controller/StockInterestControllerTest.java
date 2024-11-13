@@ -48,4 +48,20 @@ class StockInterestControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    @Test
+    @DisplayName("위시삭제")
+    @Disabled
+    void deleteStock() throws Exception{
+        // given
+        List<StockInterestDto> expectedDto = new ArrayList<>();
+        expectedDto.add(new StockInterestDto(1, "LG전자", 120000, ""));
+        expectedDto.add(new StockInterestDto(2, "현대차", 180000, ""));
+        String json = objectMapper.writeValueAsString(expectedDto);
+
+        //then
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/stocks/select").contentType(MediaType.APPLICATION_JSON).content(json).param("order","2"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
 }
