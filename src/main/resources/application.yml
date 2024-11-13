@@ -15,8 +15,3 @@ spring:
     redis:
       host: ${REDIS_URL}
       port: 6379
-aws:
-  accessKeyId: ${ACCESS_KEY_ID}
-  secretAccessKey: ${SECRET_ACCESS_KEY}
-  region: ${AWS_REGION}
-  bucketName: ${S3_BUCKET_NAME}
