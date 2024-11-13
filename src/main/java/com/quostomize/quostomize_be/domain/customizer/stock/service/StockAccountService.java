@@ -5,8 +5,10 @@ import com.quostomize.quostomize_be.api.stock.dto.StockAccountStatusResponse;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockAccount;
 import com.quostomize.quostomize_be.domain.customizer.stock.enums.PageType;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockAccountRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +34,18 @@ public class StockAccountService {
         return activeAccount
                 .map(this::createActiveAccountResponse) // 활성화된 계좌가 있는 경우, 해당 계좌를 파라미터로 전달
                 .orElseGet(() -> createInactiveAccountResponse(accounts)); // 모든 계좌가 비활성화된 경우
+    }
+
+
+    @Transactional
+    public StockAccountResponse updateStockAccount(Long stockAccountID) {
+        StockAccount stockAccount = stockAccountRepository.findById(stockAccountID)
+                .orElseThrow(() -> new EntityNotFoundException("계좌 정보를 찾을 수 없습니다."));
+        if(!stockAccount.getStockAccountActive()){
+            stockAccount.updateStockAccountActive(true);
+        }
+        stockAccountRepository.save(stockAccount);
+        return StockAccountResponse.from(stockAccount);
     }
 
 

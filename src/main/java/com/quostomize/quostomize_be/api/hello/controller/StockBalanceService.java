@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.api.hello.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quostomize.quostomize_be.api.stock.dto.StockInformationResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -46,7 +47,7 @@ public class StockBalanceService {
         return headers;
     }
 
-    public ApiResponseDTO getVolumeRank() {
+    public Response getVolumeRank() {
         try {
             String response = restClient.get()
                     .uri(uriBuilder -> uriBuilder.path("/uapi/domestic-stock/v1/trading/inquire-balance")
@@ -73,16 +74,16 @@ public class StockBalanceService {
         }
     }
 
-    private ApiResponseDTO parseFVolumeRank(String response) {
+    private Response parseFVolumeRank(String response) {
         try {
             JsonNode rootNode = objectMapper.readTree(response);
-            ApiResponseDTO apiResponseDTO = new ApiResponseDTO();
+            Response stockInformationResponse = new Response();
 
-            apiResponseDTO.setCtxAreaFk100(rootNode.path("ctx_area_fk100").asText());
-            apiResponseDTO.setCtxAreaNk100(rootNode.path("ctx_area_nk100").asText());
-            apiResponseDTO.setRtCd(rootNode.path("rt_cd").asText());
-            apiResponseDTO.setMsgCd(rootNode.path("msg_cd").asText());
-            apiResponseDTO.setMsg1(rootNode.path("msg1").asText());
+            stockInformationResponse.setCtxAreaFk100(rootNode.path("ctx_area_fk100").asText());
+            stockInformationResponse.setCtxAreaNk100(rootNode.path("ctx_area_nk100").asText());
+            stockInformationResponse.setRtCd(rootNode.path("rt_cd").asText());
+            stockInformationResponse.setMsgCd(rootNode.path("msg_cd").asText());
+            stockInformationResponse.setMsg1(rootNode.path("msg1").asText());
 
             // Parsing output1
             List<Output1DTO> output1List = new ArrayList<>();
@@ -119,7 +120,7 @@ public class StockBalanceService {
                     output1List.add(output1);
                 }
             }
-            apiResponseDTO.setOutput1(output1List);
+            stockInformationResponse.setOutput1(output1List);
 
             // Parsing output2
             List<Output2DTO> output2List = new ArrayList<>();
@@ -154,9 +155,9 @@ public class StockBalanceService {
                     output2List.add(output2);
                 }
             }
-            apiResponseDTO.setOutput2(output2List);
+            stockInformationResponse.setOutput2(output2List);
 
-            return apiResponseDTO;
+            return stockInformationResponse;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

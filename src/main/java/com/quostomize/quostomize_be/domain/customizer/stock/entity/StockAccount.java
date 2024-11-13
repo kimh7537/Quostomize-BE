@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -31,11 +33,22 @@ public class StockAccount extends BaseTimeEntity {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    @Column(name = "stock_access_token")
+    private String token;
+
+    @Column(name = "access_token_expiry")
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime expiryDate;
+
     @Builder
     public StockAccount(Long stockAccountNumber, String stockAccountName, Boolean stockAccountActive, Customer customer){
         this.stockAccountNumber = stockAccountNumber;
         this.stockAccountName = stockAccountName;
         this.stockAccountActive = stockAccountActive;
         this.customer = customer;
+    }
+
+    public void updateStockAccountActive(boolean stockAccountActive){
+        this.stockAccountActive = stockAccountActive;
     }
 }

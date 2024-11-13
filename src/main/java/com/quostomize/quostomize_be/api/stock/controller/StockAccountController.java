@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,10 +29,11 @@ public class StockAccountController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PatchMapping("/link/{stockAccountId}")
+    @Operation(summary = "가지고 있는 주식 계좌 연동", description = "가지고 있는 주식 계좌 중 하나를 연동한다.")
+    public ResponseEntity<StockAccountResponse> updateStockAccount(@PathVariable Long stockAccountId){
+        StockAccountResponse response = stockAccountService.updateStockAccount(stockAccountId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-
-
-
-
-    //TODO:
 }

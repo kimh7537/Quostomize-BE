@@ -1,5 +1,6 @@
 package com.quostomize.quostomize_be.api.hello.controller;
 
+import com.quostomize.quostomize_be.api.stock.dto.StockInformationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +20,8 @@ public class KisController {
         return kisService.getVolumeRank();
     }
 
-    @GetMapping("/stock-balance")
-    public ApiResponseDTO getStockBalance() {
+    @GetMapping("/stock-balance/good")
+    public Response get() {
         return stockBalanceService.getVolumeRank();
     }
 }
