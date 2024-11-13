@@ -64,4 +64,20 @@ class StockInterestControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    @Test
+    @DisplayName("위시 순위 조정")
+    @Disabled
+    public void switchingStock() throws Exception {
+        // given
+        List<StockInterestDto> expectedDto = new ArrayList<>();
+        expectedDto.add(new StockInterestDto(1, "LG전자", 120000, ""));
+        expectedDto.add(new StockInterestDto(2, "현대차", 180000, ""));
+        String json = objectMapper.writeValueAsString(expectedDto);
+
+        //then
+        this.mockMvc.perform(MockMvcRequestBuilders.patch("/api/stocks/select/change-rank").contentType(MediaType.APPLICATION_JSON).content(json).param("currentOrder", "2").param("editOrder", "1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
 }
