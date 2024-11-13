@@ -28,7 +28,7 @@ public class StockAccountService {
         }
 
         Optional<StockAccount> activeAccount = accounts.stream()
-                .filter(StockAccount::getStockAccountActive)
+                .filter(StockAccount::getIsStockAccountActive)
                 .findFirst();
 
         return activeAccount
@@ -41,7 +41,7 @@ public class StockAccountService {
     public StockAccountResponse updateStockAccount(Long stockAccountID) {
         StockAccount stockAccount = stockAccountRepository.findById(stockAccountID)
                 .orElseThrow(() -> new EntityNotFoundException("계좌 정보를 찾을 수 없습니다."));
-        if(!stockAccount.getStockAccountActive()){
+        if(!stockAccount.getIsStockAccountActive()){
             stockAccount.updateStockAccountActive(true);
         }
         stockAccountRepository.save(stockAccount);
@@ -54,14 +54,12 @@ public class StockAccountService {
     }
 
 
-
     private StockAccountStatusResponse createActiveAccountResponse(StockAccount account) {
         return new StockAccountStatusResponse(
                 PageType.MY_STOCK,
                 Collections.singletonList(StockAccountResponse.from(account))
         );
     }
-
 
     private StockAccountStatusResponse createInactiveAccountResponse(List<StockAccount> accounts) {
         List<StockAccountResponse> accountResponses = accounts.stream()

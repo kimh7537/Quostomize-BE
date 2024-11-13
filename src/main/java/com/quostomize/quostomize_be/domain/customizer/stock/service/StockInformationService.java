@@ -7,6 +7,7 @@ import com.quostomize.quostomize_be.api.stock.dto.StockInformationResponse;
 import com.quostomize.quostomize_be.common.error.exception.JsonProcessingAppException;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockAccount;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockAccountRepository;
+import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockHolldingRepository;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInformationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,16 @@ public class StockInformationService {
     @Value("${appsecret}")
     private String appSecret;
 
-    @Value("${access_token}")
-    private String accessToken;
-
     private final StockInformationRepository stockInformationRepository;
+    private final StockHolldingRepository stockHolldingRepository;
     private final StockAccountRepository stockAccountRepository;
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public StockInformationService(StockInformationRepository stockInformationRepository, StockAccountRepository stockAccountRepository, ObjectMapper objectMapper) {
+    public StockInformationService(StockInformationRepository stockInformationRepository, StockHolldingRepository stockHolldingRepository, StockAccountRepository stockAccountRepository, ObjectMapper objectMapper) {
         this.stockInformationRepository = stockInformationRepository;
+        this.stockHolldingRepository = stockHolldingRepository;
         this.stockAccountRepository = stockAccountRepository;
         this.restClient = RestClient.builder()
                 .baseUrl("https://openapi.koreainvestment.com:9443")
@@ -54,7 +54,7 @@ public class StockInformationService {
                 "appsecret", appSecret
         );
 
-        return restClient.post()
+        String response = restClient.post()
                 .uri("/oauth2/tokenP")
                 .header("Content-Type", "application/json")  // JSON 형식으로 전송
                 .body(requestBody) // JSON 요청 바디 설정
@@ -62,8 +62,24 @@ public class StockInformationService {
                 .body(String.class); // RestClientException 발생 시 GlobalExceptionHandler에서 처리
     }
 
+    private Long parseAndSaveAccessToken(String response){
+        try{
+            JsonNode rootNode = objectMapper.readTree(response);
+            String openAPIToken = parseText(rootNode, "access_token");
+            String expiryDate = parseText(rootNode, "access_token_token_expired");
+
+        }catch (JsonProcessingException e){
+            throw new JsonProcessingAppException(e);
+        }
+    }
+
 
     public StockInformationResponse showStockInformation(long stockAccountId){
+        
+        //TODO: access_key가 존재하는지 확인 1. 없으면 access_key 로직 호출 -> save 2. 있으면 넘어감
+        
+        //TODO: access_key가 만료 시간을 지났다면 다시 acess_key로직 호출
+        
         StockAccount stockAccount = stockAccountRepository.findById(stockAccountId)
                 .orElseThrow(() -> new EntityNotFoundException("주식 계좌 정보를 찾을 수 없음"));
 
@@ -73,6 +89,16 @@ public class StockInformationService {
 
         String response = retrieveStockInformation(cano, acntPrdtCd);
         return parseForStockInformation(response);
+    }
+
+    public String getValidAccessToken() {
+        AccessToken accessToken = accessTokenRepository.findById("ACCESS_TOKEN")
+                .orElseGet(this::requestAndSaveNewAccessToken);
+
+        if (LocalDateTime.now().isAfter(accessToken.getExpiry())) {
+            return requestAndSaveNewAccessToken().getToken();
+        }
+        return accessToken.getToken();
     }
 
     private HttpHeaders showStockInformationHttpHeaders() {

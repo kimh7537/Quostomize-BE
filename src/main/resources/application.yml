@@ -18,17 +18,20 @@ spring:
     redis:
       host: ${REDIS_URL}
       port: 6379
+
     elasticsearch:
       repositories:
         enabled: true
   elasticsearch:
     uris: http://localhost:9200
+
   jmx:
     enabled: false
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
       - org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
+
 logging:
   level:
     root: INFO
@@ -36,9 +39,10 @@ logging:
     javax.management: WARN
     jdk.internal.httpclient: WARN
     org.springframework.web.client.RestClient: INFO  # RestClient 관련 로그만 보고 싶을 때
+
 appkey: PSoEpBL7Q42Xvtq61xm7iEvHcDoIA4tT1uFE
 appsecret: HxRYm2m8jIwrkaHSDcY8wBETUK9ORf0OSuT6EQz8QJ5KY7ySkJEXJyXLJz5USELNlTqdMelckQvKjuWFDzYATi+QGp5uT9sjnMg2SC23PlXFuQeKe5n+eACL4MjuhTCwzGgWAk13/C0NEEp4JCg4VupDM3aEUWR7QwOKAy3fQz3Hr0tZcfM=
-access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6ImQ4YjcyMzJhLTI5ZTctNDkwOC1iYmM5LTZkOWU5MWJlMDBhYyIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTczMTU1NDE0MCwiaWF0IjoxNzMxNDY3NzQwLCJqdGkiOiJQU29FcEJMN1E0Mlh2dHE2MXhtN2lFdkhjRG9JQTR0VDF1RkUifQ.mVUZDckpH6NkT-CAhgpsUYPsan-brn2DB4K-hZp596Ea6KAKwBcyxDjycgL6LY_rtNc9maf3UYDd1QjqxNfeuA
+
 aws:
   accessKeyId: ${ACCESS_KEY_ID}
   secretAccessKey: ${SECRET_ACCESS_KEY}

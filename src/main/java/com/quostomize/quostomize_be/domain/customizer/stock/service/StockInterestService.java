@@ -14,10 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StockInterestService {
 
-    @Autowired
     private final StockInterestRepository stockInterestRepository;
-
-    @Autowired
     private final S3Service s3Service;
 
     // 위시리스트를 조회합니다.

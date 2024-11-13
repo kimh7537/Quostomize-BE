@@ -33,22 +33,25 @@ public class StockAccount extends BaseTimeEntity {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @Column(name = "stock_access_token")
-    private String token;
+    @Lob
+    @Column(name = "stock_access_token",columnDefinition = "TEXT")
+    private String openAPIToken;
 
     @Column(name = "access_token_expiry")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime expiryDate;
 
     @Builder
-    public StockAccount(Long stockAccountNumber, String stockAccountName, Boolean isStockAccountActive, Customer customer){
+    public StockAccount(Long stockAccountNumber, String stockAccountName, Boolean isStockAccountActive, Customer customer, String openAPIToken, LocalDateTime expiryDate){
         this.stockAccountNumber = stockAccountNumber;
         this.stockAccountName = stockAccountName;
         this.isStockAccountActive = isStockAccountActive;
         this.customer = customer;
+        this.openAPIToken = openAPIToken;
+        this.expiryDate = expiryDate;
     }
 
-    public void updateStockAccountActive(boolean stockAccountActive){
-        this.isStockAccountActive = stockAccountActive;
+    public void updateStockAccountActive(boolean isStockAccountActive){
+        this.isStockAccountActive = isStockAccountActive;
     }
 }
