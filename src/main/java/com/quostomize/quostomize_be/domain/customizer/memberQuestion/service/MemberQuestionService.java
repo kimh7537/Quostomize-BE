@@ -51,6 +51,4 @@ public class MemberQuestionService {
     public Member getMemberById(Long id) {
         return memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
-    // TODO: 로그인 여부 확인 로직 추가 필요
 }
