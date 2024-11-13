@@ -32,7 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ErrorResponse> handleAppCustomException(AppException e,
                                                                   HttpServletRequest request) {
-        log.error("AppException 발생: {}", e.getErrorCode().getMessage());
+        log.error("AppException 발생: {}", e.getMessage());
         log.error("에러가 발생한 지점 {}, {}", request.getMethod(), request.getRequestURI());
         ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), request);
         return ResponseEntity.status(e.getErrorCode().getHttpStatus()).body(errorResponse);
