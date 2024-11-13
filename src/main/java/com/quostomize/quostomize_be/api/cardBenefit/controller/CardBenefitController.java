@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.api.cardBenefit.controller;
 
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
+import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
@@ -19,22 +20,22 @@ public class CardBenefitController {
     private final CardBenefitService cardBenefitService;
     private final CardBenefitRepository cardBenefitRepository;
 
+    @GetMapping()
+    @Operation(summary = "카드 혜택 내역 조회", description = "로그인한 고객의 현재 적용된 카드 혜택을 조회합니다.")
+    public ResponseEntity<ResponseDTO> getCardBenefitStatus() {
+        List<CardBenefitResponse> benefits = cardBenefitService.findAll();
+        return ResponseEntity.ok(new ResponseDTO<>(benefits));
+    }
+
     @GetMapping("/{cardSequenceId}")
     @Operation(summary = "카드 혜택 변경 가능여부 일자 계산", description = "페이지 마운트 시 카드 혜택 변경 가능여부 일자를 계산하여 '변경' 혹은 '예약' 로직을 안내합니다.")
-    public ResponseEntity<String> getBenefitChangeDate(@PathVariable Long cardSequenceId) {
+    public ResponseEntity<ResponseDTO> getBenefitChangeDate(@PathVariable Long cardSequenceId) {
         CardBenefit cardBenefit = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("적용된 혜택 없음 - 카드: " + cardSequenceId));
         String buttonLabel = cardBenefitService.getBenefitChangeButtonLabel(cardBenefit);
-        return ResponseEntity.ok(buttonLabel);
-    }
-
-    @GetMapping()
-    @Operation(summary = "카드 혜택 내역 조회", description = "로그인한 고객의 현재 적용된 카드 혜택을 조회합니다.")
-    public ResponseEntity<List<CardBenefitResponse>> getCardBenefitStatus() {
-        List<CardBenefitResponse> benefits = cardBenefitService.findAll();
-        return ResponseEntity.ok(benefits);
+        return ResponseEntity.ok(new ResponseDTO<>(buttonLabel));
     }
 
     @PatchMapping()
