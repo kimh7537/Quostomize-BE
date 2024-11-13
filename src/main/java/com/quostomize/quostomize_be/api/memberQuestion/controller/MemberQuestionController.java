@@ -24,8 +24,10 @@ public class MemberQuestionController {
         this.memberQuestionService = memberQuestionService;
     }
 
+    // 문의 조회
     @GetMapping("")
     public ResponseEntity<ResponseDTO> getAllMemberQuestions(@RequestParam(defaultValue = "0") int page) {
+        // TODO: 로그인한 사용자 및 admin 여부 검증 로직 추가 필요
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Order.desc("questionsSequenceId"))); // 최신순으로 10개씩 페이지네이션
         Page<PageMemberQuestionResponse> questions = memberQuestionService.getAllMemberQuestions(pageRequest);
         PageResponse pageResponse = new PageResponse(
@@ -37,7 +39,8 @@ public class MemberQuestionController {
         );
         return ResponseEntity.ok(new ResponseDTO<>(pageResponse));
     }
-
+    
+    // 문의 등록
     @PostMapping("/{id}")
     public ResponseEntity<ResponseDTO> createQuestion(
             @PathVariable Long id,
