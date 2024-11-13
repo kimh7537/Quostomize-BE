@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.domain.customizer.qna.entity;
+package com.quostomize.quostomize_be.domain.customizer.adminResponse.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.memberQuestion.entity.MemberQuestion;
@@ -29,4 +29,6 @@ public class AdminResponse extends BaseTimeEntity {
     @OneToOne
     @JoinColumn(name = "questions_sequence_id", nullable = false)
     private MemberQuestion memberQuestion;
+
+
 }
