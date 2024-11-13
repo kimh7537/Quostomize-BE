@@ -19,6 +19,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long memberId;
 
+    @Column(name = "role", length = 20, nullable = false)
+    private String role = "user";
+
     @Column(name = "member_name", length = 20, nullable = false)
     private String memberName;
 
@@ -52,7 +55,7 @@ public class Member extends BaseTimeEntity {
     @Builder
     public Member(String memberName, String memberEmail, String memberLoginId, String memberPassword,
                   String residenceNumber, String zipCode, String memberAddress, String memberDetailAddress,
-                  String memberPhoneNumber, String secondaryAuthCode) {
+                  String memberPhoneNumber, String secondaryAuthCode, String role) {
         this.memberName = memberName;
         this.memberEmail = memberEmail;
         this.memberLoginId = memberLoginId;
@@ -63,5 +66,6 @@ public class Member extends BaseTimeEntity {
         this.memberDetailAddress = memberDetailAddress;
         this.memberPhoneNumber = memberPhoneNumber;
         this.secondaryAuthCode = secondaryAuthCode;
+        this.role = (role == null || role.isEmpty()) ? "USER" : role;
     }
 }

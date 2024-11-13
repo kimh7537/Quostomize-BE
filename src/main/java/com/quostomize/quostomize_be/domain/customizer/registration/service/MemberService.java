@@ -81,9 +81,6 @@ public class MemberService {
             throw new AppException(ErrorCode.INVALID_PHONE_NUMBER);
         }
 
-        if (!MemberRequestDto.isValidEmail(memberRequestDto.memberEmail())) {
-            throw new AppException(ErrorCode.INVALID_EMAIL);
-        }
 
         Member member = createMember(memberRequestDto);
         memberRepository.save(member);

@@ -1,26 +1,31 @@
 package com.quostomize.quostomize_be.api.registration.dto;
 
 import com.quostomize.quostomize_be.domain.customizer.registration.entity.Member;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
 public record MemberRequestDto(
-        String memberName,
-        String memberEmail,
-        String memberLoginId,
-        String memberPassword,
-        String memberPasswordConfirm,
-        String residenceNumber,
-        String zipCode,
-        String memberAddress,
-        String memberDetailAddress,
-        String memberPhoneNumber,
-        String secondaryAuthCode,
-        String secondaryAuthCodeConfirm
+        @NotBlank(message = "이름은 필수 입력 값입니다.") String memberName,
+        @NotBlank(message = "이메일은 필수 입력 값입니다.") @Email(message = "이메일 형식으로 입력해주세요.") String memberEmail,
+        @NotBlank String memberLoginId,
+        String role,
+        @NotBlank @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.") String memberPassword,
+        @NotBlank @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.") String memberPasswordConfirm,
+        @NotBlank @Length(min=13, max=13) String residenceNumber,
+        @NotBlank String zipCode,
+        @NotBlank String memberAddress,
+        @NotBlank(message = "상세주소를 입력하세요.") String memberDetailAddress,
+        @NotBlank String memberPhoneNumber,
+        @NotBlank @Length(min = 6, max = 6, message = "2차 인증번호 6자리를 입력해주세요.") String secondaryAuthCode,
+        @NotBlank @Length(min = 6, max = 6, message = "2차 인증번호 6자리를 입력해주세요.") String secondaryAuthCodeConfirm
 ) {
     public static MemberRequestDto from(Member member) {
         return new MemberRequestDto(
                 member.getMemberName(),
                 member.getMemberEmail(),
                 member.getMemberLoginId(),
+                member.getRole(),
                 member.getMemberPassword(),
                 null,
                 member.getResidenceNumber(),
@@ -29,6 +34,7 @@ public record MemberRequestDto(
                 member.getMemberDetailAddress(),
                 member.getMemberPhoneNumber(),
                 member.getSecondaryAuthCode(),
+
                 null
         );
     }
@@ -38,6 +44,7 @@ public record MemberRequestDto(
                 .memberName(this.memberName())
                 .memberEmail(this.memberEmail())
                 .memberLoginId(this.memberLoginId())
+                .role(this.role == null || this.role.isEmpty() ? "USER" : this.role())
                 .memberPassword(this.memberPassword())
                 .residenceNumber(this.residenceNumber())
                 .zipCode(this.zipCode())
@@ -60,7 +67,6 @@ public record MemberRequestDto(
         return phoneNumber != null && phoneNumber.matches("^\\d{10,11}$");
     }
 
-    public static boolean isValidEmail(String email) {
-        return email != null && email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
-    }
+
+
 }
