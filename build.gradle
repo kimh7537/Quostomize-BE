@@ -39,13 +39,6 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.wiremock/wiremock -> aws s3 의존성의 취약점 보완 의존성
 	testImplementation group: 'org.wiremock', name: 'wiremock', version: '3.9.2'
 
-
-
-
-
-
-
-
 	//Querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
