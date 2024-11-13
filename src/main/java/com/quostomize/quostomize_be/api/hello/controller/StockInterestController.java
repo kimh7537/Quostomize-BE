@@ -29,7 +29,7 @@ public class StockInterestController {
 
     // 순위 변경 기능
     @PatchMapping("/api/stocks/select/change-rank")
-    public void switchingStock(@RequestParam int order){
-        stockInterestService.switchStock(order);
+    public void switchingStock(@RequestParam int curentOrder, @RequestParam int editOrder){
+        stockInterestService.switchStock(curentOrder,editOrder);
 }
 }

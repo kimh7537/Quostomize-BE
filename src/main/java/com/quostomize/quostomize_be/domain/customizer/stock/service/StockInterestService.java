@@ -47,14 +47,26 @@ public class StockInterestService {
     }
 
     // 위시리스트 중 해당 id에 해당 특정항목을 특정 순서(order)로 변경합니다.
-    public void switchStock(int order){
-        if(order == 3) {
-            // 3순위를 1순위로 변경, 1순위 2순위로 변경, 2순위를 3순위로 변경
-            stockInterestRepository.switchStock1(3);
-        } else{
-            // 2순위를 1순위로 변경, 1순위를 2순위로 변경
-            stockInterestRepository.switchStock2(2);
-        }
+    public void switchStock(int currentOrder, int editOrder){
 
+        if(currentOrder == 3) {
+           if(editOrder == 1){ // 현순위 3순위에서 1순위로 바꾸는 경우,
+               stockInterestRepository.switchStock1(3);
+           } else{ // 현순위 3순위 여기서 2순위로 바꾸는 경우
+               stockInterestRepository.switchStock3(3);
+           }
+        } else if(currentOrder == 2){
+            if(editOrder == 1){ //2순위를 1순위로
+                stockInterestRepository.switchStock2(2);
+            } else { // 2순위를 3순위로
+                stockInterestRepository.switchStock4(2);
+            }
+        } else if(currentOrder == 1){
+            if (editOrder == 2){ // 1순위를 2순의로 변경한다.
+                stockInterestRepository.switchStock5(1);
+            } else { // 1순위를 3순위로 변경한다.
+                stockInterestRepository.switchStock6(1);
+            }
+        }
     }
 }
