@@ -86,10 +86,10 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-
-    public MemberResponseDto memberResponseDto(Long id) {
-
-        // 멤버 조회
-        return null;
-    }
+//    필요한가..?
+//    public MemberResponseDto memberResponseDto(Long id) {
+//
+//        // 멤버 조회
+//        return null;
+//    }
 }
