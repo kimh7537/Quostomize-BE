@@ -64,8 +64,8 @@ class MemberControllerTest {
 
         // expected: 회원가입이 완료 되었습니다.
         mockMvc.perform(post("/api/member/register")
-                .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(memberRequestDto)))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberRequestDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("회원가입이 완료되었습니다."));
     }
@@ -117,4 +117,3 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.errors.length()").value(10));
     }
 }
-

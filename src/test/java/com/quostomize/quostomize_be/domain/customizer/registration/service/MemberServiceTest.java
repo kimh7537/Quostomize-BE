@@ -66,8 +66,8 @@ class MemberServiceTest {
 
         // 엔티티 저장
         memberRepository.save(member);
-        
-        
+
+
         // 중복된 이메일로 회원가입 시도
         MemberRequestDto duplicateEmailDto = new MemberRequestDto(
                 "testName2",
