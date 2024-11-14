@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.domain.customizer.point.entity;
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,12 @@ public class PointUsageMethod extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_sequence_id", nullable = false)
     private CardDetail cardDetail;
+
+    @Builder
+    public PointUsageMethod(Boolean lotto, Boolean payBack, Boolean pieceStock, CardDetail cardDetail ){
+        this.isLotto = lotto;
+        this.isPayback=payBack;
+        this.isPieceStock=pieceStock;
+        this.cardDetail=cardDetail;
+    }
 }
