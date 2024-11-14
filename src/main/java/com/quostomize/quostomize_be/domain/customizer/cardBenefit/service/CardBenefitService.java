@@ -8,10 +8,10 @@ import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBen
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -22,6 +22,13 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class CardBenefitService {
+
+    @Value("${spring.schedule.cron}")
+    private String cronExpression;
+
+    @Value("${spring.schedule.use}")
+    private boolean isSchedulerEnabled;
+
     LocalDateTime recentTime = LocalDateTime.now();
 
     private final CardBenefitRepository cardBenefitRepository;
@@ -116,7 +123,7 @@ public class CardBenefitService {
     }
     
     // 예약한 혜택을 반영하는 스케줄러
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "${spring.schedule.cron}")
     public void updateActiveBenefits() {
         LocalDate today = LocalDate.now();
 
