@@ -33,6 +33,7 @@ public class PointUsageMethod extends BaseTimeEntity {
 
     @Builder
     public PointUsageMethod(Boolean lotto, Boolean payBack, Boolean pieceStock, CardDetail cardDetail ){
+        super();
         this.isLotto = lotto;
         this.isPayback=payBack;
         this.isPieceStock=pieceStock;
