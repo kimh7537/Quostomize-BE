@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    @GetMapping(value = "/register")
+    @GetMapping(value = "/register/{}")
     @Operation(summary = "회원 조회", description = "ID로 회원 정보를 조회합니다.")
     public ResponseEntity<MemberRequestDto> memberForm() {
-        MemberRequestDto memberRequestDto = new MemberRequestDto("", "", "", "", "", "", "", "", "", "", "", "");
+        MemberRequestDto memberRequestDto = new MemberRequestDto("", "", "", "", "","null", "", "", "", "", "","","null");
         return ResponseEntity.ok(memberRequestDto);
     }
 
