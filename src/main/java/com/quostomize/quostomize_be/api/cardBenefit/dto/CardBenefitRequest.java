@@ -1,13 +1,21 @@
 package com.quostomize.quostomize_be.api.cardBenefit.dto;
 
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Range;
+
 import java.time.LocalDate;
 import java.util.List;
 
 public record CardBenefitRequest(
+        @NotNull
         LocalDate benefitEffectiveDate,
+        @NotNull @Range(min = 0, max = 4, message = "혜택률은 최소 0%, 최대 4%로 설정할 수 있습니다.")
         Integer benefitRate,
+        @NotNull
         Boolean isActive,
+        @NotNull
         Long cardSequenceId,
+        @NotNull
         Long upperCategoryId,
         Long lowerCategoryId
 ) {

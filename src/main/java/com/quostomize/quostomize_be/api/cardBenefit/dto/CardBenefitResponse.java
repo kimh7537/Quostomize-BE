@@ -6,7 +6,7 @@ public record CardBenefitResponse(
         Long benefitId,
         Integer benefitRate,
         Boolean isActive,
-        Long cardId,
+        Long cardSequenceId,
         Long upperCategoryId,
         Long lowerCategoryId,
         LocalDateTime createdAt,

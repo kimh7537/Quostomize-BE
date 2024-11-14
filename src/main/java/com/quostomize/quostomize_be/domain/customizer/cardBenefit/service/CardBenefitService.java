@@ -2,16 +2,18 @@ package com.quostomize.quostomize_be.domain.customizer.cardBenefit.service;
 
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.BenefitCommonCode;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -22,6 +24,13 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class CardBenefitService {
+
+    @Value("${spring.schedule.cron}")
+    private String cronExpression;
+
+    @Value("${spring.schedule.use}")
+    private boolean isSchedulerEnabled;
+
     LocalDateTime recentTime = LocalDateTime.now();
 
     private final CardBenefitRepository cardBenefitRepository;
@@ -35,9 +44,9 @@ public class CardBenefitService {
     // 혜택 내역 조회
     public List<CardBenefitResponse> findAll() {
         // TODO: 하드코딩된 customer 정보 변경 필요
-        Long cardId = 2L;
+        Long cardSequenceId = 2L;
         boolean isActive = true;
-        Set<CardBenefit> cardBenefits = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardId, isActive);
+        Set<CardBenefit> cardBenefits = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, isActive);
         return cardBenefits.stream().map(CardBenefitResponse::from).collect(Collectors.toList());
     }
 
@@ -49,7 +58,11 @@ public class CardBenefitService {
     }
 
     // 변경 일자에 따른 버튼 내용
-    public String getBenefitChangeButtonLabel(CardBenefit cardBenefit) {
+    public String getBenefitChangeButtonLabel(Long cardSequenceId) {
+        CardBenefit cardBenefit = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_BENEFIT_NOT_FOUND));
         LocalDateTime modifiedAt = cardBenefit.getModifiedAt();
         long daysDifference = ChronoUnit.DAYS.between(modifiedAt, recentTime);
         return daysDifference >= 30 ? "변경하기" : "예약하기";
@@ -66,7 +79,7 @@ public class CardBenefitService {
 
             // 2. 새로운 CardBenefit으로 업데이트
                 CardDetail cardDetail = cardDetailRepository.findById(request.cardSequenceId())
-                        .orElseThrow(() -> new RuntimeException("Card Detail을 찾을 수 없습니다."));
+                        .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_NOT_FOUND));
                 cardBenefitRepository.save(
                         CardBenefit.builder()
                                 .cardDetail(cardDetail)
@@ -98,7 +111,7 @@ public class CardBenefitService {
 
                     // 2. 예약 혜택을 새로운 혜택으로 저장하기
                     CardDetail cardDetail = cardDetailRepository.findById(request.cardSequenceId())
-                            .orElseThrow(() -> new RuntimeException("Card Detail을 찾을 수 없습니다."));
+                            .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_NOT_FOUND));
                     cardBenefitRepository.save(
                             CardBenefit.builder()
                                     .cardDetail(cardDetail)
@@ -116,7 +129,7 @@ public class CardBenefitService {
     }
     
     // 예약한 혜택을 반영하는 스케줄러
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "${spring.schedule.cron}")
     public void updateActiveBenefits() {
         LocalDate today = LocalDate.now();
 
