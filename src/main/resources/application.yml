@@ -40,8 +40,8 @@ logging:
     jdk.internal.httpclient: WARN
     org.springframework.web.client.RestClient: INFO  # RestClient 관련 로그만 보고 싶을 때
 
-appkey: PSoEpBL7Q42Xvtq61xm7iEvHcDoIA4tT1uFE
-appsecret: HxRYm2m8jIwrkaHSDcY8wBETUK9ORf0OSuT6EQz8QJ5KY7ySkJEXJyXLJz5USELNlTqdMelckQvKjuWFDzYATi+QGp5uT9sjnMg2SC23PlXFuQeKe5n+eACL4MjuhTCwzGgWAk13/C0NEEp4JCg4VupDM3aEUWR7QwOKAy3fQz3Hr0tZcfM=
+appkey: ${OPENAPI_APPKEY}
+appsecret: ${OPENAPI_APPSECRET}
 
 aws:
   accessKeyId: ${ACCESS_KEY_ID}

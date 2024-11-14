@@ -15,7 +15,7 @@ import java.util.List;
 public interface StockInterestRepository extends JpaRepository <StockInterest,Long> {
 
     // 모든 wishlist를 DTO로 조회합니다.
-    @Query("Select NEW com.quostomize.quostomize_be.api.hello.dto.StockInterestDto(si.priority, sif.stockName, sif.stockPresentPrice, sif.stockImage) FROM StockInterest si JOIN StockInformation sif ON si.stockInformation = sif ORDER BY priority asc")
+    @Query("Select NEW com.quostomize.quostomize_be.api.stock.dto.StockInterestDto(si.priority, sif.stockName, sif.stockPresentPrice, sif.stockImage) FROM StockInterest si JOIN StockInformation sif ON si.stockInformation = sif ORDER BY priority asc")
     List<StockInterestDto> findAllStockInterestDto();
 
     // 해당 order 에 맞는 wish항목을 삭제합니다.

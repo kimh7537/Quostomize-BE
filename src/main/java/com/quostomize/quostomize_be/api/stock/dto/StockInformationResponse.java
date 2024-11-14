@@ -7,7 +7,7 @@ import java.util.List;
 
 public record StockInformationResponse(
         List<StockOneResponse> output1,
-        Double resultRate,
+        List<StockAllResponse> output2,
         String rtCd,
         String msg1
 ) {
@@ -25,10 +25,11 @@ public record StockInformationResponse(
         private String evluPflsRt; // 평가 손익율
     }
 
-//    @Getter
-//    @Setter
-//    public static class StockAllResponse {
-//        private String evluAmtSmtlAmt; // 평가금액합계금액
+    @Getter
+    @Setter
+    public static class StockAllResponse {
+        private Integer evluAmtSmtlAmt; // 평가금액합계금액
+        private Double resultRate;
 //        private String pchsAmtSmtlAmt; // 매입금액합계금액
-//    }
+    }
 }

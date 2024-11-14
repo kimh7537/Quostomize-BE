@@ -168,9 +168,9 @@ public class StockInformationService {
             String msg1 = parseText(rootNode, "msg1");
             // output 리스트 파싱
             List<StockInformationResponse.StockOneResponse> stockOneResponses = parseStockOneResponses(rootNode.path("output1"));
-            Double resultRate = parseStockAllResponses(rootNode.path("output2"));
+            List<StockInformationResponse.StockAllResponse> stockAllResponses = parseStockAllResponses(rootNode.path("output2"));
             // StockInformationResponse 객체를 생성하여 반환
-            return new StockInformationResponse(stockOneResponses, resultRate, rtCd, msg1);
+            return new StockInformationResponse(stockOneResponses, stockAllResponses, rtCd, msg1);
     }
 
 
@@ -195,18 +195,22 @@ public class StockInformationService {
     }
 
     // Helper method to parse StockAllResponse list
-    private Double parseStockAllResponses(JsonNode output2Node) {
+    private List<StockInformationResponse.StockAllResponse> parseStockAllResponses(JsonNode output2Node) {
+        List<StockInformationResponse.StockAllResponse> stockAllResponses = new ArrayList<>();
         if (output2Node.isArray()) {
             for(JsonNode node : output2Node){
+                StockInformationResponse.StockAllResponse stockAllResponse = new StockInformationResponse.StockAllResponse();
                 int evluAmtSmtlAmt = Integer.parseInt(parseText(node, "evlu_amt_smtl_amt"));
                 int pchsAmtSmtlAmt = Integer.parseInt(parseText(node, "pchs_amt_smtl_amt"));
                 // 계산 후 소수점 두 자리로 반올림
                 double percentageChange = ((double) (evluAmtSmtlAmt - pchsAmtSmtlAmt) / pchsAmtSmtlAmt) * 100;
                 BigDecimal roundedPercentage = BigDecimal.valueOf(percentageChange).setScale(2, RoundingMode.HALF_UP);
-                return roundedPercentage.doubleValue();
+                stockAllResponse.setEvluAmtSmtlAmt(evluAmtSmtlAmt);
+                stockAllResponse.setResultRate(roundedPercentage.doubleValue());
+                stockAllResponses.add(stockAllResponse);
             }
         }
-        return 0.0;
+        return stockAllResponses;
     }
 
     private void saveStockInformationAndHolding(String response, StockAccount stockAccount)
