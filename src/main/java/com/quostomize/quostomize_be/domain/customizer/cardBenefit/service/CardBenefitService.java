@@ -24,6 +24,13 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class CardBenefitService {
+
+    @Value("${spring.schedule.cron}")
+    private String cronExpression;
+
+    @Value("${spring.schedule.use}")
+    private boolean isSchedulerEnabled;
+
     LocalDateTime recentTime = LocalDateTime.now();
 
     private final CardBenefitRepository cardBenefitRepository;
@@ -122,7 +129,7 @@ public class CardBenefitService {
     }
     
     // 예약한 혜택을 반영하는 스케줄러
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "${spring.schedule.cron}")
     public void updateActiveBenefits() {
         LocalDate today = LocalDate.now();
 
