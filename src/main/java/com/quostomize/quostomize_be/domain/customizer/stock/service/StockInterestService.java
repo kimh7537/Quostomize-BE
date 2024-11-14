@@ -6,6 +6,7 @@ import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,22 @@ public class StockInterestService {
 
     // 위시리스트를 조회합니다.
     public List<StockInterestDto> getStockWishList() {
-        List<StockInterestDto> allStockInterestDto = stockInterestRepository.findAllStockInterestDto();
+        // Step 1: Query로 Object[] 결과 받기
+        List<Object[]> results = stockInterestRepository.findAllStockInterestDto();
+
+        // Step 2: Object[] 결과를 StockInterestDto로 수동 변환
+        List<StockInterestDto> allStockInterestDto = new ArrayList<>();
+        for (Object[] result : results) {
+            Integer priority = (Integer) result[0];
+            String stockName = (String) result[1];
+            Integer stockPresentPrice = (Integer) result[2];
+            String stockImage = (String) result[3];
+
+            // Step 3: DTO 객체 생성 후 리스트에 추가
+            StockInterestDto dto = new StockInterestDto(priority, stockName, stockPresentPrice, stockImage);
+            allStockInterestDto.add(dto);
+        return allStockInterestDto;
+        }
         List<StockInterestDto> collect = allStockInterestDto.stream()
                 .map(stock -> {
                     // stockImage로 presigned URL을 생성
