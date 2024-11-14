@@ -2,6 +2,8 @@ package com.quostomize.quostomize_be.domain.customizer.cardBenefit.service;
 
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.BenefitCommonCode;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
@@ -56,7 +58,11 @@ public class CardBenefitService {
     }
 
     // 변경 일자에 따른 버튼 내용
-    public String getBenefitChangeButtonLabel(CardBenefit cardBenefit) {
+    public String getBenefitChangeButtonLabel(Long cardSequenceId) {
+        CardBenefit cardBenefit = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_BENEFIT_NOT_FOUND));
         LocalDateTime modifiedAt = cardBenefit.getModifiedAt();
         long daysDifference = ChronoUnit.DAYS.between(modifiedAt, recentTime);
         return daysDifference >= 30 ? "변경하기" : "예약하기";
@@ -73,7 +79,7 @@ public class CardBenefitService {
 
             // 2. 새로운 CardBenefit으로 업데이트
                 CardDetail cardDetail = cardDetailRepository.findById(request.cardSequenceId())
-                        .orElseThrow(() -> new RuntimeException("Card Detail을 찾을 수 없습니다."));
+                        .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_NOT_FOUND));
                 cardBenefitRepository.save(
                         CardBenefit.builder()
                                 .cardDetail(cardDetail)
@@ -105,7 +111,7 @@ public class CardBenefitService {
 
                     // 2. 예약 혜택을 새로운 혜택으로 저장하기
                     CardDetail cardDetail = cardDetailRepository.findById(request.cardSequenceId())
-                            .orElseThrow(() -> new RuntimeException("Card Detail을 찾을 수 없습니다."));
+                            .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_NOT_FOUND));
                     cardBenefitRepository.save(
                             CardBenefit.builder()
                                     .cardDetail(cardDetail)
