@@ -17,7 +17,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
 //    private final PasswordEncoder passwordEncoder;
 
-    private static final String USERNAME_REGEX = "^[a-zA-Z][a-zA-Z0-9_]*$";
 
     public void validateDuplicateMember(MemberRequestDto RequestDto) {
         // 이메일 중복 확인
@@ -58,6 +57,7 @@ public class MemberService {
 
         validateDuplicateMember(memberRequestDto);
 
+
         // 아이디 양식 확인
         if (!memberRequestDto.isValidMemberLoginId(memberRequestDto.memberLoginId())){
             throw new AppException(ErrorCode.INVALID_LOGIN_ID);
@@ -76,12 +76,11 @@ public class MemberService {
             throw new AppException(ErrorCode.INVALID_PHONE_NUMBER);
         }
 
-
         Member member = createMember(memberRequestDto);
         memberRepository.save(member);
     }
 
-//    필요한가..?
+//    필요없을 것 같음.
 //    public MemberResponseDto memberResponseDto(Long id) {
 //
 //        // 멤버 조회
