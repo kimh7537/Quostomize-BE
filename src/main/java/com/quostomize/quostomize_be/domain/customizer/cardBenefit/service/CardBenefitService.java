@@ -51,7 +51,11 @@ public class CardBenefitService {
     }
 
     // 변경 일자에 따른 버튼 내용
-    public String getBenefitChangeButtonLabel(CardBenefit cardBenefit) {
+    public String getBenefitChangeButtonLabel(Long cardSequenceId) {
+        CardBenefit cardBenefit = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_BENEFIT_NOT_FOUND));
         LocalDateTime modifiedAt = cardBenefit.getModifiedAt();
         long daysDifference = ChronoUnit.DAYS.between(modifiedAt, recentTime);
         return daysDifference >= 30 ? "변경하기" : "예약하기";

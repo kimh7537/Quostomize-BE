@@ -8,6 +8,7 @@ import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBen
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,7 @@ public class CardBenefitController {
     @GetMapping("/{cardSequenceId}")
     @Operation(summary = "카드 혜택 변경 가능여부 일자 계산", description = "페이지 마운트 시 카드 혜택 변경 가능여부 일자를 계산하여 '변경' 혹은 '예약' 로직을 안내합니다.")
     public ResponseEntity<String> getBenefitChangeDate(@PathVariable Long cardSequenceId) {
-        CardBenefit cardBenefit = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_BENEFIT_NOT_FOUND));
-        String buttonLabel = cardBenefitService.getBenefitChangeButtonLabel(cardBenefit);
+        String buttonLabel = cardBenefitService.getBenefitChangeButtonLabel(cardSequenceId);
         return ResponseEntity.ok(buttonLabel);
     }
 
@@ -41,14 +38,14 @@ public class CardBenefitController {
 
     @PatchMapping()
     @Operation(summary = "카드 혜택 상세 변경", description = "선택한 항목을 반영하여 카드 혜택을 변경합니다.")
-    public ResponseEntity<Void> updateCardBenefitStatus(@RequestBody List<CardBenefitRequest> requests) {
+    public ResponseEntity<Void> updateCardBenefitStatus(@Valid @RequestBody List<CardBenefitRequest> requests) {
         cardBenefitService.updateCardBenefits(requests);
         return ResponseEntity.ok().build();
     }
 
      @PatchMapping("/reserve")
      @Operation(summary = "카드 혜택 변경 예약", description = "변경 가능일 이전에 요청한 사항은 혜택적용일에 자동으로 적용됩니다.")
-    public ResponseEntity<Void> reserveCardBenefits(@RequestBody List<CardBenefitRequest> requests) {
+    public ResponseEntity<Void> reserveCardBenefits(@Valid @RequestBody List<CardBenefitRequest> requests) {
         cardBenefitService.reserveCardBenefits(requests);
         return ResponseEntity.ok().build();
      }
