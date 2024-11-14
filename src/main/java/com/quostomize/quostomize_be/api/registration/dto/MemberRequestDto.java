@@ -67,6 +67,4 @@ public record MemberRequestDto(
         return phoneNumber != null && phoneNumber.matches("^\\d{10,11}$");
     }
 
-
-
 }

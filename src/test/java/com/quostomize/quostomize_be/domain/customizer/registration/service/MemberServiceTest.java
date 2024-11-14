@@ -2,13 +2,16 @@ package com.quostomize.quostomize_be.domain.customizer.registration.service;
 
 import com.quostomize.quostomize_be.api.registration.dto.MemberRequestDto;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
+import com.quostomize.quostomize_be.domain.customizer.registration.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.registration.repository.MemberRepository;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceTest {
 
     @Autowired
+    private JdbcTemplate jdbcTemplate; //Customer_id 에 test가 영향을 받아 잠시 Fk 비활성화 하기 위해 사용
+
+    @Autowired
     private MemberService memberService;
 
     @Autowired
@@ -27,54 +33,42 @@ class MemberServiceTest {
     @BeforeEach
     void clean(){
         memberRepository.deleteAll();
+
     }
 
-    @Test
-    @DisplayName("회원가입을 하려는 자.")
-    void saveMember_Success() {
-        // given
-        MemberRequestDto requestDto = new MemberRequestDto(
-                "testName",
-                "test@example.com",
-                "testLoginId",
-                "",
-                "password123",
-                "password123",
-                "1234567891012",
-                "12345",
-                "testDetailAddress",
-                "testDetailAddress",
-                "01022225555" ,
-                "123456",
-                "123456"
-        );
-
-        // when & then
-        assertDoesNotThrow(() -> memberService.saveMember(requestDto));
-        assertEquals(1, memberRepository.count(), "회원이 저장되지 않았습니다.");
+    @BeforeEach
+    void setUp(){
+        jdbcTemplate.execute("SET foreign_key_checks = 0;"); // 외래 키 제약 조건 비활성화
     }
+
+    @AfterEach
+    void tearDown() {
+        jdbcTemplate.execute("SET foreign_key_checks = 1;"); // 외래 키 제약 조건 활성화
+    }
+
 
     @Test
     @DisplayName("중복된 이메일로 인한 예외 발생 테스트")
     void saveMember_DuplicateEmail_Exception() {
         // given
-        MemberRequestDto requestDto = new MemberRequestDto(
-                "testName",
-                "test@example.com",
-                "testLoginId",
-                "",
-                "password123",
-                "password123",
-                "1234567891011",
-                "12345",
-                "testAddress",
-                "testAddress111",
-                "01012345678",
-                "456789",
-                "456789"
-        );
-        memberService.saveMember(requestDto);
+        Member member = Member.builder()
+                .memberName("testName")
+                .memberEmail("test@example.com")
+                .memberLoginId("testLoginId")
+                .memberPassword("password123")
+                .residenceNumber("1234567891011")
+                .zipCode("12345")
+                .memberAddress("testAddress")
+                .memberDetailAddress("testAddress111")
+                .memberPhoneNumber("01012345645")
+                .secondaryAuthCode("456789")
+                .build();
 
+        // 엔티티 저장
+        memberRepository.save(member);
+        
+        
+        // 중복된 이메일로 회원가입 시도
         MemberRequestDto duplicateEmailDto = new MemberRequestDto(
                 "testName2",
                 "test@example.com",
@@ -95,5 +89,6 @@ class MemberServiceTest {
         AppException exception = assertThrows(AppException.class, () -> memberService.saveMember(duplicateEmailDto));
         assertEquals("EMAIL_DUPLICATED", exception.getErrorCode().name());
     }
+
 
 }

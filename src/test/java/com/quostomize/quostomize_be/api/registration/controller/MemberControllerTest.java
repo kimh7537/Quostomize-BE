@@ -50,7 +50,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("정보 다 잘 넣었을 때, 회원 가입을 시켜주는 자.")
+    @DisplayName("정보의 요구사항을 갖추고 회원가입 시도")
     public void saveTest() throws Exception {
         // Given
         MemberRequestDto memberRequestDto = new MemberRequestDto(
@@ -60,10 +60,9 @@ class MemberControllerTest {
                 "nickname", "12345678910", "123456", "123456"
         );
 
-        // When
         doNothing().when(memberService).saveMember(any(MemberRequestDto.class));
 
-        // Then
+        // expected: 회원가입이 완료 되었습니다.
         mockMvc.perform(post("/api/member/register")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(memberRequestDto)))
@@ -72,19 +71,50 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("정보 없이 날렸을 때, 아니라고 하는 자.")
-    public void registerMember_WithInvalidData_ShouldReturnBadRequest() throws Exception {
+    @DisplayName("정보를 입력하지 않고 회원가입 시도")
+    public void returnBadRequest() throws Exception {
         // Given
         MemberRequestDto invalidMemberRequestDto = new MemberRequestDto(
                 "", "", "", "", "", "",
                 "", "", "", "", "", "", ""
         );
 
-        // Then
+        // expected: 빈 정보를 보낼 때, BadRequest 반환
         mockMvc.perform(post("/api/member/register")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidMemberRequestDto)))
                 .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    @DisplayName("잘못된 정보를 가지고 회원가입 시도")
+    public void returnBadRequest2() throws Exception {
+        // Given: 양식과 다른 Email, Password,PhoneNumber, SecondaryCode 및 주민번호, 주소에 관한 정보 미입력으로 총 발생할 에러 10건.
+        MemberRequestDto invalidMemberRequestDto = new MemberRequestDto(
+                "안녕",
+                "invalid-email",
+                "user123",
+                "",
+                "short",
+                "short",
+                "",
+                "",
+                "",
+                "",
+                "1234567",
+                "123",
+                "123"
+        );
+
+        // expected: 요청이 Bad Request를 반환하는지 확인
+        mockMvc.perform(post("/api/member/register")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidMemberRequestDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.errors").isArray())
+                .andExpect(jsonPath("$.errors.length()").value(10));
     }
 }
 
