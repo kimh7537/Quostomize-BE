@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.api.hello.dto;
+package com.quostomize.quostomize_be.api.stock.dto;
 
 public record StockInterestDto (
         Integer priority,

@@ -2,9 +2,8 @@ package com.quostomize.quostomize_be.domain.customizer.stock.service;
 
 import com.quostomize.quostomize_be.common.s3.S3Service;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInterestRepository;
-import com.quostomize.quostomize_be.api.hello.dto.StockInterestDto;
+import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.quostomize.quostomize_be.domain.customizer.stock.repository;
 
-import com.quostomize.quostomize_be.api.hello.dto.StockInterestDto;
+import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInterest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
