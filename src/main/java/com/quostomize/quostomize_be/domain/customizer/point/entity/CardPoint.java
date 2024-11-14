@@ -27,6 +27,7 @@ public class CardPoint extends BaseTimeEntity {
 
     @Builder
     public CardPoint(Long cardPoint,CardDetail cardDetail){
+        super();
         this.cardPoint = cardPoint;
         this.cardDetail=cardDetail;
     }
