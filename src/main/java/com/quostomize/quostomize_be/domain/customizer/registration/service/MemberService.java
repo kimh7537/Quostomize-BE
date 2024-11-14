@@ -17,36 +17,36 @@ public class MemberService {
     private final MemberRepository memberRepository;
 //    private final PasswordEncoder passwordEncoder;
 
-    public void validateDuplicateMember(MemberRequestDto memberRequestDto) {
+    public void validateDuplicateMember(MemberRequestDto RequestDto) {
         // 이메일 중복 확인
-        Member findMemberByEmail = memberRepository.findByMemberEmail(memberRequestDto.memberEmail());
+        Member findMemberByEmail = memberRepository.findByMemberEmail(RequestDto.memberEmail());
         if (findMemberByEmail != null) {
             throw new AppException(ErrorCode.EMAIL_DUPLICATED);
         }
 
         // ID 중복 확인
-        Member findMemberByLoginId = memberRepository.findByMemberLoginId(memberRequestDto.memberLoginId());
+        Member findMemberByLoginId = memberRepository.findByMemberLoginId(RequestDto.memberLoginId());
         if (findMemberByLoginId != null) {
             throw new AppException(ErrorCode.MEMBER_LOGIN_ID_DUPLICATED);
         }
 
         // 전화번호 중복 확인
-        Member findMemberByPhoneNumber = memberRepository.findByMemberPhoneNumber(memberRequestDto.memberPhoneNumber());
+        Member findMemberByPhoneNumber = memberRepository.findByMemberPhoneNumber(RequestDto.memberPhoneNumber());
         if (findMemberByPhoneNumber != null) {
             throw new AppException(ErrorCode.PHONE_NUMBER_DUPLICATED);
         }
     }
 
     // 비밀번호 확인 메서드
-    public void validatePassword(String password, String passwordConfirm) {
-        if (!password.equals(passwordConfirm)) {
+    public void validatePassword(MemberRequestDto requestDto) {
+        if (!requestDto.isValidPassword()) {
             throw new AppException(ErrorCode.NOT_MATCHED_PASSWORD);
         }
     }
 
     // 2차 인증번호 확인 메서드
-    public void validateSecondaryAuthCode(String secondaryAuthCode, String secondaryAuthCodeConfirm) {
-        if (!secondaryAuthCode.equals(secondaryAuthCodeConfirm)) {
+    public void validateSecondaryAuthCode(MemberRequestDto requestDto) {
+        if (!requestDto.isValidSecondaryAuthCode()) {
             throw new AppException(ErrorCode.NOT_MATCHED_SECONDARY_AUTH_CODE);
         }
     }
@@ -68,16 +68,28 @@ public class MemberService {
 
     public void saveMember (MemberRequestDto memberRequestDto) {
         validateDuplicateMember(memberRequestDto);
-        validatePassword(memberRequestDto.memberPassword(), memberRequestDto.memberPasswordConfirm());
-        validateSecondaryAuthCode(memberRequestDto.secondaryAuthCode(), memberRequestDto.secondaryAuthCodeConfirm());
+
+        if (!memberRequestDto.isValidPassword()) {
+            throw new AppException(ErrorCode.NOT_MATCHED_PASSWORD);
+        }
+
+        if (!memberRequestDto.isValidSecondaryAuthCode()) {
+            throw new AppException(ErrorCode.NOT_MATCHED_SECONDARY_AUTH_CODE);
+        }
+
+        if (!MemberRequestDto.isValidPhoneNumber(memberRequestDto.memberPhoneNumber())) {
+            throw new AppException(ErrorCode.INVALID_PHONE_NUMBER);
+        }
+
+
         Member member = createMember(memberRequestDto);
         memberRepository.save(member);
     }
 
-
-    public MemberResponseDto memberResponseDto(Long id) {
-
-        // 멤버 조회
-        return null;
-    }
+//    필요한가..?
+//    public MemberResponseDto memberResponseDto(Long id) {
+//
+//        // 멤버 조회
+//        return null;
+//    }
 }
