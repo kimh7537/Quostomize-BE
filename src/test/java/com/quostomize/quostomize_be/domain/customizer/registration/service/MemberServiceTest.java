@@ -90,5 +90,30 @@ class MemberServiceTest {
         assertEquals("EMAIL_DUPLICATED", exception.getErrorCode().name());
     }
 
+    @Test
+    @DisplayName("유효하지 않은 아이디로 회원가입 시도")
+    void notValid_LoginId_Exception(){
+        // given
+        MemberRequestDto notValidLoginId = new MemberRequestDto(
+                "testName2",
+                "test@example.com",
+                "2312gjkdfs",
+                "",
+                "password123",
+                "password123",
+                "1234545678912",
+                "12345",
+                "testDetailAddress",
+                "testDetailAddress",
+                "01055558888",
+                "123456",
+                "123456"
+        );
+
+        // when & then
+        AppException exception = assertThrows(AppException.class, () -> memberService.saveMember(notValidLoginId));
+        assertEquals("INVALID_LOGIN_ID", exception.getErrorCode().name());
+
+    }
 
 }
