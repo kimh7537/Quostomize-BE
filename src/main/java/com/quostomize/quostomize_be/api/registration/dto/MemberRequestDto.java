@@ -55,11 +55,6 @@ public record MemberRequestDto(
                 .build();
     }
 
-
-    public boolean isValidMemberLoginId(String memberLoginId) {
-        return memberLoginId != null & memberLoginId.matches("^[a-zA-Z][a-zA-Z0-9_]*$");
-    }
-
     public boolean isValidPassword() {
         return this.memberPassword().equals(this.memberPasswordConfirm());
     }
