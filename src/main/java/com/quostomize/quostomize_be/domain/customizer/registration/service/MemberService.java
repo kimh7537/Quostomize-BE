@@ -17,6 +17,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 //    private final PasswordEncoder passwordEncoder;
 
+
     public void validateDuplicateMember(MemberRequestDto RequestDto) {
         // 이메일 중복 확인
         Member findMemberByEmail = memberRepository.findByMemberEmail(RequestDto.memberEmail());
@@ -37,20 +38,6 @@ public class MemberService {
         }
     }
 
-    // 비밀번호 확인 메서드
-    public void validatePassword(MemberRequestDto requestDto) {
-        if (!requestDto.isValidPassword()) {
-            throw new AppException(ErrorCode.NOT_MATCHED_PASSWORD);
-        }
-    }
-
-    // 2차 인증번호 확인 메서드
-    public void validateSecondaryAuthCode(MemberRequestDto requestDto) {
-        if (!requestDto.isValidSecondaryAuthCode()) {
-            throw new AppException(ErrorCode.NOT_MATCHED_SECONDARY_AUTH_CODE);
-        }
-    }
-
     private Member createMember(MemberRequestDto memberRequestDto) {
         return Member.builder()
                 .memberName(memberRequestDto.memberName())
@@ -67,12 +54,20 @@ public class MemberService {
     }
 
     public void saveMember (MemberRequestDto memberRequestDto) {
+
         validateDuplicateMember(memberRequestDto);
 
+
+        // 아이디 양식 확인
+        if (!memberRequestDto.isValidMemberLoginId(memberRequestDto.memberLoginId())){
+            throw new AppException(ErrorCode.INVALID_LOGIN_ID);
+        }
+
+        // 비밀번호 확인
         if (!memberRequestDto.isValidPassword()) {
             throw new AppException(ErrorCode.NOT_MATCHED_PASSWORD);
         }
-
+        // 2차 인증번호 확인
         if (!memberRequestDto.isValidSecondaryAuthCode()) {
             throw new AppException(ErrorCode.NOT_MATCHED_SECONDARY_AUTH_CODE);
         }
@@ -81,12 +76,11 @@ public class MemberService {
             throw new AppException(ErrorCode.INVALID_PHONE_NUMBER);
         }
 
-
         Member member = createMember(memberRequestDto);
         memberRepository.save(member);
     }
 
-//    필요한가..?
+//    필요없을 것 같음.
 //    public MemberResponseDto memberResponseDto(Long id) {
 //
 //        // 멤버 조회
