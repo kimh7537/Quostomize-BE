@@ -18,3 +18,8 @@ spring:
   schedule:
     cron: 0 0 0 * * ?
     use: true
+aws:
+  accessKeyId: ${ACCESS_KEY_ID}
+  secretAccessKey: ${SECRET_ACCESS_KEY}
+  region: ${AWS_REGION}
+  bucketName: ${S3_BUCKET_NAME}
