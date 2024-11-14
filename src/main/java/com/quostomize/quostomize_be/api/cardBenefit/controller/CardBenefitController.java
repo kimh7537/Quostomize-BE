@@ -2,6 +2,8 @@ package com.quostomize.quostomize_be.api.cardBenefit.controller;
 
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
@@ -25,7 +27,7 @@ public class CardBenefitController {
         CardBenefit cardBenefit = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true)
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("적용된 혜택 없음 - 카드: " + cardSequenceId));
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_BENEFIT_NOT_FOUND));
         String buttonLabel = cardBenefitService.getBenefitChangeButtonLabel(cardBenefit);
         return ResponseEntity.ok(buttonLabel);
     }
