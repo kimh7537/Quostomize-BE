@@ -1,6 +1,6 @@
 package com.quostomize.quostomize_be.api.card.dto;
 
-import com.quostomize.quostomize_be.api.cardapplicant.CardApplicantDTO;
+import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

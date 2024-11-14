@@ -4,7 +4,7 @@ import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,9 +15,9 @@ import java.util.Random;
 public class CardService {
 
     private final CardRepository cardRepository;
-    private final Random random;
+    private final Random random = new Random();
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+//    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public CardDetail createCard(CreateCardDTO createCardDTO) {
         String cardNumber = String.valueOf(random.nextLong(1_000_0000_0000_0000L,10_000_0000_0000_0000L));
@@ -28,8 +28,8 @@ public class CardService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(createCardDTO.cardPassword());
-        String encodedCvc = bCryptPasswordEncoder.encode(cvc);
+//        String encodedPassword = bCryptPasswordEncoder.encode(createCardDTO.cardPassword());
+//        String encodedCvc = bCryptPasswordEncoder.encode(cvc);
         int expiredYear = LocalDate.now().plusYears(5).getYear();
         int expiredMonth = LocalDate.now().getMonthValue();
         LocalDate expiredAt = LocalDate.of(expiredYear,expiredMonth, 1);
@@ -41,8 +41,10 @@ public class CardService {
                 .isAppCard(createCardDTO.isAppCard())
                 .isForeignBlocked(createCardDTO.isForeignBlocked())
                 .isPostpaidTransport(createCardDTO.isPostpaidTransport())
-                .cardPassword(encodedPassword)
-                .cvcNumber(encodedCvc)
+//                .cardPassword(encodedPassword)
+//                .cvcNumber(encodedCvc)
+                .cardPassword(createCardDTO.cardPassword())
+                .cvcNumber(cvc)
                 .expirationDate(expiredAt)
                 .optionalTerms(createCardDTO.optionalTerms())
                 .paymentReceiptMethods(createCardDTO.paymentReceiptMethods())

@@ -1,6 +1,6 @@
-package com.quostomize.quostomize_be.domain.customizer.cardApplication.repository;
+package com.quostomize.quostomize_be.domain.customizer.cardapplication.repository;
 
-import com.quostomize.quostomize_be.domain.customizer.cardApplication.entity.CardApplicantInfo;
+import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

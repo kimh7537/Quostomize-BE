@@ -1,6 +1,6 @@
-package com.quostomize.quostomize_be.api.cardapplicant;
+package com.quostomize.quostomize_be.api.cardapplicant.dto;
 
-import com.quostomize.quostomize_be.domain.customizer.cardApplication.entity.CardApplicantInfo;
+import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
 import jakarta.validation.constraints.*;
 
 public record CardApplicantDetailsDTO(

@@ -1,13 +1,13 @@
-package com.quostomize.quostomize_be.domain.customizer.cardApplication.service;
+package com.quostomize.quostomize_be.domain.customizer.cardapplication.service;
 
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
-import com.quostomize.quostomize_be.api.cardapplicant.CardApplicantDTO;
-import com.quostomize.quostomize_be.api.cardapplicant.CardApplicantDetailsDTO;
+import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
+import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
 import com.quostomize.quostomize_be.common.DTO.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
-import com.quostomize.quostomize_be.domain.customizer.cardApplication.entity.CardApplicantInfo;
-import com.quostomize.quostomize_be.domain.customizer.cardApplication.repository.CardApplicantInfoRepository;
+import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
+import com.quostomize.quostomize_be.domain.customizer.cardapplication.repository.CardApplicantInfoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;

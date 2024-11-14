@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.api.cardapplicant;
+package com.quostomize.quostomize_be.api.cardapplicant.dto;
 
 import jakarta.validation.constraints.*;
 

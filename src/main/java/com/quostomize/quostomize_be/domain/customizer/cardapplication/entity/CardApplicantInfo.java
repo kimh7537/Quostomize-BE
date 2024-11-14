@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.domain.customizer.cardApplication.entity;
+package com.quostomize.quostomize_be.domain.customizer.cardapplication.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
