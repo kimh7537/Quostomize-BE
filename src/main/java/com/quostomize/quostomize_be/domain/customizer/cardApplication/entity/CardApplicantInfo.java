@@ -1,7 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.cardApplication.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
-import com.quostomize.quostomize_be.domain.customizer.card.entity.Card;
+import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "card_applications")
-public class CardApplication extends BaseTimeEntity {
+@Table(name = "card_applicant_info")
+public class CardApplicantInfo extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "application_id")
-    private Long applicationId;
+    @Column(name = "card_applicant_info_id")
+    private Long cardApplicantInfoId;
 
-    @Column(name = "residence_number", length = 13, nullable = false)
+    @Column(name = "residence_number", nullable = false)
     private String residenceNumber;
 
     @Column(name = "applicant_name", length = 40, nullable = false)
@@ -42,19 +42,19 @@ public class CardApplication extends BaseTimeEntity {
     @Column(name = "phone_number", length = 20, nullable = false)
     private String phoneNumber;
 
-    @Column(name = "home_address", length = 100)
+    @Column(name = "home_address", length = 100, nullable = false)
     private String homeAddress;
 
-    @Column(name = "home_detail_address", length = 100)
+    @Column(name = "home_detail_address", length = 100, nullable = false)
     private String homeDetailAddress;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", nullable = false)
-    private Card card;
+    @JoinColumn(name = "card_sequence_id", nullable = false)
+    private CardDetail cardDetail;
 
     @Builder
-    public CardApplication(Card card, String homeDetailAddress, String homeAddress, String phoneNumber, String applicantEmail, String shippingDetailAddress, String shippingAddress, String zipCode, String englishName, String applicantName, String residenceNumber, Long applicationId) {
-        this.card = card;
+    public CardApplicantInfo(CardDetail cardDetail, String homeDetailAddress, String homeAddress, String phoneNumber, String applicantEmail, String shippingDetailAddress, String shippingAddress, String zipCode, String englishName, String applicantName, String residenceNumber) {
+        this.cardDetail = cardDetail;
         this.homeDetailAddress = homeDetailAddress;
         this.homeAddress = homeAddress;
         this.phoneNumber = phoneNumber;
@@ -65,6 +65,6 @@ public class CardApplication extends BaseTimeEntity {
         this.englishName = englishName;
         this.applicantName = applicantName;
         this.residenceNumber = residenceNumber;
-        this.applicationId = applicationId;
+        this.cardApplicantInfoId = cardApplicantInfoId;
     }
 }
