@@ -9,3 +9,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findByMemberPhoneNumber(String memberPhoneNumber);
     Member findByMemberEmail(String memberEmail);
 }
+
+
+
+
+
+
+
+
+
