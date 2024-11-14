@@ -1,5 +1,7 @@
 package com.quostomize.quostomize_be.common.error.handler;
 
+import com.amazonaws.Response;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.error.response.ErrorResponse;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -27,12 +30,12 @@ import static com.quostomize.quostomize_be.common.error.response.MethodArgumentE
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AppException.class)
-    public ResponseEntity<ErrorResponse> handleAppCustomException(AppException e, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleAppCustomException(AppException e,
+                                                                  HttpServletRequest request) {
         log.error("AppException 발생: {}", e.getErrorCode().getMessage());
         log.error("에러가 발생한 지점 {}, {}", request.getMethod(), request.getRequestURI());
         ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), request);
-        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
-                .body(errorResponse);
+        return ResponseEntity.status(e.getErrorCode().getHttpStatus()).body(errorResponse);
     }
 
     @Override
@@ -65,6 +68,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("Entity Not Found Exception 발생: {}", e.getMessage());
         log.error("에러가 발생한 지점 {}, {}", request.getMethod(), request.getRequestURI());
         ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.ENTITY_NOT_FOUND, request);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(RestClientException.class)
+    public ResponseEntity<ErrorResponse> handleRestClientException(RestClientException e,
+                                                                   HttpServletRequest request) {
+        log.error("RestClient Exception 발생: {}", e.getMessage());
+        log.error("에러가 발생한 지점 {}, {}", request.getMethod(), request.getRequestURI());
+        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.OPENAPI_CONNECT_FAIL, request);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 

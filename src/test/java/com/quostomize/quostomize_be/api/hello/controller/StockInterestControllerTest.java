@@ -1,7 +1,7 @@
 package com.quostomize.quostomize_be.api.hello.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quostomize.quostomize_be.api.hello.dto.StockInterestDto;
+import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
