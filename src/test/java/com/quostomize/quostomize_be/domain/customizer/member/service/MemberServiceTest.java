@@ -1,11 +1,11 @@
 package com.quostomize.quostomize_be.domain.customizer.member.service;
 
+import com.quostomize.quostomize_be.api.member.dto.ChangeAddressDTO;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.member.repository.MemberRepository;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -33,7 +34,7 @@ public class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Test
-    @DisplayName("책 단일 조회")
+    @DisplayName("회원 단일 조회")
     void getMemberInfoById() {
 
         // given
@@ -46,7 +47,7 @@ public class MemberServiceTest {
         given(memberRepository.findByMemberId(memberId)).willReturn(Optional.of(savedMember));
 
         // when
-        ResponseDTO<MemberResponseDTO> findMember = memberService.findByMemberId(String.valueOf(memberId));
+        ResponseDTO<MemberResponseDTO> findMember = memberService.findByMemberId(memberId);
 
         // then
         assertThat(findMember.getData().memberName()).isEqualTo(savedMember.getMemberName());
@@ -56,7 +57,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("책 전체 조회")
+    @DisplayName("회원 전체 조회")
     void getAllMemberInfos() {
 
         // given
@@ -77,6 +78,35 @@ public class MemberServiceTest {
         assertThat(resultList.getData().size()).isEqualTo(3);
 
     }
+
+
+    @Test
+    @DisplayName("회원 주소 변경")
+    void updateMemberAddress() {
+        // given
+        long memberId = 1L;
+        Member member = new Member(memberId, "ADMIN", "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279");
+
+        String newAddress = "서울시 강남구 테헤란로 123";
+        String newDetailAddress = "극비빌딩 B609호";
+        ChangeAddressDTO changeAddressDTO = new ChangeAddressDTO(newAddress, newDetailAddress);
+
+        given(memberRepository.findByMemberId(memberId))
+                .willReturn(Optional.of(member));
+
+        // when
+        ResponseDTO<Void> result = memberService.updateMemberAddress(memberId, changeAddressDTO);
+
+        // then
+        assertThat(member.getMemberAddress()).isEqualTo(newAddress);
+        assertThat(member.getMemberDetailAddress()).isEqualTo(newDetailAddress);
+        assertThat(result).isNotNull();
+
+        verify(memberRepository).findByMemberId(memberId);
+    }
+
+
+
 
 
 }
