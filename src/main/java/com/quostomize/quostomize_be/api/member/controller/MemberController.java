@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.api.member.controller;
 
 import com.quostomize.quostomize_be.api.member.dto.ChangeAddressDTO;
+import com.quostomize.quostomize_be.api.member.dto.ChangeEmailDTO;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.member.service.MemberService;
@@ -27,13 +28,13 @@ public class MemberController {
             @PathVariable("memberId")
             Long memberId
     ) {
-        return ResponseEntity.ok(memberService.findByMemberId(memberId));
+        return ResponseEntity.ok(new ResponseDTO<>(memberService.findByMemberId(memberId)));
     }
 
     @GetMapping
     @Operation(summary = "전체 회원 정보 조회", description = "전체 회원 정보를 조회합니다.")
     public ResponseEntity<ResponseDTO<List<MemberResponseDTO>>> findAll() {
-        return ResponseEntity.ok(memberService.findAll());
+        return ResponseEntity.ok(new ResponseDTO<>(memberService.findAll()));
     }
 
     @PatchMapping("/change-address/{memberId}")
@@ -44,8 +45,22 @@ public class MemberController {
 
             @RequestBody
             ChangeAddressDTO changeAddressDTO
-    ) {;
-        return ResponseEntity.ok(memberService.updateMemberAddress(memberId, changeAddressDTO));
+    ) {
+        memberService.updateMemberAddress(memberId, changeAddressDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/change-email/{memberId}")
+    @Operation(summary = "회원 이메일 변경", description = "회원의 이메일 정보를 변경합니다.")
+    public ResponseEntity<ResponseDTO<Void>> updateMemberEmail(
+            @PathVariable("memberId")
+            Long memberId,
+
+            @RequestBody
+            ChangeEmailDTO changeEmailDTO
+    ) {
+        memberService.updateMemberEmail(memberId, changeEmailDTO);
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.member.service;
 
 import com.quostomize.quostomize_be.api.member.dto.ChangeAddressDTO;
+import com.quostomize.quostomize_be.api.member.dto.ChangeEmailDTO;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
@@ -35,7 +36,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원 단일 조회")
-    void getMemberInfoById() {
+    void getMemberInfoByIdTest() {
 
         // given
         long memberId = 2L;
@@ -58,7 +59,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원 전체 조회")
-    void getAllMemberInfos() {
+    void getAllMemberInfosTest() {
 
         // given
         List<Member> memberList = new ArrayList<>();
@@ -82,7 +83,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원 주소 변경")
-    void updateMemberAddress() {
+    void updateMemberAddressTest() {
         // given
         long memberId = 1L;
         Member member = new Member(memberId, "ADMIN", "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279");
@@ -100,6 +101,30 @@ public class MemberServiceTest {
         // then
         assertThat(member.getMemberAddress()).isEqualTo(newAddress);
         assertThat(member.getMemberDetailAddress()).isEqualTo(newDetailAddress);
+        assertThat(result).isNotNull();
+
+        verify(memberRepository).findByMemberId(memberId);
+    }
+
+    @Test
+    @DisplayName("회원 이메일 변경")
+    void updateMemberEmailTest() {
+        // given
+        long memberId = 1L;
+        Member member = new Member(memberId, "ADMIN", "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279");
+
+        String newEmail = "updateTest03333@testmail.com";
+        ChangeEmailDTO changeEmailDTO = new ChangeEmailDTO(newEmail);
+
+
+        given(memberRepository.findByMemberId(memberId))
+                .willReturn(Optional.of(member));
+
+        // when
+        ResponseDTO<Void> result = memberService.updateMemberEmail(memberId, changeEmailDTO);
+
+        // then
+        assertThat(member.getMemberEmail()).isEqualTo(newEmail);
         assertThat(result).isNotNull();
 
         verify(memberRepository).findByMemberId(memberId);
