@@ -2,12 +2,14 @@ package com.quostomize.quostomize_be.domain.customizer.member.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "members", uniqueConstraints = {
         @UniqueConstraint(name = "MEMBER_EMAIL_UNIQUE", columnNames = "member_email"),
         @UniqueConstraint(name = "MEMBER_LOGIN_ID_UNIQUE", columnNames = "member_login_id"),
