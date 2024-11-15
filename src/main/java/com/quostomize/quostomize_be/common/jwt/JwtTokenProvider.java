@@ -27,7 +27,6 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh.expiration}")
     Long refreshExpiration;
 
-    private static final Long SOCKET_TOKEN_EXPIRATION = 1000 * 30L;
     private final BlackListRepository blackListRepository;
     private final MemberRepository memberRepository;
 
