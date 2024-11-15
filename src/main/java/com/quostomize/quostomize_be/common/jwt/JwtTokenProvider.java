@@ -114,25 +114,6 @@ public class JwtTokenProvider {
         }
     }
 
-//    public String createSocketToken(Long id, String role) {
-//        Claims claims = Jwts.claims();
-//        claims.put("id", id);
-//        claims.put("role", role);
-////        claims.put("type", TokenConstants.SOCKET_TOKEN);
-//        return Jwts.builder()
-//                .setClaims(claims)
-//                .setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setExpiration(new Date(System.currentTimeMillis() + SOCKET_TOKEN_EXPIRATION))
-//                .signWith(SignatureAlgorithm.HS256, secretKey)
-//                .compact();
-//    }
-
-//    public void checkSocketToken(String socketToken) {
-//        String tokenType = getType(socketToken);
-//        if (!TokenConstants.SOCKET_TOKEN.equals(tokenType)) {
-//            throw new InterceptorException("소켓 토큰을 이용해주세요.");
-//        }
-//    }
 
     public void validateAccessToken(String accessToken) {
         if (!TokenConstants.ACCESS_TOKEN.equals(getType(accessToken))) {
