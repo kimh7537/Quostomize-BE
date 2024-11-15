@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "daily_lotto_participant")
 public class DailyLottoParticipant extends BaseTimeEntity {
 
@@ -24,4 +22,9 @@ public class DailyLottoParticipant extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    @Builder
+    public DailyLottoParticipant(Customer customer) {
+        this.customer = customer;
+    }
 }
