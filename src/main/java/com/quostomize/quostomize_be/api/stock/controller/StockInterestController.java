@@ -29,7 +29,7 @@ public class StockInterestController {
     // 삭제 기능
     @DeleteMapping("/select")
     @Operation(summary = "위시리스토 삭제",description = "선택한 위시항목에 대해서 삭제합니다.")
-    public ResponseEntity<ResponseDTO<List<StockInterestDto>>> deleteStock(@RequestParam int order){
+    public ResponseEntity<Void> deleteStock(@RequestParam int order){
         stockInterestService.deleteStock(order);
         return ResponseEntity.noContent().build();
     }
@@ -37,7 +37,7 @@ public class StockInterestController {
     // 순위 변경 기능
     @PatchMapping("/select/change-rank")
     @Operation(summary = "위시리스토 순위변경",description = "선택 되어있는 위시리스트의 순위(priority)를 변경 합니다.")
-    public ResponseEntity<ResponseDTO<List<StockInterestDto>>> switchingStock(@RequestParam int curentOrder, @RequestParam int editOrder){
+    public ResponseEntity<Void> switchingStock(@RequestParam int curentOrder, @RequestParam int editOrder){
         stockInterestService.switchStock(curentOrder,editOrder);
         return  ResponseEntity.noContent().build();
     }
