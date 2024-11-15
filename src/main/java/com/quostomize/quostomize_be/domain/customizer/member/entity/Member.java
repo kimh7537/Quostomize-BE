@@ -2,12 +2,14 @@ package com.quostomize.quostomize_be.domain.customizer.member.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "members", uniqueConstraints = {
         @UniqueConstraint(name = "MEMBER_EMAIL_UNIQUE", columnNames = "member_email"),
         @UniqueConstraint(name = "MEMBER_LOGIN_ID_UNIQUE", columnNames = "member_login_id"),
@@ -54,4 +56,27 @@ public class Member extends BaseTimeEntity {
     @Column(name = "secondary_auth_code", nullable = false)
     private String secondaryAuthCode;
 
+    public void updateAddress(String newAddress) {
+        if (!this.memberAddress.equals(newAddress)) {
+            this.memberAddress = newAddress;
+        }
+    }
+
+    public void updateDetailAddress(String newDetailAddress) {
+        if (!this.memberDetailAddress.equals(newDetailAddress)) {
+            this.memberDetailAddress = newDetailAddress;
+        }
+    }
+
+    public void updateEmail(String newEmail) {
+        if (!this.memberEmail.equals(newEmail)) {
+            this.memberEmail = newEmail;
+        }
+    }
+
+    public void updatePhoneNumber(String newPhoneNumber) {
+        if (!this.memberPhoneNumber.equals(newPhoneNumber)) {
+            this.memberPhoneNumber = newPhoneNumber;
+        }
+    }
 }
