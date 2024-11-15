@@ -65,12 +65,19 @@ public class Member extends BaseTimeEntity {
     private MemberRole role;
 
     @Builder
-    public Member(String memberLoginId, String memberPassword, String memberName, String memberPhoneNumber, String memberEmail){
+    public Member(Long memberId, String memberName, String memberEmail, String memberLoginId, String memberPassword, String residenceNumber, String zipCode, String memberAddress, String memberDetailAddress, String memberPhoneNumber, String secondaryAuthCode, MemberRole role) {
+        this.memberId = memberId;
+        this.memberName = memberName;
+        this.memberEmail = memberEmail;
         this.memberLoginId = memberLoginId;
         this.memberPassword = memberPassword;
-        this.memberName = memberName;
+        this.residenceNumber = residenceNumber;
+        this.zipCode = zipCode;
+        this.memberAddress = memberAddress;
+        this.memberDetailAddress = memberDetailAddress;
         this.memberPhoneNumber = memberPhoneNumber;
-        this.memberEmail = memberEmail;
+        this.secondaryAuthCode = secondaryAuthCode;
+        this.role = role != null ? role : MemberRole.MEMBER; // 기본값 설정
     }
 
     public void updateRole(MemberRole role) {

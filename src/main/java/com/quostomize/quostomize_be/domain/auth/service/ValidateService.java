@@ -45,7 +45,6 @@ public class ValidateService {
         }
     }
 
-
     public void checkDuplicateEmail(String email) {
         if (memberRepository.findByMemberEmail(email).isPresent()) {
             log.error("[회원 가입 실패]: 중복된 이메일 " + email);
@@ -57,6 +56,13 @@ public class ValidateService {
         if (memberRepository.findByMemberPhoneNumber(phone).isPresent()) {
             log.error("[회원 가입 실패]: 존재하는 전화번호 " + phone);
             throw new AppException(ErrorCode.PHONE_NUMBER_DUPLICATED);
+        }
+    }
+
+    public void checkResidenceNumber(String residenceNumber) {
+        if (memberRepository.findByResidenceNumber(residenceNumber).isPresent()) {
+            log.error("[회원 가입 실패]: 존재하는 주민등록번호 " + residenceNumber);
+            throw new AppException(ErrorCode.RESIDENCE_NUMBER_DUPLICATED);
         }
     }
 

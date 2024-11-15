@@ -24,6 +24,7 @@ public enum ErrorCode {
     PHONE_DUPLICATED(HttpStatus.CONFLICT, "A-302", "존재하는 핸드폰 번호 입니다."),
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "A-303", "존재하는 이메일 입니다."),
     PHONE_NUMBER_DUPLICATED(HttpStatus.CONFLICT, "A-304", "존재하는 전화번호입니다."),
+    RESIDENCE_NUMBER_DUPLICATED(HttpStatus.CONFLICT, "A-305", "존재하는 주민번호입니다."),
 
     //로그인
     // Auth 일반적인 인증 문제 Auth JWT 토큰 관련 에러

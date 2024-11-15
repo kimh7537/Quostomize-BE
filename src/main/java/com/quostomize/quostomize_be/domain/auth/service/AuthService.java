@@ -46,7 +46,11 @@ public class AuthService {
 
         String encryptedPhoneNumber = encryptService.encryptPhoneNumber(request.memberPhoneNumber());
         validateService.checkDuplicatePhoneNumber(encryptedPhoneNumber);
-        log.info("[회원 가입 서비스]: {}, {}", request.memberEmail(), request.memberName());
+        String encryptedSecondaryAuthCode = encryptService.encryptSecondaryAuthCode(request.secondaryAuthCode());
+        String encryptedResidenceNumber = encryptService.encryptResidenceNumber(request.residenceNumber());
+        validateService.checkDuplicatePhoneNumber(encryptedPhoneNumber);
+
+        log.info("[회원 가입 서비스]: {}, {}", request.memberLoginId(), request.memberName());
 
         Member newMember = Member.builder()
                 .memberLoginId(request.memberLoginId())
@@ -54,6 +58,11 @@ public class AuthService {
                 .memberPassword(bCryptPasswordEncoder.encode(request.memberPassword()))
                 .memberName(request.memberName())
                 .memberPhoneNumber(encryptedPhoneNumber)
+                .secondaryAuthCode(encryptedSecondaryAuthCode)
+                .residenceNumber(encryptedResidenceNumber)
+                .zipCode(request.zipCode())
+                .memberAddress(request.memberAddress())
+                .memberDetailAddress(request.memberDetailAddress())
                 .build();
         memberRepository.save(newMember);
 
