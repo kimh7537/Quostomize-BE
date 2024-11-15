@@ -73,4 +73,10 @@ public class Member extends BaseTimeEntity {
             this.memberEmail = newEmail;
         }
     }
+
+    public void updatePhoneNumber(String newPhoneNumber) {
+        if (!this.memberPhoneNumber.equals(newPhoneNumber)) {
+            this.memberPhoneNumber = newPhoneNumber;
+        }
+    }
 }
