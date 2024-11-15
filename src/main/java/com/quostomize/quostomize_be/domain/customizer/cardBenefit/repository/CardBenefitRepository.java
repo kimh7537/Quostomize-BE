@@ -12,16 +12,16 @@ import java.util.Set;
 
 @Repository
 public interface CardBenefitRepository extends JpaRepository<CardBenefit, Long> {
-    Set<CardBenefit> findCardBenefitsByCardDetailCardSequenceIdAndIsActive(Long cardSequenceId, boolean isActive);
+    @Query("select cb from CardBenefit cb where cb.cardDetail.cardSequenceId = :cardSequenceId and cb.isActive = :isActive")
+    Set<CardBenefit> findCardBenefitsByCardDetailCardSequenceIdAndIsActive(@Param("cardSequenceId") long cardSequenceId, @Param("isActive") boolean isActive);
     
-    // TODO: update문이 3번 반복되는 문제 해결 필요
     @Modifying
     @Query("update CardBenefit cb set cb.isActive = false where cb.cardDetail.cardSequenceId = :cardSequenceId")
-    void deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") Long cardSequenceId);
+    void deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") long cardSequenceId);
 
     Set<CardBenefit> findCardBenefitsByBenefitEffectiveDateAndIsActive(LocalDate effectiveDate, boolean isActive);
 
     @Modifying
-    @Query("UPDATE CardBenefit cb SET cb.isActive = true WHERE cb.benefitId = :benefitId")
-    void activateCardBenefitById(@Param("benefitId") Long benefitId);
+    @Query("update CardBenefit cb set cb.isActive = true where cb.benefitEffectiveDate = :today and cb.isActive = false")
+    void activateBenefitsForToday(@Param("today") LocalDate today);
 }
