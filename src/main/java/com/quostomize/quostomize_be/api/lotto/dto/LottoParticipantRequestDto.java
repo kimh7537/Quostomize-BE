@@ -1,6 +1,9 @@
 package com.quostomize.quostomize_be.api.lotto.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public record LottoParticipantRequestDto(
-        Long cardSequenceId, Boolean isLottoOn
+        @NotNull Long cardSequenceId,
+        @NotNull Boolean isLottoOn
 ) {
 }
