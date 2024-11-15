@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInte
 import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class StockInterestService {
     private final S3Service s3Service;
 
     // 위시리스트를 조회합니다.
+    @Transactional
     public List<StockInterestDto> getStockWishList() {
         // Step 1: Query로 Object[] 결과 받기
         List<Object[]> results = stockInterestRepository.findAllStockInterestDto();
@@ -33,7 +35,6 @@ public class StockInterestService {
             // Step 3: DTO 객체 생성 후 리스트에 추가
             StockInterestDto dto = new StockInterestDto(priority, stockName, stockPresentPrice, stockImage);
             allStockInterestDto.add(dto);
-        return allStockInterestDto;
         }
         List<StockInterestDto> collect = allStockInterestDto.stream()
                 .map(stock -> {
@@ -43,10 +44,11 @@ public class StockInterestService {
                     return stock.withStockImage(preSignedUrl); // 새로운 객체 반환
                 })
                 .collect(Collectors.toList());
-        return collect;
+        return  collect;
     }
 
     // 위시리스트 중 해당 id에 해당하는 특정항목을 제거합니다.
+    @Transactional
     public void deleteStock(int order){
 
         if(order == 1){
@@ -59,6 +61,7 @@ public class StockInterestService {
     }
 
     // 위시리스트 중 해당 id에 해당 특정항목을 특정 순서(order)로 변경합니다.
+    @Transactional
     public void switchStock(int currentOrder, int editOrder){
 
         if(currentOrder == 3) {
