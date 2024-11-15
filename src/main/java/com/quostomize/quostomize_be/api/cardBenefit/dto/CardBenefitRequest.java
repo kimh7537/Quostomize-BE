@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record CardBenefitRequest(
-        @NotNull
+        // @NotNull
         LocalDate benefitEffectiveDate,
-        @NotNull @Range(min = 0, max = 4, message = "혜택률은 최소 0%, 최대 4%로 설정할 수 있습니다.")
+        // @NotNull @Range(min = 0, max = 4, message = "혜택률은 최소 0%, 최대 4%로 설정할 수 있습니다.")
         Integer benefitRate,
         @NotNull
         Boolean isActive,
