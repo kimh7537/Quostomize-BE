@@ -6,12 +6,14 @@ import com.quostomize.quostomize_be.domain.customizer.card.repository.CardReposi
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CardService {
 
     private final CardRepository cardRepository;
@@ -19,6 +21,7 @@ public class CardService {
 
 //    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+    @Transactional
     public CardDetail createCard(CreateCardDTO createCardDTO) {
         String cardNumber = String.valueOf(random.nextLong(1_000_0000_0000_0000L,10_000_0000_0000_0000L));
         String cvc = String.valueOf(random.nextInt(100, 1000));

@@ -3,7 +3,6 @@ package com.quostomize.quostomize_be.domain.customizer.cardapplication.service;
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
-import com.quostomize.quostomize_be.common.DTO.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
@@ -12,11 +11,13 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CardApplicantInfoService {
 
     @Lazy
@@ -24,21 +25,21 @@ public class CardApplicantInfoService {
 
     private final CardApplicantInfoRepository cardApplicantInfoRepository;
 
-    public ResponseDTO<List<CardApplicantDetailsDTO>> getCardApplicantsList() {
-        List<CardApplicantDetailsDTO> cardApplicantDetailsDTOList = cardApplicantInfoRepository.findAll().stream().map(
+    public List<CardApplicantDetailsDTO> getCardApplicantsList() {
+        return cardApplicantInfoRepository.findAll().stream().map(
                 CardApplicantDetailsDTO::fromEntity
         ).toList();
-        return new ResponseDTO<>(cardApplicantDetailsDTOList);
     }
 
-    public ResponseDTO<CardApplicantDetailsDTO> getCardApplicantsDetails(String cardApplicantInfoId) {
+    public CardApplicantDetailsDTO getCardApplicantsDetails(Long cardApplicantInfoId) {
         CardApplicantInfo cardApplicantInfo = cardApplicantInfoRepository.findByCardApplicantInfoId(
-                Long.parseLong(cardApplicantInfoId)
+                cardApplicantInfoId
         ).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카드 신청 내역입니다."));
-        return new ResponseDTO<>(CardApplicantDetailsDTO.fromEntity(cardApplicantInfo));
+        return CardApplicantDetailsDTO.fromEntity(cardApplicantInfo);
     }
 
-    public ResponseDTO<Void> createCardApplicant(CardApplicantDTO cardApplicantDTO) {
+    @Transactional
+    public CardApplicantDetailsDTO createCardApplicant(CardApplicantDTO cardApplicantDTO) {
         // 실제로는 신청 때 바로 카드가 생성되지는 않는다.
         // 암호화는 아직 되어있지 않음
         CreateCardDTO createCardDTO = CreateCardDTO.fromApplicant(cardApplicantDTO);
@@ -60,6 +61,6 @@ public class CardApplicantInfoService {
                 .build()
         );
 
-        return new ResponseDTO<>(null);
+        return CardApplicantDetailsDTO.fromEntity(newCardApplicantInfo);
     }
 }

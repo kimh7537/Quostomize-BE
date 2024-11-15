@@ -2,7 +2,7 @@ package com.quostomize.quostomize_be.api.cardapplicant.controller;
 
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
-import com.quostomize.quostomize_be.common.DTO.ResponseDTO;
+import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.service.CardApplicantInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -51,7 +51,7 @@ public class CardApplicantInfoController {
         )
     )
     public ResponseEntity<ResponseDTO<List<CardApplicantDetailsDTO>>> getCardApplicantsList() {
-        return ResponseEntity.ok(cardApplicantInfoService.getCardApplicantsList());
+        return ResponseEntity.ok(new ResponseDTO<List<CardApplicantDetailsDTO>>(cardApplicantInfoService.getCardApplicantsList()));
     }
 
 
@@ -79,8 +79,8 @@ public class CardApplicantInfoController {
                     )}
             )
     )
-    public ResponseEntity<ResponseDTO<CardApplicantDetailsDTO>> getCardApplicantsDetails(@PathVariable String cardApplicantId) {
-        return ResponseEntity.ok(cardApplicantInfoService.getCardApplicantsDetails(cardApplicantId));
+    public ResponseEntity<ResponseDTO<CardApplicantDetailsDTO>> getCardApplicantsDetails(@PathVariable Long cardApplicantId) {
+        return ResponseEntity.ok(new ResponseDTO<CardApplicantDetailsDTO>(cardApplicantInfoService.getCardApplicantsDetails(cardApplicantId)));
     }
 
 
