@@ -39,7 +39,7 @@ public class MemberController {
 
     @PatchMapping("/change-address/{memberId}")
     @Operation(summary = "회원 주소 변경", description = "회원의 자택 주소 정보를 변경합니다.")
-    public ResponseEntity<ResponseDTO<Void>> updateMemberAddress(
+    public ResponseEntity<Void> updateMemberAddress(
             @PathVariable("memberId")
             Long memberId,
 
@@ -47,12 +47,12 @@ public class MemberController {
             UpdateAddressDTO updateAddressDTO
     ) {
         memberService.updateMemberAddress(memberId, updateAddressDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/change-email/{memberId}")
     @Operation(summary = "회원 이메일 변경", description = "회원의 이메일 정보를 변경합니다.")
-    public ResponseEntity<ResponseDTO<Void>> updateMemberEmail(
+    public ResponseEntity<Void> updateMemberEmail(
             @PathVariable("memberId")
             Long memberId,
 
@@ -60,12 +60,12 @@ public class MemberController {
             UpdateEmailDTO updateEmailDTO
     ) {
         memberService.updateMemberEmail(memberId, updateEmailDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/change-phonenumber/{memberId}")
     @Operation(summary = "회원 이메일 변경", description = "회원의 이메일 정보를 변경합니다.")
-    public ResponseEntity<ResponseDTO<Void>> updateMemberPhoneNumber(
+    public ResponseEntity<Void> updateMemberPhoneNumber(
             @PathVariable("memberId")
             Long memberId,
 
@@ -73,7 +73,7 @@ public class MemberController {
             UpdatePhoneNumberDTO updatePhoneNumberDTO
     ) {
         memberService.updateMemberPhoneNumber(memberId, updatePhoneNumberDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }
