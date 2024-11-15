@@ -56,4 +56,15 @@ public class Member extends BaseTimeEntity {
     @Column(name = "secondary_auth_code", nullable = false)
     private String secondaryAuthCode;
 
+    public void changeAddress(String newAddress) {
+        if (!this.memberAddress.equals(newAddress)) {
+            this.memberAddress = newAddress;
+        }
+    }
+
+    public void changeDetailAddress(String newDetailAddress) {
+        if (!this.memberDetailAddress.equals(newDetailAddress)) {
+            this.memberDetailAddress = newDetailAddress;
+        }
+    }
 }
