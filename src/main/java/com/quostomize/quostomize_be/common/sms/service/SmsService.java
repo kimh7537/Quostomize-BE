@@ -1,6 +1,6 @@
 package com.quostomize.quostomize_be.common.sms.service;
 
-import com.quostomize.quostomize_be.api.sms.dto.UserDto;
+import com.quostomize.quostomize_be.api.sms.dto.SmsRequest;
 import com.quostomize.quostomize_be.common.error.exception.InvalidPhoneNumberException;
 import com.quostomize.quostomize_be.common.error.exception.SmsCertificationAppException;
 import com.quostomize.quostomize_be.common.sms.repository.SmsCertificationRepository;
@@ -17,25 +17,24 @@ public class SmsService {
     private final SmsCertificationUtil smsUtil;
     private final SmsCertificationRepository SmsCertificationRepository;
 
-    private static final int CERTIFICATION_NUMBER_LENGTH = 6;
     private static final int MIN_CERTIFICATION_NUMBER = 100_000;
     private static final int MAX_CERTIFICATION_NUMBER = 999_999;
 
     @Transactional
-    public void sendSms(UserDto.SmsCertificationRequest requestDto) {
-        validatePhoneNumber(requestDto.getPhone());
+    public void sendSms(SmsRequest smsRequest) {
+        validatePhoneNumber(smsRequest.phone());
 
         String certificationNumber = generateCertificationNumber();
-        smsUtil.sendSms(requestDto.getPhone(), certificationNumber);
-        SmsCertificationRepository.createSmsCertification(requestDto.getPhone(), certificationNumber);
+        smsUtil.sendSms(smsRequest.phone(), certificationNumber);
+        SmsCertificationRepository.createSmsCertification(smsRequest.phone(), certificationNumber);
     }
 
     @Transactional
-    public void verifySms(UserDto.SmsCertificationRequest requestDto) {
-        if (!isCertificationValid(requestDto)) {
+    public void verifySms(SmsRequest smsRequest) {
+        if (!isCertificationValid(smsRequest)) {
             throw new SmsCertificationAppException("인증번호가 일치하지 않습니다.");
         }
-        SmsCertificationRepository.removeSmsCertification(requestDto.getPhone());
+        SmsCertificationRepository.removeSmsCertification(smsRequest.phone());
     }
 
     private String generateCertificationNumber() {
@@ -50,9 +49,9 @@ public class SmsService {
         }
     }
 
-    private boolean isCertificationValid(UserDto.SmsCertificationRequest requestDto) {
-        return SmsCertificationRepository.hasKey(requestDto.getPhone()) &&
-                SmsCertificationRepository.getSmsCertification(requestDto.getPhone())
-                        .equals(requestDto.getCertificationNumber());
+    private boolean isCertificationValid(SmsRequest smsRequest) {
+        return SmsCertificationRepository.hasKey(smsRequest.phone()) &&
+                SmsCertificationRepository.getSmsCertification(smsRequest.phone())
+                        .equals(smsRequest.certificationNumber());
     }
 }
