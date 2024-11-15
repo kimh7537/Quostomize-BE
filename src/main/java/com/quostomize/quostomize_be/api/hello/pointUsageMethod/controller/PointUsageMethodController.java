@@ -29,6 +29,7 @@ public class PointUsageMethodController {
 
         PointUsageMethod pointUsageMethod = pointUsageMethodService.getPointUsageMethod(cardSequenceId);
         PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(pointUsageMethod);
+
         ResponseDTO<PointUsageMethodResponseDto> response = new ResponseDTO(responseDto);
 
         return ResponseEntity.ok(response);
@@ -37,6 +38,7 @@ public class PointUsageMethodController {
 
     @PostMapping(value = "/{cardSequenceId}")
     @Operation(summary = "포인트 사용 옵션 변경", description = "포인트 사용 옵션 활성 상태를 변경합니다.(on/off)")
+
     public ResponseEntity<ResponseDTO> togglePointUsage(
             @PathVariable Long cardSequenceId,
             @RequestBody PointUsageMethodRequestDto pointUsageMethodRequestDto
@@ -48,9 +50,8 @@ public class PointUsageMethodController {
                 cardSequenceId, usageType, isActive);
         PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(updatedPointUsageMethod);
         ResponseDTO<PointUsageMethodResponseDto> response = new ResponseDTO(responseDto);
-
-
         return ResponseEntity.ok(response);
+
     }
 
 
