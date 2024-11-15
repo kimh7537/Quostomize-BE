@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.api.stock.controller;
 
 import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
+import com.quostomize.quostomize_be.api.stock.dto.StockRecommendResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.stock.service.StockInterestService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,5 +41,12 @@ public class StockInterestController {
     public ResponseEntity<Void> switchingStock(@RequestParam int curentOrder, @RequestParam int editOrder){
         stockInterestService.switchStock(curentOrder,editOrder);
         return  ResponseEntity.noContent().build();
+    }
+    //선택한 혜택 기반 그리고 결제 내역 기반에 따른 추천로직
+    @GetMapping("/recommendations")
+    @Operation(summary = "종목추천",description = "선택한 혜택 그리고 결제 내역 기반으로 종목을 추천합니다.")
+    public ResponseEntity<ResponseDTO<List<StockRecommendResponse>>> getRecommandStocks(@RequestParam Long cardId, @RequestParam boolean isRecommendByCardBenefit){
+        List<StockRecommendResponse> cardBenefit = stockInterestService.getCardBenefit(cardId,isRecommendByCardBenefit);
+        return ResponseEntity.ok(new ResponseDTO<>(cardBenefit));
     }
 }
