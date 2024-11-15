@@ -8,16 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Repository
 public interface CardBenefitRepository extends JpaRepository<CardBenefit, Long> {
     Set<CardBenefit> findCardBenefitsByCardDetailCardSequenceIdAndIsActive(Long cardSequenceId, boolean isActive);
-
+    
+    // TODO: update문이 3번 반복되는 문제 해결 필요
     @Modifying
-    @Query("UPDATE CardBenefit cb SET cb.isActive = false WHERE cb.cardDetail.cardSequenceId = :cardSequenceId AND cb.isActive = true AND cb.createdAt < :recentTime")
-    int deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") Long cardSequenceId, @Param("recentTime") LocalDateTime recentTime);
+    @Query("update CardBenefit cb set cb.isActive = false where cb.cardDetail.cardSequenceId = :cardSequenceId")
+    void deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") Long cardSequenceId);
 
     Set<CardBenefit> findCardBenefitsByBenefitEffectiveDateAndIsActive(LocalDate effectiveDate, boolean isActive);
 
