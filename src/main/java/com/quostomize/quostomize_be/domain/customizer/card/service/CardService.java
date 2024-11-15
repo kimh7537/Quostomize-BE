@@ -13,6 +13,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CardService {
 
     private final CardRepository cardRepository;
