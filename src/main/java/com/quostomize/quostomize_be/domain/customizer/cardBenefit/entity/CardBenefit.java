@@ -11,8 +11,6 @@ import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @Table(name = "card_benefits")
 public class CardBenefit extends BaseTimeEntity {
 
@@ -45,4 +43,14 @@ public class CardBenefit extends BaseTimeEntity {
     @JoinColumn(name = "lower_category_id")
     private BenefitCommonCode lowerCategory;
 
+    @Builder
+    public CardBenefit(Long benefitId, LocalDate benefitEffectiveDate, Integer benefitRate, Boolean isActive, CardDetail cardDetail, BenefitCommonCode upperCategory, BenefitCommonCode lowerCategory) {
+        this.benefitId = benefitId;
+        this.benefitEffectiveDate = benefitEffectiveDate;
+        this.benefitRate = benefitRate;
+        this.isActive = isActive;
+        this.cardDetail = cardDetail;
+        this.upperCategory = upperCategory;
+        this.lowerCategory = lowerCategory;
+    }
 }
