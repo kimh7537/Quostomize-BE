@@ -42,9 +42,9 @@ public class CardBenefitController {
     }
 
      @PatchMapping("/reserve")
-     @Operation(summary = "카드 혜택 변경 예약", description = "변경 가능일 이전에 요청한 사항은 혜택적용일에 자동으로 적용됩니다.")
+     @Operation(summary = "카드 혜택 변경 예약 및 반영", description = "변경 가능일 이전에 요청한 사항은 혜택적용일에 자동으로 적용됩니다.")
     public ResponseEntity<Void> reserveCardBenefits(@Valid @RequestBody List<CardBenefitRequest> requests) {
-        cardBenefitService.reserveCardBenefits(requests);
+        cardBenefitService.processCardBenefits(requests);
         return ResponseEntity.ok().build();
      }
 }
