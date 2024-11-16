@@ -1,8 +1,13 @@
 package com.quostomize.quostomize_be.api.hello.controller;
 
+import com.quostomize.quostomize_be.common.auth.PrincipalDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class HelloController {
 
     private final TestService redisTestService;
@@ -21,6 +27,30 @@ public class HelloController {
 //        throw new EntityNotFoundException();
 
         return "hello";
+    }
+
+    @GetMapping("/authentication")
+    public String authentication(@AuthenticationPrincipal Long memberId) {
+        log.info("principal details : {}", memberId);
+
+
+        return "Authentication";
+    }
+
+    @GetMapping("/authentication1")
+    public String authentication(Authentication authentication) {
+        Long memberId = (Long) authentication.getPrincipal(); // Principal에서 memberId 추출
+
+        // Role 가져오기
+        String role = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("UNKNOWN");
+
+        log.info("principal details : {}, role: {}", memberId, role);
+
+        return "Authentication";
     }
 
 
