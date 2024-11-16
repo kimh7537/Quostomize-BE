@@ -8,11 +8,14 @@ import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBe
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/benefit-change")
 @RequiredArgsConstructor
@@ -22,8 +25,8 @@ public class CardBenefitController {
 
     @GetMapping()
     @Operation(summary = "카드 혜택 내역 조회", description = "로그인한 고객의 현재 적용된 카드 혜택을 조회합니다.")
-    public ResponseEntity<ResponseDTO> getCardBenefitStatus() {
-        List<CardBenefitResponse> benefits = cardBenefitService.findAll();
+    public ResponseEntity<ResponseDTO> getCardBenefitStatus(@AuthenticationPrincipal Long memberId) {
+        List<CardBenefitResponse> benefits = cardBenefitService.findAll(memberId);
         return ResponseEntity.ok(new ResponseDTO<>(benefits));
     }
 
