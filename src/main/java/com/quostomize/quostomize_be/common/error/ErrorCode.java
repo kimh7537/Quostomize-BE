@@ -33,11 +33,15 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_EXIST(HttpStatus.UNAUTHORIZED, "T-004", "해당 리프레시 토큰이 DB에 존재하지 않습니다."),
     REISSUE_FAIL(HttpStatus.UNAUTHORIZED, "T-005", "액세스 토큰 재발급 요청 실패"),
     LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "T-006", "로그인에 실패했습니다."),
+    MEMBER_INFO_NOT_FOUND(HttpStatus.UNAUTHORIZED, "T-007", "로그인된 사용자 정보를 가져올 수 없습니다."),
 
     //회원 관련
     ROLE_IS_NOT_MATCH(HttpStatus.BAD_REQUEST, "M-101", "해당 ROLE은 변경할 수 없습니다."),
     ROLE_IS_NOT_OLD_MEMBER(HttpStatus.BAD_REQUEST, "M-103", "해당 회원의 ROLE은 OLD_MEMBER가 아닙니다."),
     SAME_PASSWORD(HttpStatus.CONFLICT, "M-301", "이전과 같은 비밀번호로 변경할 수 없습니다."),
+
+    // 고객 관련
+    CUSTOMER_CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "U-001", "고객의 카드를 찾을 수 없습니다."),
 
     // 상위 예외 처리
     GENERAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G-001", "예상치 못한 오류가 발생했습니다."),
