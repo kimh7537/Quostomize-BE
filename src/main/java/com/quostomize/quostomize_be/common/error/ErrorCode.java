@@ -25,7 +25,8 @@ public enum ErrorCode {
     CARD_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "C-201", "해당 카드 정보를 찾을 수 없습니다."),
     
     // 카드 혜택
-    CARD_DETAIL_BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "B-201", "해당 카드에 적용된 혜택이 없습니다.");
+    CARD_DETAIL_BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "B-201", "해당 카드에 적용된 혜택이 없습니다."),
+    CARD_BENEFIT_RESERVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "B-501", "예약한 혜택 반영에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
