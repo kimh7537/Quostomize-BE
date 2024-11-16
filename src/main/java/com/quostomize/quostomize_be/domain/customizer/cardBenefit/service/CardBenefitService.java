@@ -92,7 +92,7 @@ public class CardBenefitService {
     private LocalDate calculateBenefitEffectiveDate(LocalDateTime modifiedAt) {
         long daysDifference = ChronoUnit.DAYS.between(modifiedAt, recentTime);
         if (daysDifference < 30) {
-            return modifiedAt.toLocalDate().plusDays(29);
+            return modifiedAt.toLocalDate().plusDays(30);
         }
         return null;
     }
@@ -102,24 +102,35 @@ public class CardBenefitService {
     public void updateCardBenefits(List<CardBenefitRequest> cardBenefitRequests) {
         // 한번의 Request에서 cardSequenceId는 동일한 값을 가지므로 첫 번째 요청으로부터 cardSequenceId를 가져옴
         long cardSequenceId = cardBenefitRequests.get(0).cardSequenceId();
-            // 1. 동일한 card_sequence_id를 가진 모든 CardBenefit의 is_active를 false로 설정 (최초 1번 호출)
-            cardBenefitRepository.deactivateCardBenefitsByCardSequenceId(cardSequenceId);
-            // 2. 새로운 혜택 정보 일괄 추가
-                CardDetail cardDetail = cardDetailRepository.findById(cardSequenceId)
-                        .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_NOT_FOUND));
-                List<CardBenefit> cardBenefits = cardBenefitRequests.stream()
-                        .map(request -> createCardBenefit(request, cardDetail, true))
-                        .collect(Collectors.toList());
-                cardBenefitRepository.saveAll(cardBenefits);
+        // 1. 동일한 card_sequence_id를 가진 모든 CardBenefit의 is_active를 false로 설정 (최초 1번 호출)
+        cardBenefitRepository.deactivateCardBenefitsByCardSequenceId(cardSequenceId);
+        // 2. 새로운 혜택 정보 일괄 추가
+        CardDetail cardDetail = cardDetailRepository.findById(cardSequenceId)
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_NOT_FOUND));
+        List<CardBenefit> cardBenefits = cardBenefitRequests.stream()
+                .map(request -> createCardBenefit(request, cardDetail, true))
+                .collect(Collectors.toList());
+        cardBenefitRepository.saveAll(cardBenefits);
+    }
+
+    // 혜택 변경 예약 및 반영을 하나의 트랜잭션으로 처리
+    @Transactional
+    public void processCardBenefits(List<CardBenefitRequest> cardBenefitRequests) {
+        if (!cardBenefitRequests.isEmpty()) {
+            reserveCardBenefits(cardBenefitRequests);
+        }
     }
 
     // 혜택 변경 예약하기
-    @Transactional
-    public void reserveCardBenefits(List<CardBenefitRequest> cardBenefitRequests) {
-        long cardSequenceId = cardBenefitRequests.get(0).cardSequenceId();
+    private void reserveCardBenefits(List<CardBenefitRequest> cardBenefitRequests) {
+        if (cardBenefitRequests.isEmpty()) {
+            return;
+        }
 
+        long cardSequenceId = cardBenefitRequests.get(0).cardSequenceId();
         CardDetail cardDetail = cardDetailRepository.findById(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_DETAIL_NOT_FOUND));
+
         Set<CardBenefit> existingBenefit = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true);
 
         if (!existingBenefit.isEmpty()) {
@@ -136,15 +147,25 @@ public class CardBenefitService {
     }
 
     // 예약한 혜택을 반영하는 스케줄러
-    @Transactional
     @Scheduled(cron = "${spring.schedule.cron}")
-    public void updateActiveBenefits() {
-        LocalDate today = LocalDate.now();
-        Set<CardBenefit> benefitsToActivate = cardBenefitRepository.findCardBenefitsByBenefitEffectiveDateAndIsActive(today, false);
+    @Transactional
+    public void scheduledBenefitUpdate() {
+        try {
+            LocalDate today = LocalDate.now();
+            Set<CardBenefit> benefitsToActivate = cardBenefitRepository.findCardBenefitsByBenefitEffectiveDateAndIsActive(today, false);
+            if (!benefitsToActivate.isEmpty()) {
+                updateActiveBenefits(benefitsToActivate);
+            }
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.CARD_BENEFIT_RESERVE_FAILED);
+        }
+    }
+
+    private void updateActiveBenefits(Set<CardBenefit> benefitsToActivate) {
         for (CardBenefit benefit : benefitsToActivate) {
             long cardSequenceid = benefit.getCardDetail().getCardSequenceId();
             cardBenefitRepository.deactivateCardBenefitsByCardSequenceId(cardSequenceid);
         }
-        cardBenefitRepository.activateBenefitsForToday(today);
+        cardBenefitRepository.activateBenefitsForToday(LocalDate.now());
     }
 }
