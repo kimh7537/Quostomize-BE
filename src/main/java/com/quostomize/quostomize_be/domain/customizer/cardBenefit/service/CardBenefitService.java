@@ -10,6 +10,8 @@ import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBen
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 
+import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
+import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CardBenefitService {
 
+    private final CustomerRepository customerRepository;
     @Value("${spring.schedule.cron}")
     private String cronExpression;
 
@@ -37,18 +40,25 @@ public class CardBenefitService {
     private final CardBenefitRepository cardBenefitRepository;
     private final CardDetailRepository cardDetailRepository;
 
-    public CardBenefitService(CardBenefitRepository cardBenefitRepository, CardDetailRepository cardDetailRepository) {
+    public CardBenefitService(CardBenefitRepository cardBenefitRepository, CardDetailRepository cardDetailRepository, CustomerRepository customerRepository) {
         this.cardBenefitRepository = cardBenefitRepository;
         this.cardDetailRepository = cardDetailRepository;
+        this.customerRepository = customerRepository;
     }
 
     // 혜택 내역 조회
-    public List<CardBenefitResponse> findAll() {
-        // TODO: 하드코딩된 customer 정보 변경 필요
-        long cardSequenceId = 2L;
-        boolean isActive = true;
-        Set<CardBenefit> cardBenefits = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, isActive);
+    public List<CardBenefitResponse> findAll(long memberId) {
+        long cardSequenceId = getCardSequenceIdForMember(memberId);
+        Set<CardBenefit> cardBenefits = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true);
         return cardBenefits.stream().map(CardBenefitResponse::from).collect(Collectors.toList());
+    }
+
+    // 사용자의 카드id 조회
+    private long getCardSequenceIdForMember(long memberId) {
+        Customer customer = customerRepository.findByMember_MemberId(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_CARD_NOT_FOUND));
+        System.out.println("customer.getCustomerId() = " + customer.getCustomerId());
+        return customer.getCustomerId();
     }
 
     // 혜택 변경 가능일자 계산
