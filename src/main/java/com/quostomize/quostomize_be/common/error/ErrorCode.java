@@ -30,7 +30,8 @@ public enum ErrorCode {
 
     // SMS 인증
     SMS_CERTIFICATION_ERROR(HttpStatus.BAD_REQUEST, "M-001", "인증번호가 일치하지 않습니다."),
-    INVALID_PHONE_FORMAT(HttpStatus.BAD_REQUEST, "M-002", "유효하지 않은 전화번호 형식입니다.")
+    SMS_CERTIFICATION_EXPIRED(HttpStatus.BAD_REQUEST, "M-002", "인증번호가 만료되었습니다."),
+    INVALID_PHONE_FORMAT(HttpStatus.BAD_REQUEST, "M-003", "유효하지 않은 전화번호 형식입니다.")
     ;
 
     private final HttpStatus httpStatus;
