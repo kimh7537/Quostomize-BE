@@ -5,7 +5,6 @@ import com.quostomize.quostomize_be.api.member.dto.UpdateEmailDTO;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdatePhoneNumberDTO;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
-import com.quostomize.quostomize_be.domain.customizer.member.service.MemberService;
 import com.quostomize.quostomize_be.api.member.dto.UpdatePasswordRequest;
 import com.quostomize.quostomize_be.api.member.dto.UpdatePhoneNumberRequest;
 import com.quostomize.quostomize_be.common.jwt.JwtTokenProvider;
