@@ -31,6 +31,11 @@ public class SmsService {
 
     @Transactional
     public void verifySms(SmsRequest smsRequest) {
+        // 키가 존재하지 않으면 만료된 것으로 간주
+        if (!SmsCertificationRepository.hasKey(smsRequest.phone())) {
+            throw new AppException(ErrorCode.SMS_CERTIFICATION_EXPIRED);
+        }
+
         if (!isCertificationValid(smsRequest)) {
             throw new AppException(ErrorCode.SMS_CERTIFICATION_ERROR);
         }
