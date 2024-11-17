@@ -1,7 +1,0 @@
-package com.quostomize.quostomize_be.domain.customizer.member.repository;
-
-import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface MemberRepository extends JpaRepository<Member, Long> {
-}
