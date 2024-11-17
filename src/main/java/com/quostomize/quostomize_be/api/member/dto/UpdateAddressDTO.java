@@ -7,6 +7,11 @@ import jakarta.validation.constraints.Size;
 public record UpdateAddressDTO(
         @NotNull
         @NotBlank
+        @Size(max = 10)
+        String zipCode,
+
+        @NotNull
+        @NotBlank
         @Size(max = 100)
         String newAddress,
 

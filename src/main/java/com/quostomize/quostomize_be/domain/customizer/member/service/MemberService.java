@@ -36,6 +36,7 @@ public class MemberService {
     public MemberResponseDTO updateMemberAddress(Long memberId, UpdateAddressDTO updateAddressDTO) {
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 엔티티입니다."));
 
+        member.updateZipCode(updateAddressDTO.zipCode());
         member.updateAddress(updateAddressDTO.newAddress());
         member.updateDetailAddress(updateAddressDTO.newDetailAddress());
 
