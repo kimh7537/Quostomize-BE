@@ -1,8 +1,7 @@
 package com.quostomize.quostomize_be.common.sms.service;
 
 import com.quostomize.quostomize_be.api.sms.dto.SmsRequest;
-import com.quostomize.quostomize_be.common.error.exception.InvalidPhoneNumberException;
-import com.quostomize.quostomize_be.common.error.exception.SmsCertificationAppException;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.sms.repository.SmsCertificationRepository;
 import com.quostomize.quostomize_be.common.sms.util.SmsCertificationUtil;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
@@ -54,7 +53,7 @@ class SmsServiceTest {
         SmsRequest request = new SmsRequest("invalid", null);
 
         // when, then
-        assertThrows(InvalidPhoneNumberException.class, () -> smsService.sendSms(request));
+        assertThrows(AppException.class, () -> smsService.sendSms(request));
     }
 
     @Test
@@ -83,6 +82,19 @@ class SmsServiceTest {
         when(smsCertificationRepository.getSmsCertification(anyString())).thenReturn("654321");
 
         // when, then
-        assertThrows(SmsCertificationAppException.class, () -> smsService.verifySms(request));
+        assertThrows(AppException.class, () -> smsService.verifySms(request));
+    }
+
+    @Test
+    @DisplayName("SMS 인증번호 만료 시 예외 발생")
+    void verifySms_ExpiredCertification_ThrowsException() {
+        // given
+        SmsRequest request = new SmsRequest("01012345678", "123456");
+
+        // 인증번호가 존재하지만 만료된 상황
+        when(smsCertificationRepository.hasKey(anyString())).thenReturn(false);
+
+        // when, then
+        assertThrows(AppException.class, () -> smsService.verifySms(request));
     }
 }
