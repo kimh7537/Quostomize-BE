@@ -42,7 +42,9 @@ public enum ErrorCode {
 
     // 상위 예외 처리
     GENERAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G-001", "예상치 못한 오류가 발생했습니다."),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G-002", "서버 내부 오류가 발생했습니다.")
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G-002", "서버 내부 오류가 발생했습니다."),
+
+    PROCESSING(HttpStatus.CONFLICT, "D-999", "해당 키의 요청은 아직 처리 중 입니다."),
     ;
 
     private final HttpStatus httpStatus;
