@@ -2,9 +2,12 @@ package com.quostomize.quostomize_be.domain.customizer.stock.service;
 
 import com.quostomize.quostomize_be.api.stock.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.api.stock.dto.StockRecommendResponse;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.s3.S3Service;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.benefit.repository.CardBenefitRepository;
+import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInformationRepository;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInterestRepository;
 import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
@@ -107,7 +110,6 @@ public class StockInterestService {
         if (isRecommendByCardBenefit) {
             // 카드 혜택 조회
             List<CardBenefit> cardBenefits = cardBenefitRepository.findByCardDetail_CardSequenceId(cardId);
-
             // 카드 혜택 ResponseDto로 변환
             List<CardBenefitResponse> benefits = cardBenefits.stream()
                     .map(Benefit -> {
@@ -151,240 +153,264 @@ public class StockInterestService {
                     }
                 }
             }
-//            List<Map.Entry<String, HashMap<String, Integer>>> entryListUpper = new ArrayList<>();
-//            List<Map.Entry<String, Integer>> entryListLower = new ArrayList<>(lowerName.entrySet());
-//            // 상위분류 적립률
-//            List<Map.Entry<String, Integer>> entryListUpper = new ArrayList<>(upperName.entrySet());
-
             if (upperNumber == 5) { // 상위 분류만 5개가 있을 떄,
                 // 혜택 적립률이 가장 높은 3가지의 테마에 대해서 주식 추천.
                 // collect의 모든 entry를 순회하면서 내부의 HashMap을 정렬
-                for (Map.Entry<String, HashMap<String, Integer>> outerEntry : upperName.entrySet()) {
-                    // 내부 HashMap을 entrySet()으로 변환하여 List로 만듬
-                    List<Map.Entry<String, Integer>> innerList = new ArrayList<>(outerEntry.getValue().entrySet());
+                List<Map.Entry<String, HashMap<String, Integer>>> entryListUpper = upperName.entrySet().stream() .sorted((entry1, entry2) -> {
+                            // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
+                            int max1 = Collections.max(entry1.getValue().values());
+                            int max2 = Collections.max(entry2.getValue().values());
+                            return Integer.compare(max2, max1);
+                        })
+                        .collect(Collectors.toList());
 
-                    // 내부 HashMap을 value 기준 내림차순 정렬
-                    innerList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-
-                    // 정렬된 결과를 다시 HashMap으로 재조정
-                    HashMap<String, Integer> sortedInnerMap = new LinkedHashMap<>();
-                    for (Map.Entry<String, Integer> entry : innerList) {
-                        sortedInnerMap.put(entry.getKey(), entry.getValue());
-                    }
-
-                    // 정렬된 내부 HashMap을 외부 HashMap에 다시 저장
-                    upperName.put(outerEntry.getKey(), sortedInnerMap);
-                }
-                List<Map.Entry<String, HashMap<String, Integer>>> entryListUpper = upperName.entrySet().stream().toList();
                 for (int i = 0; i < 3; i++) {
-                    if (entryListUpper.get(i).getKey().equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
-                        stockRecommendResponse = new StockRecommendResponse("신세계", 250000, preSignedUrl);
+                    Map.Entry<String, HashMap<String,Integer>> entry = entryListUpper.get(i);
+                    String category = entry.getKey();
+                    if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
+                        StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
-                    } else if (entryListUpper.get(i).getKey().equals("생활")) {
-                        stockRecommendResponse = new StockRecommendResponse("SK", 80000, preSignedUrl);
+                    } else if (category.equals("생활")) {
+                        StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
-                    } else if (entryListUpper.get(i).getKey().equals("푸드")) {
-                        stockRecommendResponse = new StockRecommendResponse("GS", 50000, preSignedUrl);
+                    } else if (category.equals("푸드")) {
+                        StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
-                    } else if (entryListUpper.get(i).getKey().equals("여행")) {
-                        stockRecommendResponse = new StockRecommendResponse("하나투어", 83880, preSignedUrl);
+                    } else if (category.equals("여행")) {
+                        StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
-                    } else if (entryListUpper.get(i).getKey().equals("문화")) {
-                        stockRecommendResponse = new StockRecommendResponse("CJ CGV", 6990, preSignedUrl);
+                    } else if (category.equals("문화")) {
+                        StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     }
                 }
             } else if (lowerNumber == 5) { // 하위 분류만 5개가 있을 떄,
                 // 혜택 적립률이 가장 높은 3가지의 하위분류에 대해서 주식 추천.
-                for (Map.Entry<String, HashMap<String, Integer>> outerEntry : lowerName.entrySet()) {
-                    // 내부 HashMap을 entrySet()으로 변환하여 List로 만듬
-                    List<Map.Entry<String, Integer>> innerList = new ArrayList<>(outerEntry.getValue().entrySet());
+                // 적립률 순서대로 배열 내 인덱스를 정렬진행
+                List<Map.Entry<String, HashMap<String, Integer>>> entryListLower = lowerName.entrySet().stream() .sorted((entry1, entry2) -> {
+                            // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
+                            int max1 = Collections.max(entry1.getValue().values());
+                            int max2 = Collections.max(entry2.getValue().values());
+                            return Integer.compare(max2, max1);
+                        })
+                        .collect(Collectors.toList());
 
-                    // 내부 HashMap을 value 기준 내림차순 정렬
-                    innerList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-
-                    // 정렬된 결과를 다시 HashMap으로 재조정
-                    HashMap<String, Integer> sortedInnerMap = new LinkedHashMap<>();
-                    for (Map.Entry<String, Integer> entry : innerList) {
-                        sortedInnerMap.put(entry.getKey(), entry.getValue());
-                    }
-
-                    // 정렬된 내부 HashMap을 외부 HashMap에 다시 저장
-                    lowerName.put(outerEntry.getKey(), sortedInnerMap);
-                }
-                List<Map.Entry<String, HashMap<String, Integer>>> entryListLower = lowerName.entrySet().stream().toList();
                 for (int i = 0; i < 3; i++) {
-                    if (entryListLower.get(i).getKey().equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
-                        if (entryListLower.get(i).getKey().equals("백화점")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("온라인쇼핑")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("마트")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        }
-                    } else if (entryListLower.get(i).getKey().equals("생활")) {
-                        if (entryListLower.get(i).getKey().equals("주유소")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("통신")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("대중교통")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        }
-                    } else if (entryListLower.get(i).getKey().equals("푸드")) {
-                        if (entryListLower.get(i).getKey().equals("편의점")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("커피")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("배달")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        }
-                    } else if (entryListLower.get(i).getKey().equals("여행")) {
-                        if (entryListLower.get(i).getKey().equals("투어")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("차량")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("숙소")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        }
-                    } else if (entryListLower.get(i).getKey().equals("문화")) {
-                        if (entryListLower.get(i).getKey().equals("OTT")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("영화관")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
-                        } else if (entryListLower.get(i).getKey().equals("도서")) {
-                            stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                            recommendResponses.add(stockRecommendResponse);
+                    Map.Entry<String, HashMap<String,Integer>> example = entryListLower.get(i);
+                    String category = example.getKey();
+                    HashMap<String, Integer> sortedexample = example.getValue();
+
+                    for(Map.Entry<String, Integer> innerEntry : sortedexample.entrySet()){
+                        if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
+                            if (innerEntry.getKey().equals("백화점")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("온라인쇼핑")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("마트")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            }
+                        } else if (category.equals("생활")) {
+                            if (innerEntry.getKey().equals("주유소")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("통신")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("대중교통")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10006).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            }
+                        } else if (category.equals("푸드")) {
+                            if (innerEntry.getKey().equals("편의점")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10007).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("커피")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10008).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("배달")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10009).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            }
+                        } else if (category.equals("여행")) {
+                            if (innerEntry.getKey().equals("투어")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("차량")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("숙소")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            }
+                        } else if (category.equals("문화")) {
+                            if (innerEntry.getKey().equals("OTT")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("영화관")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (innerEntry.getKey().equals("도서")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10006).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            }
                         }
                     }
-                }
 
+
+                }
             } else { // 상위 하위 분류가 동시에 존재할 떄,
                 // 혜택 적립률이 가장 높은 3가지를 선정하여, 하위분류 혹은 상위분류 주식 추천
-                for (Map.Entry<String, HashMap<String, Integer>> outerEntry : lowerName.entrySet()) {
-                    // 내부 HashMap을 entrySet()으로 변환하여 List로 만듬
-                    List<Map.Entry<String, Integer>> innerList = new ArrayList<>(outerEntry.getValue().entrySet());
 
-                    // 내부 HashMap을 value 기준 내림차순 정렬
-                    innerList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+                // 하위분류에 대해서 적립률이 높은순서대로 정렬한 배열 객체 생성
+                List<Map.Entry<String, HashMap<String, Integer>>> entryListLower = lowerName.entrySet().stream() .sorted((entry1, entry2) -> {
+                            // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
+                            int max1 = Collections.max(entry1.getValue().values());
+                            int max2 = Collections.max(entry2.getValue().values());
+                            return Integer.compare(max2, max1);
+                        })
+                        .collect(Collectors.toList());
 
-                    // 정렬된 결과를 다시 HashMap으로 재조정
-                    HashMap<String, Integer> sortedInnerMap = new LinkedHashMap<>();
-                    for (Map.Entry<String, Integer> entry : innerList) {
-                        sortedInnerMap.put(entry.getKey(), entry.getValue());
-                    }
+                // 상위 분류에 대해서 적립률이 높은 순서대로 정렬한 배열 객체 생성
+                    List<Map.Entry<String, HashMap<String, Integer>>> entryListUpper = upperName.entrySet().stream() .sorted((entry1, entry2) -> {
+                                // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
+                                int max1 = Collections.max(entry1.getValue().values());
+                                int max2 = Collections.max(entry2.getValue().values());
+                                return Integer.compare(max2, max1);
+                            })
+                            .collect(Collectors.toList());
+                int lowerIndex = 0; // 하위 인덱스 진행 사이클 수
+                int upperIndex = 0; // 상위 인덱스 진행 사이클 수
+                for (int i = 0; i < 3; i++) {
+                    if(lowerIndex < entryListLower.size() || upperIndex < entryListUpper.size()) {
 
-                    // 정렬된 내부 HashMap을 외부 HashMap에 다시 저장
-                    lowerName.put(outerEntry.getKey(), sortedInnerMap);
-                }
-                List<Map.Entry<String, HashMap<String, Integer>>> entryListLower = lowerName.entrySet().stream().toList();
-                if (upperNumber == 5) { // 상위 분류만 5개가 있을 떄,
-                    // 혜택 적립률이 가장 높은 3가지의 테마에 대해서 주식 추천.
-                    // collect의 모든 entry를 순회하면서 내부의 HashMap을 정렬
-                    for (Map.Entry<String, HashMap<String, Integer>> outerEntry : upperName.entrySet()) {
-                        // 내부 HashMap을 entrySet()으로 변환하여 List로 만듬
-                        List<Map.Entry<String, Integer>> innerList = new ArrayList<>(outerEntry.getValue().entrySet());
 
-                        // 내부 HashMap을 value 기준 내림차순 정렬
-                        innerList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+                        if (entryListLower.get(lowerIndex).getValue().entrySet().stream().findFirst().get().getValue() > entryListUpper.get(upperIndex).getValue().entrySet().stream().findFirst().get().getValue()) { // 혜택률이 하위 분류가 더 큰 경우
+                            // 하위 인덱스를 진행시
+                            Map.Entry<String, HashMap<String, Integer>> example = entryListLower.get(i);
+                            String category = example.getKey();
+                            HashMap<String, Integer> sortedexample = example.getValue();
+                            lowerIndex += 1; // 하위 인덱스 진행시 사이클 추가
 
-                        // 정렬된 결과를 다시 HashMap으로 재조정
-                        HashMap<String, Integer> sortedInnerMap = new LinkedHashMap<>();
-                        for (Map.Entry<String, Integer> entry : innerList) {
-                            sortedInnerMap.put(entry.getKey(), entry.getValue());
-                        }
-
-                        // 정렬된 내부 HashMap을 외부 HashMap에 다시 저장
-                        upperName.put(outerEntry.getKey(), sortedInnerMap);
-                    }
-                    List<Map.Entry<String, HashMap<String, Integer>>> entryListUpper = upperName.entrySet().stream().toList();
-
-                    for (int i = 0; i < 3; i++) {
-                        if (entryListLower.get(i).getValue().get(i) > entryListUpper.get(i).getValue().get(i)) { // 혜택률이 하위 분류가 더 큰 경우
-                            if (entryListLower.get(i).getKey().equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
-                                if (entryListLower.get(i).getKey().equals("백화점")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("온라인쇼핑")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("마트")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                }
-                            } else if (entryListLower.get(i).getKey().equals("생활")) {
-                                if (entryListLower.get(i).getKey().equals("주유소")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("통신")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("대중교통")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                }
-                            } else if (entryListLower.get(i).getKey().equals("푸드")) {
-                                if (entryListLower.get(i).getKey().equals("편의점")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("커피")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("배달")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                }
-                            } else if (entryListLower.get(i).getKey().equals("여행")) {
-                                if (entryListLower.get(i).getKey().equals("투어")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("차량")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("숙소")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                }
-                            } else if (entryListLower.get(i).getKey().equals("문화")) {
-                                if (entryListLower.get(i).getKey().equals("OTT")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("영화관")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
-                                } else if (entryListLower.get(i).getKey().equals("도서")) {
-                                    stockRecommendResponse = new StockRecommendResponse("현대 백화점", 130000, preSignedUrl);
-                                    recommendResponses.add(stockRecommendResponse);
+                            for (Map.Entry<String, Integer> innerEntry : sortedexample.entrySet()) {
+                                if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
+                                    if (innerEntry.getKey().equals("백화점")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("온라인쇼핑")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("마트")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                } else if (category.equals("생활")) {
+                                    if (innerEntry.getKey().equals("주유소")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("통신")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("대중교통")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10006).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                } else if (category.equals("푸드")) {
+                                    if (innerEntry.getKey().equals("편의점")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10007).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("커피")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10008).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("배달")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10009).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                } else if (category.equals("여행")) {
+                                    if (innerEntry.getKey().equals("투어")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("차량")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("숙소")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                } else if (category.equals("문화")) {
+                                    if (innerEntry.getKey().equals("OTT")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("영화관")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("도서")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10006).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
                                 }
                             }
-                        } else { // 상위분류 혜택률이 하위분류 혜택률보다 더 큰 경우
-                            if (entryListUpper.get(i).getKey().equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
-                                stockRecommendResponse = new StockRecommendResponse("신세계", 250000, preSignedUrl);
+                        } else { // 상위 인덱스를 진행 시
+                            Map.Entry<String, HashMap<String, Integer>> entry = entryListUpper.get(i);
+                            String category = entry.getKey();
+                            upperIndex += 1; // 상위 인덱스를 추가
+
+                            if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
-                            } else if (entryListUpper.get(i).getKey().equals("생활")) {
-                                stockRecommendResponse = new StockRecommendResponse("SK", 80000, preSignedUrl);
+                            } else if (category.equals("생활")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
-                            } else if (entryListUpper.get(i).getKey().equals("푸드")) {
-                                stockRecommendResponse = new StockRecommendResponse("GS", 50000, preSignedUrl);
+                            } else if (category.equals("푸드")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
-                            } else if (entryListUpper.get(i).getKey().equals("여행")) {
-                                stockRecommendResponse = new StockRecommendResponse("하나투어", 83880, preSignedUrl);
+                            } else if (category.equals("여행")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
-                            } else if (entryListUpper.get(i).getKey().equals("문화")) {
-                                stockRecommendResponse = new StockRecommendResponse("CJ CGV", 6990, preSignedUrl);
+                            } else if (category.equals("문화")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         }
@@ -392,9 +418,7 @@ public class StockInterestService {
                 }
             }
         }
-
         else{ // 결제 내역 기반 주식 추천
-
         }
         // 추천종목 리턴
         return recommendResponses;
