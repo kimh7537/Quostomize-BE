@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.common.dto;
+package com.quostomize.quostomize_be.common.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
