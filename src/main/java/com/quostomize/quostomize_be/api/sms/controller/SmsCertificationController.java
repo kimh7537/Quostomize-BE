@@ -22,13 +22,13 @@ public class SmsCertificationController {
     @Operation(summary = "SMS 인증번호 발송", description = "사용자 휴대폰 번호로 6자리 인증번호를 발송합니다.")
     public ResponseEntity<Void> sendSms(@Valid @RequestBody SmsRequest smsRequest) {
         smsService.sendSms(smsRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/confirm")
     @Operation(summary = "SMS 인증번호 확인", description = "발송된 SMS 인증번호를 검증합니다.")
     public ResponseEntity<Void> verifySms(@Valid @RequestBody SmsRequest smsRequest) {
         smsService.verifySms(smsRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
