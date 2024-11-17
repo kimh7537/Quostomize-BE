@@ -29,6 +29,15 @@ public class HelloController {
         return "hello";
     }
 
+    @GetMapping("/good")
+    @Operation(summary = "유저 프로필 이미지 삭제", description = "유저의 프로필 이미지를 삭제하고 기본 이미지로 설정합니다.")
+    public String good() {
+
+//        throw new EntityNotFoundException();
+
+        return "god";
+    }
+
     @GetMapping("/authentication")
     public String authentication(@AuthenticationPrincipal Long memberId) {
         log.info("principal details : {}", memberId);
