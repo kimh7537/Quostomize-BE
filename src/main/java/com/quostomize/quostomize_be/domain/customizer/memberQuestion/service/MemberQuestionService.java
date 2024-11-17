@@ -1,11 +1,12 @@
-package com.quostomize.quostomize_be.memberQuestion.service;
+package com.quostomize.quostomize_be.domain.customizer.memberQuestion.service;
 
 import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionRequest;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
-import com.quostomize.quostomize_be.memberQuestion.entity.MemberQuestion;
-import com.quostomize.quostomize_be.memberQuestion.repository.MemberQuestionRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.quostomize.quostomize_be.domain.customizer.memberQuestion.entity.MemberQuestion;
+import com.quostomize.quostomize_be.domain.customizer.memberQuestion.repository.MemberQuestionRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +20,7 @@ public class MemberQuestionService {
         this.memberRepository = memberRepository;
     }
 
+    // qna 문의 생성
     public Long createQuestion(MemberQuestionRequest request, Member member) {
         MemberQuestion memberQuestion = MemberQuestion.builder()
                 .isPrivate(request.isPrivate())
@@ -28,14 +30,10 @@ public class MemberQuestionService {
                 .questionContent(request.questionContent())
                 .member(member)
                 .build();
-
         MemberQuestion savedMemberQuestion = memberQuestionRepository.save(memberQuestion);
         return savedMemberQuestion.getQuestionsSequenceId();
     }
-
     public Member getMemberById(Long id) {
-        return memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return memberRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.MEMBER_INFO_NOT_FOUND));
     }
-
-    // TODO: 로그인 여부 확인 로직 추가 필요
 }
