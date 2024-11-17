@@ -1,8 +1,8 @@
 package com.quostomize.quostomize_be.common.sms.service;
 
 import com.quostomize.quostomize_be.api.sms.dto.SmsRequest;
-import com.quostomize.quostomize_be.common.error.exception.InvalidPhoneNumberException;
-import com.quostomize.quostomize_be.common.error.exception.SmsCertificationAppException;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.sms.repository.SmsCertificationRepository;
 import com.quostomize.quostomize_be.common.sms.util.SmsCertificationUtil;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class SmsService {
     @Transactional
     public void verifySms(SmsRequest smsRequest) {
         if (!isCertificationValid(smsRequest)) {
-            throw new SmsCertificationAppException("인증번호가 일치하지 않습니다.");
+            throw new AppException(ErrorCode.SMS_CERTIFICATION_ERROR);
         }
         SmsCertificationRepository.removeSmsCertification(smsRequest.phone());
     }
@@ -45,7 +45,7 @@ public class SmsService {
 
     private void validatePhoneNumber(String phoneNumber) {
         if (phoneNumber == null || !phoneNumber.matches("^010\\d{8}$")) {
-            throw new InvalidPhoneNumberException();
+            throw new AppException(ErrorCode.INVALID_PHONE_FORMAT);
         }
     }
 
