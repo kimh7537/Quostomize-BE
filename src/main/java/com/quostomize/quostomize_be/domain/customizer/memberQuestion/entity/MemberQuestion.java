@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.memberQuestion.entity;
+package com.quostomize.quostomize_be.domain.customizer.memberQuestion.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
