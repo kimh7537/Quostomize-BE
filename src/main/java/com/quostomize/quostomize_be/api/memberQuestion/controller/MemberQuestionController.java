@@ -1,7 +1,6 @@
 package com.quostomize.quostomize_be.api.memberQuestion.controller;
 
 import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionRequest;
-import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.memberQuestion.service.MemberQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
