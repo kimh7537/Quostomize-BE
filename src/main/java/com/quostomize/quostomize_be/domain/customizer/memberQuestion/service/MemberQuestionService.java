@@ -1,8 +1,8 @@
 package com.quostomize.quostomize_be.memberQuestion.service;
 
 import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionRequest;
-import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
-import com.quostomize.quostomize_be.domain.customizer.member.repository.MemberRepository;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import com.quostomize.quostomize_be.memberQuestion.entity.MemberQuestion;
 import com.quostomize.quostomize_be.memberQuestion.repository.MemberQuestionRepository;
 import jakarta.persistence.EntityNotFoundException;

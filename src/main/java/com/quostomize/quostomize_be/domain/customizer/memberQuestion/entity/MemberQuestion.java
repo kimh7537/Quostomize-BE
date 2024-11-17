@@ -1,16 +1,13 @@
 package com.quostomize.quostomize_be.memberQuestion.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
-import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @Table(name = "member_questions")
 public class MemberQuestion extends BaseTimeEntity {
 
@@ -41,4 +38,15 @@ public class MemberQuestion extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    @Builder
+    public MemberQuestion(Long questionsSequenceId, Boolean isPrivate, Boolean isAnswered, Long categoryCode, String questionTitle, String questionContent, Member member) {
+        this.questionsSequenceId = questionsSequenceId;
+        this.isPrivate = isPrivate;
+        this.isAnswered = isAnswered;
+        this.categoryCode = categoryCode;
+        this.questionTitle = questionTitle;
+        this.questionContent = questionContent;
+        this.member = member;
+    }
 }
