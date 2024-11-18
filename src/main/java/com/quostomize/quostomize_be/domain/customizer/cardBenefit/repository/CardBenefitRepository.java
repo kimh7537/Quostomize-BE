@@ -8,20 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Repository
 public interface CardBenefitRepository extends JpaRepository<CardBenefit, Long> {
-    Set<CardBenefit> findCardBenefitsByCardDetailCardSequenceIdAndIsActive(Long cardSequenceId, boolean isActive);
-
+    @Query("select cb from CardBenefit cb where cb.cardDetail.cardSequenceId = :cardSequenceId and cb.isActive = :isActive")
+    Set<CardBenefit> findCardBenefitsByCardDetailCardSequenceIdAndIsActive(@Param("cardSequenceId") long cardSequenceId, @Param("isActive") boolean isActive);
+    
     @Modifying
-    @Query("UPDATE CardBenefit cb SET cb.isActive = false WHERE cb.cardDetail.cardSequenceId = :cardSequenceId AND cb.isActive = true AND cb.createdAt < :recentTime")
-    int deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") Long cardSequenceId, @Param("recentTime") LocalDateTime recentTime);
+    @Query("update CardBenefit cb set cb.isActive = false where cb.cardDetail.cardSequenceId = :cardSequenceId")
+    void deactivateCardBenefitsByCardSequenceId(@Param("cardSequenceId") long cardSequenceId);
 
     Set<CardBenefit> findCardBenefitsByBenefitEffectiveDateAndIsActive(LocalDate effectiveDate, boolean isActive);
 
     @Modifying
-    @Query("UPDATE CardBenefit cb SET cb.isActive = true WHERE cb.benefitId = :benefitId")
-    void activateCardBenefitById(@Param("benefitId") Long benefitId);
+    @Query("update CardBenefit cb set cb.isActive = true where cb.benefitEffectiveDate = :today and cb.isActive = false")
+    void activateBenefitsForToday(@Param("today") LocalDate today);
 }
