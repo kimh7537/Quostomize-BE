@@ -64,6 +64,8 @@ public class MemberQuestionService {
         );
     }
 
+    // TODO: qna 문의글에 대한 답변 내용 확인
+
     // qna 문의 생성
     @Transactional
     public Long createQuestion(MemberQuestionRequest request, Member member) {

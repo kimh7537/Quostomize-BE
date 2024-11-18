@@ -11,4 +11,5 @@ public interface MemberQuestionRepository extends JpaRepository<MemberQuestion, 
     Page<MemberQuestion> findAll(Pageable pageable);
     Page<MemberQuestion> findByMember_MemberId(Long memberId, Pageable pageable);
     Optional<MemberQuestion> findByMember_MemberIdAndQuestionsSequenceId(Long memberId, Long questionsSequenceId);
+    Optional<MemberQuestion> findByMember_MemberId(Long questionSequenceId);
 }
