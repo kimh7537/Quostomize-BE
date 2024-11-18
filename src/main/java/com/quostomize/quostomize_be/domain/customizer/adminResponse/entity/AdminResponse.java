@@ -9,8 +9,6 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @Table(name = "admin_responses")
 public class AdminResponse extends BaseTimeEntity {
 
@@ -29,4 +27,15 @@ public class AdminResponse extends BaseTimeEntity {
     @OneToOne
     @JoinColumn(name = "questions_sequence_id", nullable = false)
     private MemberQuestion memberQuestion;
+
+    @Builder
+    public AdminResponse(Long responseSequenceId, String responseContent, MemberQuestion memberQuestion) {
+        this.responseSequenceId = responseSequenceId;
+        this.responseContent = responseContent;
+        this.memberQuestion = memberQuestion;
+    }
+
+    public String getMemberLoginId() {
+        return this.memberQuestion.getMember().getMemberLoginId();
+    }
 }
