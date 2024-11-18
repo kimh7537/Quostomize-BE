@@ -6,12 +6,16 @@ import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionRequest
 import com.quostomize.quostomize_be.api.memberQuestion.dto.PageMemberQuestionResponse;
 import com.quostomize.quostomize_be.api.memberQuestion.dto.PageResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
-import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.memberQuestion.service.MemberQuestionService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,12 +28,17 @@ public class MemberQuestionController {
         this.memberQuestionService = memberQuestionService;
     }
 
-    // 문의 조회
     @GetMapping("")
-    public ResponseEntity<ResponseDTO> getAllMemberQuestions(@RequestParam(defaultValue = "0") int page) {
-        // TODO: 로그인한 사용자 및 admin 여부 검증 로직 추가 필요
+    @Operation(summary = "문의글 조회", description = "ADMIN은 전체 문의글을 조회, MEMBER/OLD_MEMBER는 본인이 작성한 글만 조회합니다.")
+    public ResponseEntity<ResponseDTO> getAllMemberQuestions(Authentication authentication, @RequestParam(defaultValue = "0") int page) {
+        Long memberId = (Long) authentication.getPrincipal();
+        String memberRole = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("UNKNOWN");
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Order.desc("questionsSequenceId"))); // 최신순으로 10개씩 페이지네이션
-        Page<PageMemberQuestionResponse> questions = memberQuestionService.getAllMemberQuestions(pageRequest);
+        Page<PageMemberQuestionResponse> questions = memberQuestionService.getAllMemberQuestions(memberId, memberRole, pageRequest);
         PageResponse pageResponse = new PageResponse(
                 questions.getContent(), // 현재 페이지에 해당하는 데이터 리스트
                 questions.getNumber(), // 현재 페이지 번호
@@ -39,14 +48,15 @@ public class MemberQuestionController {
         );
         return ResponseEntity.ok(new ResponseDTO<>(pageResponse));
     }
-    
-    // 문의 등록
-    @PostMapping("/{id}")
+
+    @PostMapping("")
+    @Operation(summary = "문의 등록", description = "로그인한 회원에 한해서만 문의사항을 등록할 수 있습니다.")
     public ResponseEntity<ResponseDTO> createQuestion(
-            @PathVariable Long id,
+            @AuthenticationPrincipal Long memberId,
             @RequestBody MemberQuestionRequest request) {
-        Member member = memberQuestionService.getMemberById(id);
+        Member member = memberQuestionService.getMemberById(memberId);
         Long questionId = memberQuestionService.createQuestion(request, member);
         return ResponseEntity.ok(new ResponseDTO<>(questionId));
     }
+
 }
