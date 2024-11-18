@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +39,16 @@ public class MemberQuestionController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ResponseDTO> getAllMemberQuestions(@RequestParam(defaultValue = "0") int page) {
+    @Operation(summary = "문의글 조회", description = "ADMIN은 전체 문의글을 조회, MEMBER/OLD_MEMBER는 본인이 작성한 글만 조회합니다.")
+    public ResponseEntity<ResponseDTO> getAllMemberQuestions(Authentication authentication, @RequestParam(defaultValue = "0") int page) {
+        Long memberId = (Long) authentication.getPrincipal();
+        String memberRole = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("UNKNOWN");
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Order.desc("questionsSequenceId"))); // 최신순으로 10개씩 페이지네이션
-        Page<PageMemberQuestionResponse> questions = memberQuestionService.getAllMemberQuestions(pageRequest);
+        Page<PageMemberQuestionResponse> questions = memberQuestionService.getAllMemberQuestions(memberId, memberRole, pageRequest);
         PageResponse pageResponse = new PageResponse(
                 questions.getContent(), // 현재 페이지에 해당하는 데이터 리스트
                 questions.getNumber(), // 현재 페이지 번호
