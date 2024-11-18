@@ -10,9 +10,9 @@ import com.quostomize.quostomize_be.domain.customizer.customer.repository.Custom
 import com.quostomize.quostomize_be.domain.customizer.lotto.entity.DailyLottoParticipant;
 import com.quostomize.quostomize_be.domain.customizer.lotto.repository.DailyLottoParticipantRepository;
 import com.quostomize.quostomize_be.domain.customizer.point.entity.CardPoint;
-import com.quostomize.quostomize_be.domain.customizer.point.entity.PointUsageMethod;
 import com.quostomize.quostomize_be.domain.customizer.point.repository.CardPointRepository;
-import com.quostomize.quostomize_be.domain.customizer.point.repository.PointUsageMethodRepository;
+import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
+import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
