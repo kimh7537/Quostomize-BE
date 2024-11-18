@@ -1,0 +1,11 @@
+{
+  "mappings": {
+    "properties": {
+      "id": { "type": "keyword" },
+      "stockCode": { "type": "integer" },
+      "stockName": { "type": "text", "analyzer": "standard" },
+      "stockPresentPrice": { "type": "integer" },
+      "stockImage": { "type": "text", "index": false }
+    }
+  }
+}
