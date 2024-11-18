@@ -8,9 +8,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "point_usage_methods")
 public class PointUsageMethod extends BaseTimeEntity {
 
@@ -33,13 +31,12 @@ public class PointUsageMethod extends BaseTimeEntity {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private CardDetail cardDetail;
 
-    public PointUsageMethodBuilder toBuilder() {
-        return PointUsageMethod.builder()
-                .pointUsageTypeId(this.pointUsageTypeId)
-                .cardDetail(this.cardDetail)
-                .isLotto(this.isLotto)
-                .isPayback(this.isPayback)
-                .isPieceStock(this.isPieceStock);
-
+    @Builder
+    public PointUsageMethod(Long pointUsageTypeId, Boolean isLotto, Boolean isPayback, Boolean isPieceStock, CardDetail cardDetail) {
+        this.pointUsageTypeId = pointUsageTypeId;
+        this.isLotto = isLotto;
+        this.isPayback = isPayback;
+        this.isPieceStock = isPieceStock;
+        this.cardDetail = cardDetail;
     }
 }
