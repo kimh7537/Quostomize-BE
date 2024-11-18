@@ -168,23 +168,23 @@ public class StockInterestService {
                     Map.Entry<String, HashMap<String,Integer>> entry = entryListUpper.get(i);
                     String category = entry.getKey();
                     if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
-                        StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     } else if (category.equals("생활")) {
-                        StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     } else if (category.equals("푸드")) {
-                        StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     } else if (category.equals("여행")) {
-                        StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     } else if (category.equals("문화")) {
-                        StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     }
@@ -208,71 +208,71 @@ public class StockInterestService {
                     for(Map.Entry<String, Integer> innerEntry : sortedexample.entrySet()){
                         if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
                             if (innerEntry.getKey().equals("백화점")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(69960).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("온라인쇼핑")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(57050).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("마트")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         } else if (category.equals("생활")) {
                             if (innerEntry.getKey().equals("주유소")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(1510).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("통신")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("대중교통")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10006).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         } else if (category.equals("푸드")) {
                             if (innerEntry.getKey().equals("편의점")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10007).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("커피")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10008).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(30200).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("배달")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10009).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(357780).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         } else if (category.equals("여행")) {
                             if (innerEntry.getKey().equals("투어")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("차량")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(264900).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("숙소")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10440).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         } else if (category.equals("문화")) {
                             if (innerEntry.getKey().equals("OTT")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(153450).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("영화관")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("도서")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10006).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(418470).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
@@ -317,71 +317,71 @@ public class StockInterestService {
                             for (Map.Entry<String, Integer> innerEntry : sortedexample.entrySet()) {
                                 if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
                                     if (innerEntry.getKey().equals("백화점")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(69960).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("온라인쇼핑")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(57050).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("마트")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
                                 } else if (category.equals("생활")) {
                                     if (innerEntry.getKey().equals("주유소")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(1510).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("통신")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("대중교통")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10006).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
                                 } else if (category.equals("푸드")) {
                                     if (innerEntry.getKey().equals("편의점")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10007).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("커피")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10008).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(30200).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("배달")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10009).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(357780).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
                                 } else if (category.equals("여행")) {
                                     if (innerEntry.getKey().equals("투어")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("차량")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(264900).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("숙소")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10440).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
                                 } else if (category.equals("문화")) {
                                     if (innerEntry.getKey().equals("OTT")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(153450).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("영화관")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("도서")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10006).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(418470).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
@@ -393,23 +393,23 @@ public class StockInterestService {
                             upperIndex += 1; // 상위 인덱스를 추가
 
                             if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10001).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (category.equals("생활")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10002).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (category.equals("푸드")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10003).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (category.equals("여행")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10004).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (category.equals("문화")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10005).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
