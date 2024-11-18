@@ -17,13 +17,25 @@ public enum ErrorCode {
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "A-002", "유효하지 않은 패스워드입니다."),
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "A-003", "유효하지 않은 전화번호 입니다."),
     CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "A-101", "요청하신 코드가 일치하지 않습니다."),
+    PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "A-102", "비밀번호가 일치하지 않습니다."),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "A-201", "해당 이메일이 존재하지 않습니다."),
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "A-301", "존재하는 이메일 입니다."),
     PHONE_NUMBER_DUPLICATED(HttpStatus.CONFLICT, "A-302", "존재하는 전화번호입니다."),
-    
+
+    // 주식
+    OPENAPI_CONNECT_FAIL(HttpStatus.BAD_REQUEST, "S-001", "오픈 api 테스트가 실패했습니다."),
+
+    //JSON 처리 관련 에러
+    JSON_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "J-001", "JSON 처리 중 오류가 발생했습니다."),
+
+    // SMS 인증
+    SMS_CERTIFICATION_ERROR(HttpStatus.BAD_REQUEST, "M-001", "인증번호가 일치하지 않습니다."),
+    SMS_CERTIFICATION_EXPIRED(HttpStatus.BAD_REQUEST, "M-002", "인증번호가 만료되었습니다."),
+    INVALID_PHONE_FORMAT(HttpStatus.BAD_REQUEST, "M-003", "유효하지 않은 전화번호 형식입니다."),
+
     // 카드
     CARD_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "C-201", "해당 카드 정보를 찾을 수 없습니다."),
-    
+
     // 카드 혜택
     CARD_DETAIL_BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "B-201", "해당 카드에 적용된 혜택이 없습니다.");
 
