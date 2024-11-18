@@ -21,8 +21,24 @@ public class AdminResponseService {
         this.memberQuestionRepository = memberQuestionRepository;
     }
 
+    // TODO: Repository 직접 참조하지 않고, 연관된 Service를 통해서 참조하는 방식으로 변경 필요
+    // 답변 조회
+    public AdminResponse getAnswer(Long memberId, String memberRole, Long questionsSequenceId) {
+        // 관리자: 모든 답변 조회 가능
+        if ("ROLE_ADMIN".equals(memberRole)) {
+            return adminResponseRepository.findByMemberQuestion_QuestionsSequenceId(questionsSequenceId)
+                    .orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
+        }
+        
+        // 일반 사용자: 자신이 작성한 질문에 대해서만 답변 조회 가능
+        MemberQuestion memberQuestion = memberQuestionRepository.findByMember_MemberIdAndQuestionsSequenceId(memberId, questionsSequenceId)
+                .orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
+        return adminResponseRepository.findByMemberQuestion(memberQuestion)
+                .orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
+    }
+
+
     // 문의에 대한 답변 등록
-    // TODO: Repository 직접 참조하지 않고, 연관된 Service를 통해서 참조하는 방식으로 변경
     @Transactional
     public Long createAdminAnswer(Long memberId, String memberRole, Long questionsSequenceId, String responseContent) {
         // ADMIN 권한 여부 확인
