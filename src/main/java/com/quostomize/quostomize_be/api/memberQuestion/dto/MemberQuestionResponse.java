@@ -1,6 +1,6 @@
 package com.quostomize.quostomize_be.api.memberQuestion.dto;
 
-import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
 
 public record MemberQuestionResponse(
         Long questionSequenceId,
