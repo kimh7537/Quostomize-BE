@@ -8,82 +8,57 @@ import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.Po
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PointUsageMethodService {
 
     private final PointUsageMethodRepository repository;
 
+    @Transactional
     public PointUsageMethod getPointUsageMethod(Long cardSequenceId) {
         return repository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
     }
 
-
-    public PointUsageMethodResponseDto updatedPointUsageMethod(PointUsageMethodRequestDto request) {
-        PointUsageMethod pointUsageMethod = request.toEntity();
-
-        PointUsageMethod existingPointUsage = repository.findByCardDetail_CardSequenceId(request.cardDetail().getCardSequenceId())
-                .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
-
-        existingPointUsage = PointUsageMethod.builder()
-                .pointUsageTypeId(existingPointUsage.getPointUsageTypeId())
-                .cardDetail(existingPointUsage.getCardDetail())
-                .isLotto(request.isActive())
-                .isPayback(request.isActive())
-                .isPieceStock(request.isActive())
-                .build();
-
-        PointUsageMethod savedPointUsageMethod = repository.save(existingPointUsage);
-
-        return PointUsageMethodResponseDto.from(savedPointUsageMethod);
-    }
-
+    @Transactional
     public PointUsageMethod togglePointUsage(Long cardSequenceId, String usageType, boolean isActive) {
         PointUsageMethod pointUsageMethod = repository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
 
-        PointUsageMethod updatedPointUsageMethod = PointUsageMethod.builder()
-                .pointUsageTypeId(pointUsageMethod.getPointUsageTypeId())
-                .cardDetail(pointUsageMethod.getCardDetail())
-                .isLotto(pointUsageMethod.getIsLotto())
-                .isPayback(pointUsageMethod.getIsPayback())
-                .isPieceStock(pointUsageMethod.getIsPieceStock())
-                .build();
+        // 기본 빌더 생성
+        PointUsageMethod.PointUsageMethodBuilder updatedPointUsageMethod = pointUsageMethod.toBuilder();
 
-        // 사용 유형에 따른 필드 변경
-        switch (usageType) {
-            case "lotto":
-                updatedPointUsageMethod = updatedPointUsageMethod.toBuilder()
-                        .isLotto(isActive)
-                        .build();
-                break;
+        // lotto 관련 설정 (payback 및 piecestock과 별도로 처리)
+        if ("lotto".equals(usageType)) {
+            updatedPointUsageMethod.isLotto(isActive);
+        }
 
-            case "payback":
-                if (isActive && updatedPointUsageMethod.getIsPieceStock()) {
-                    throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
-                }
-                updatedPointUsageMethod = updatedPointUsageMethod.toBuilder()
-                        .isPayback(isActive)
-                        .build();
-                break;
+        // payback과 piecestock에 대한 충돌 체크 후 설정
+        if ("payback".equals(usageType)) {
+            // 현재 상태 확인
+            if (isActive && updatedPointUsageMethod.build().getIsPieceStock()) {
+                throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
+            }
+            updatedPointUsageMethod.isPayback(isActive);
+        }
 
-            case "piecestock":
-                if (isActive && updatedPointUsageMethod.getIsPayback()) {
-                    throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
-                }
-                updatedPointUsageMethod = updatedPointUsageMethod.toBuilder()
-                        .isPieceStock(isActive)
-                        .build();
-                break;
+        if ("piecestock".equals(usageType)) {
+            // 현재 상태 확인
+            if (isActive && updatedPointUsageMethod.build().getIsPayback()) {
+                throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
+            }
+            updatedPointUsageMethod.isPieceStock(isActive);
         }
 
         // 활성화된 옵션 수 체크
-        int activeCount = (updatedPointUsageMethod.getIsLotto() ? 1 : 0) +
-                (updatedPointUsageMethod.getIsPayback() ? 1 : 0) +
-                (updatedPointUsageMethod.getIsPieceStock() ? 1 : 0);
+        PointUsageMethod updatedPointUsage = updatedPointUsageMethod.build();
+        int activeCount = (updatedPointUsage.getIsLotto() ? 1 : 0) +
+                (updatedPointUsage.getIsPayback() ? 1 : 0) +
+                (updatedPointUsage.getIsPieceStock() ? 1 : 0);
 
         if (activeCount < 1) {
             throw new AppException(ErrorCode.MINIMUM_ONE_OPTION_REQUIRED);
@@ -93,7 +68,9 @@ public class PointUsageMethodService {
         }
 
         // 포인트 사용 방법 저장
-        return repository.save(updatedPointUsageMethod);
+        return repository.save(updatedPointUsage);
     }
+
+
 
 }

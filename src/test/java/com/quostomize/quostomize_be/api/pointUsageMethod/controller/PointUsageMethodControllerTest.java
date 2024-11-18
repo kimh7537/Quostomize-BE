@@ -4,6 +4,7 @@ package com.quostomize.quostomize_be.api.pointUsageMethod.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quostomize.quostomize_be.api.hello.pointUsageMethod.dto.PointUsageMethodRequestDto;
 import com.quostomize.quostomize_be.api.hello.pointUsageMethod.dto.PointUsageMethodResponseDto;
+import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.Service.PointUsageMethodService;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,13 +57,14 @@ class PointUsageMethodControllerTest {
         Long cardSequenceId = 1L;
         PointUsageMethod mockUsageMethod = new PointUsageMethod();
         PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(mockUsageMethod);
+        ResponseDTO<PointUsageMethodResponseDto> expectedResponse = new ResponseDTO<>(responseDto);
 
         Mockito.when(usageMethodService.getPointUsageMethod(cardSequenceId)).thenReturn(mockUsageMethod);
 
         // expected
         mockMvc.perform(get("/api/my-card/{cardSequenceId}", cardSequenceId))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(responseDto)));
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
 
         Mockito.verify(usageMethodService, Mockito.times(1)).getPointUsageMethod(cardSequenceId);
     }
@@ -72,10 +74,11 @@ class PointUsageMethodControllerTest {
     public void test2() throws Exception {
 
         // given
-        Long cardSequenceId = 1L;   // 임의로 1을 Long 타입으로 주입
-        PointUsageMethodRequestDto requestDto = new PointUsageMethodRequestDto(null, null, true, "lotto");
+        Long cardSequenceId = 1L;
+        PointUsageMethodRequestDto requestDto = new PointUsageMethodRequestDto(null, null, true, true,"lotto");
         PointUsageMethod updatedUsageMethod = new PointUsageMethod();
         PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(updatedUsageMethod);
+        ResponseDTO<PointUsageMethodResponseDto> expectedResponse = new ResponseDTO<>(responseDto);
 
         Mockito.when(usageMethodService.togglePointUsage(cardSequenceId, requestDto.usageType(), requestDto.isActive()))
                 .thenReturn(updatedUsageMethod);
@@ -85,7 +88,7 @@ class PointUsageMethodControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(responseDto)));
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
 
         Mockito.verify(usageMethodService, Mockito.times(1)).togglePointUsage(cardSequenceId, requestDto.usageType(), requestDto.isActive());
     }

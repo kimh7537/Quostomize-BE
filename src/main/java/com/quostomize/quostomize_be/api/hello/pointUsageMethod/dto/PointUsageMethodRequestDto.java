@@ -7,15 +7,24 @@ import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.Po
 public record PointUsageMethodRequestDto(
         Long pointUsageTypeId,
         CardDetail cardDetail,
+        Boolean isLotto,
         Boolean isActive,
         String usageType
 ) {
     public static PointUsageMethodRequestDto from(PointUsageMethod pointUsageMethod) {
+        boolean isLotto = pointUsageMethod.getIsLotto();
+
+        String usageType = pointUsageMethod.getIsPayback() ? "payback" :
+                pointUsageMethod.getIsPieceStock() ? "piecestock" : null;
+
+        boolean isActive = pointUsageMethod.getIsPayback() || pointUsageMethod.getIsPieceStock();
+
         return new PointUsageMethodRequestDto(
                 pointUsageMethod.getPointUsageTypeId(),
                 pointUsageMethod.getCardDetail(),
-                pointUsageMethod.getIsLotto() || pointUsageMethod.getIsPayback() || pointUsageMethod.getIsPieceStock(),
-                pointUsageMethod.getIsLotto() ? "lotto" : pointUsageMethod.getIsPayback() ? "payback" : "piecestock"
+                isLotto,
+                isActive,
+                usageType
         );
     }
 
@@ -23,7 +32,7 @@ public record PointUsageMethodRequestDto(
         return PointUsageMethod.builder()
                 .pointUsageTypeId(this.pointUsageTypeId())
                 .cardDetail(this.cardDetail())
-                .isLotto(this.isActive())
+                .isLotto(this.isLotto())
                 .isPayback(this.isActive())
                 .isPieceStock(this.isActive())
                 .build();
