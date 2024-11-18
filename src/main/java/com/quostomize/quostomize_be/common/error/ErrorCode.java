@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
-
     // DTO 에서 발생하는 에러
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "I-001", "입력 값이 잘못되었습니다."),
     // 404 오류 -> 객체를 찾을 수 없는 문제
@@ -17,6 +16,7 @@ public enum ErrorCode {
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "A-002", "유효하지 않은 패스워드입니다."),
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "A-003", "유효하지 않은 전화번호 입니다."),
     CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "A-101", "요청하신 코드가 일치하지 않습니다."),
+    PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "A-102", "비밀번호가 일치하지 않습니다."),
     LOGIN_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "A-201", "해당 아이디가 존재하지 않습니다."),
     PHONE_NOT_FOUND(HttpStatus.NOT_FOUND, "A-202", "해당 번호가 존재하지 않습니다."),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "A-203", "해당 이메일이 존재하지 않습니다."),
@@ -39,6 +39,7 @@ public enum ErrorCode {
     ROLE_IS_NOT_MATCH(HttpStatus.BAD_REQUEST, "M-101", "해당 ROLE은 변경할 수 없습니다."),
     ROLE_IS_NOT_OLD_MEMBER(HttpStatus.BAD_REQUEST, "M-103", "해당 회원의 ROLE은 OLD_MEMBER가 아닙니다."),
     SAME_PASSWORD(HttpStatus.CONFLICT, "M-301", "이전과 같은 비밀번호로 변경할 수 없습니다."),
+    USER_ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "M-401", "권한이 없어서 접근할 수 없습니다."),
 
     // 고객 관련
     CUSTOMER_CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "U-001", "고객의 카드를 찾을 수 없습니다."),
@@ -52,7 +53,21 @@ public enum ErrorCode {
     
     // 카드 혜택
     CARD_DETAIL_BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "B-201", "해당 카드에 적용된 혜택이 없습니다."),
-    CARD_BENEFIT_RESERVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "B-501", "예약한 혜택 반영에 실패했습니다.");
+    CARD_BENEFIT_RESERVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "B-501", "예약한 혜택 반영에 실패했습니다."),
+
+    // 주식
+    OPENAPI_CONNECT_FAIL(HttpStatus.BAD_REQUEST, "S-001", "오픈 api 테스트가 실패했습니다."),
+
+    //JSON 처리 관련 에러
+    JSON_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "J-001", "JSON 처리 중 오류가 발생했습니다."),
+
+    // SMS 인증
+    SMS_CERTIFICATION_ERROR(HttpStatus.BAD_REQUEST, "M-001", "인증번호가 일치하지 않습니다."),
+    SMS_CERTIFICATION_EXPIRED(HttpStatus.BAD_REQUEST, "M-002", "인증번호가 만료되었습니다."),
+    INVALID_PHONE_FORMAT(HttpStatus.BAD_REQUEST, "M-003", "유효하지 않은 전화번호 형식입니다."),
+
+    // QnA
+    DUPLICATE_REQUEST(HttpStatus.ALREADY_REPORTED, "Q-101", "이미 답변이 등록된 문의글입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -2,13 +2,11 @@ package com.quostomize.quostomize_be.domain.customizer.benefit.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @Table(name = "benefit_common_codes")
 public class BenefitCommonCode extends BaseTimeEntity {
 

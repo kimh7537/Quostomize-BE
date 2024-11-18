@@ -7,7 +7,6 @@ import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
-import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 
 @Entity
 @Getter
