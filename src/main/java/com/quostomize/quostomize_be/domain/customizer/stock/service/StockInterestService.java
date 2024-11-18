@@ -160,6 +160,10 @@ public class StockInterestService {
                             // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
                             int max1 = Collections.max(entry1.getValue().values());
                             int max2 = Collections.max(entry2.getValue().values());
+                            if (max1 == max2) {
+                                // 값이 동일할 경우, 랜덤으로 순서를 변경하거나 안 변경하도록 설정
+                                return Math.random() < 0.5 ? -1 : 1; // 50% 확률로 순서 변경
+                            }
                             return Integer.compare(max2, max1);
                         })
                         .collect(Collectors.toList());
@@ -168,23 +172,23 @@ public class StockInterestService {
                     Map.Entry<String, HashMap<String,Integer>> entry = entryListUpper.get(i);
                     String category = entry.getKey();
                     if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
-                        StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     } else if (category.equals("생활")) {
-                        StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     } else if (category.equals("푸드")) {
-                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     } else if (category.equals("여행")) {
-                        StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     } else if (category.equals("문화")) {
-                        StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                        StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                         recommendResponses.add(stockRecommendResponse);
                     }
@@ -196,6 +200,10 @@ public class StockInterestService {
                             // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
                             int max1 = Collections.max(entry1.getValue().values());
                             int max2 = Collections.max(entry2.getValue().values());
+                            if (max1 == max2) {
+                                // 값이 동일할 경우, 랜덤으로 순서를 변경하거나 안 변경하도록 설정
+                                return Math.random() < 0.5 ? -1 : 1; // 50% 확률로 순서 변경
+                            }
                             return Integer.compare(max2, max1);
                         })
                         .collect(Collectors.toList());
@@ -208,71 +216,71 @@ public class StockInterestService {
                     for(Map.Entry<String, Integer> innerEntry : sortedexample.entrySet()){
                         if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
                             if (innerEntry.getKey().equals("백화점")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(69960).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(69960).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("온라인쇼핑")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(57050).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(57050).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("마트")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         } else if (category.equals("생활")) {
                             if (innerEntry.getKey().equals("주유소")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(1510).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(1510).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("통신")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("대중교통")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         } else if (category.equals("푸드")) {
                             if (innerEntry.getKey().equals("편의점")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("커피")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(30200).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(30200).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("배달")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(357780).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(357780).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         } else if (category.equals("여행")) {
                             if (innerEntry.getKey().equals("투어")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("차량")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(264900).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(264900).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("숙소")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(10440).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(10440).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
                         } else if (category.equals("문화")) {
                             if (innerEntry.getKey().equals("OTT")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(153450).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(153450).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("영화관")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (innerEntry.getKey().equals("도서")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(418470).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(418470).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
@@ -283,31 +291,78 @@ public class StockInterestService {
                 }
             } else { // 상위 하위 분류가 동시에 존재할 떄,
                 // 혜택 적립률이 가장 높은 3가지를 선정하여, 하위분류 혹은 상위분류 주식 추천
+                List<Map.Entry<String, HashMap<String, Integer>>> entryListLower;
+                List<Map.Entry<String, HashMap<String, Integer>>> entryListUpper;
 
-                // 하위분류에 대해서 적립률이 높은순서대로 정렬한 배열 객체 생성
-                List<Map.Entry<String, HashMap<String, Integer>>> entryListLower = lowerName.entrySet().stream() .sorted((entry1, entry2) -> {
-                            // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
-                            int max1 = Collections.max(entry1.getValue().values());
-                            int max2 = Collections.max(entry2.getValue().values());
-                            return Integer.compare(max2, max1);
-                        })
-                        .collect(Collectors.toList());
-
-                // 상위 분류에 대해서 적립률이 높은 순서대로 정렬한 배열 객체 생성
-                    List<Map.Entry<String, HashMap<String, Integer>>> entryListUpper = upperName.entrySet().stream() .sorted((entry1, entry2) -> {
+                if(lowerName.size() > 1){
+                    // 하위분류에 대해서 적립률이 높은순서대로 정렬한 배열 객체 생성
+                    entryListLower = lowerName.entrySet().stream() .sorted((entry1, entry2) -> {
                                 // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
                                 int max1 = Collections.max(entry1.getValue().values());
                                 int max2 = Collections.max(entry2.getValue().values());
+                                if (max1 == max2) {
+                                    // 값이 동일할 경우, 랜덤으로 순서를 변경하거나 안 변경하도록 설정
+                                    return Math.random() < 0.5 ? -1 : 1; // 50% 확률로 순서 변경
+                                }
                                 return Integer.compare(max2, max1);
                             })
                             .collect(Collectors.toList());
+
+                } else {
+                    entryListLower = lowerName.entrySet().stream().toList();
+                }
+
+                if(upperName.size() >1){
+                    // 상위 분류에 대해서 적립률이 높은 순서대로 정렬한 배열 객체 생성
+                    entryListUpper = upperName.entrySet().stream() .sorted((entry1, entry2) -> {
+                                // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
+                                int max1 = Collections.max(entry1.getValue().values());
+                                int max2 = Collections.max(entry2.getValue().values());
+                                if (max1 == max2) {
+                                    // 값이 동일할 경우, 랜덤으로 순서를 변경하거나 안 변경하도록 설정
+                                    return Math.random() < 0.5 ? -1 : 1; // 50% 확률로 순서 변경
+                                }
+                                return Integer.compare(max2, max1);
+                            })
+                            .collect(Collectors.toList());
+                } else{
+                    entryListUpper = upperName.entrySet().stream().toList();
+                }
+
                 int lowerIndex = 0; // 하위 인덱스 진행 사이클 수
                 int upperIndex = 0; // 상위 인덱스 진행 사이클 수
+
                 for (int i = 0; i < 3; i++) {
                     if(lowerIndex < entryListLower.size() || upperIndex < entryListUpper.size()) {
 
+                        // 로어 인덱스가 실제 사이즈랑 일치 시, -> 어퍼만 비교하면 되기에, 어퍼만 비교하는 로직을 추가한다.
+                        if(lowerIndex == entryListLower.size()){
+                            Map.Entry<String, HashMap<String, Integer>> entry = entryListUpper.get(i);
+                            String category = entry.getKey();
+                            upperIndex += 1; // 상위 인덱스를 추가
 
-                        if (entryListLower.get(lowerIndex).getValue().entrySet().stream().findFirst().get().getValue() > entryListUpper.get(upperIndex).getValue().entrySet().stream().findFirst().get().getValue()) { // 혜택률이 하위 분류가 더 큰 경우
+                            if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
+                                StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (category.equals("생활")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (category.equals("푸드")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (category.equals("여행")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            } else if (category.equals("문화")) {
+                                StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                recommendResponses.add(stockRecommendResponse);
+                            }
+                        } else if(upperIndex == entryListUpper.size()){ //반대로 어퍼 인덱스가 실제 사이즈랑 일치 시, 로어 인덱스만 비교한다.
                             // 하위 인덱스를 진행시
                             Map.Entry<String, HashMap<String, Integer>> example = entryListLower.get(i);
                             String category = example.getKey();
@@ -317,71 +372,153 @@ public class StockInterestService {
                             for (Map.Entry<String, Integer> innerEntry : sortedexample.entrySet()) {
                                 if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
                                     if (innerEntry.getKey().equals("백화점")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(69960).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(69960).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("온라인쇼핑")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(57050).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(57050).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("마트")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
                                 } else if (category.equals("생활")) {
                                     if (innerEntry.getKey().equals("주유소")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(1510).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(1510).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("통신")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("대중교통")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
                                 } else if (category.equals("푸드")) {
                                     if (innerEntry.getKey().equals("편의점")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("커피")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(30200).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(30200).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("배달")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(357780).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(357780).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
                                 } else if (category.equals("여행")) {
                                     if (innerEntry.getKey().equals("투어")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("차량")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(264900).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(264900).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("숙소")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(10440).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10440).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
                                 } else if (category.equals("문화")) {
                                     if (innerEntry.getKey().equals("OTT")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(153450).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(153450).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("영화관")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     } else if (innerEntry.getKey().equals("도서")) {
-                                        StockInformation stocks = stockInformationRepository.findByStockCode(418470).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(418470).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                }
+                            }
+                        }
+
+                         else if (entryListLower.get(lowerIndex).getValue().entrySet().stream().findFirst().get().getValue() > entryListUpper.get(upperIndex).getValue().entrySet().stream().findFirst().get().getValue()) { // 혜택률이 하위 분류가 더 큰 경우
+                            // 하위 인덱스를 진행시
+                            Map.Entry<String, HashMap<String, Integer>> example = entryListLower.get(i);
+                            String category = example.getKey();
+                            HashMap<String, Integer> sortedexample = example.getValue();
+                            lowerIndex += 1; // 하위 인덱스 진행시 사이클 추가
+
+                            for (Map.Entry<String, Integer> innerEntry : sortedexample.entrySet()) {
+                                if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
+                                    if (innerEntry.getKey().equals("백화점")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(69960).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("온라인쇼핑")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(57050).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("마트")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                } else if (category.equals("생활")) {
+                                    if (innerEntry.getKey().equals("주유소")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(1510).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("통신")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("대중교통")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                } else if (category.equals("푸드")) {
+                                    if (innerEntry.getKey().equals("편의점")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("커피")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(30200).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("배달")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(357780).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                } else if (category.equals("여행")) {
+                                    if (innerEntry.getKey().equals("투어")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("차량")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(264900).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("숙소")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(10440).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    }
+                                } else if (category.equals("문화")) {
+                                    if (innerEntry.getKey().equals("OTT")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(153450).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("영화관")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
+                                        stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
+                                        recommendResponses.add(stockRecommendResponse);
+                                    } else if (innerEntry.getKey().equals("도서")) {
+                                        StockInformation stocks = stockInformationRepository.findByStockCode(418470).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                         stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                         recommendResponses.add(stockRecommendResponse);
                                     }
@@ -393,23 +530,23 @@ public class StockInterestService {
                             upperIndex += 1; // 상위 인덱스를 추가
 
                             if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
-                                StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(4170).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (category.equals("생활")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(17670).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (category.equals("푸드")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(78930).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (category.equals("여행")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(39130).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             } else if (category.equals("문화")) {
-                                StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("이거 에바인데요")));
+                                StockInformation stocks = stockInformationRepository.findByStockCode(79160).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
                                 stockRecommendResponse = new StockRecommendResponse(stocks.getStockName(),stocks.getStockPresentPrice(),preSignedUrl);
                                 recommendResponses.add(stockRecommendResponse);
                             }
