@@ -1,6 +1,6 @@
 package com.quostomize.quostomize_be.api.member.dto;
 
-import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

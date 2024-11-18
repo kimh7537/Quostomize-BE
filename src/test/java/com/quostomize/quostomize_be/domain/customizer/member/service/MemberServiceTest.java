@@ -4,10 +4,11 @@ import com.quostomize.quostomize_be.api.member.dto.UpdateAddressDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdateEmailDTO;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdatePhoneNumberDTO;
-import com.quostomize.quostomize_be.common.dto.ResponseDTO;
-import com.quostomize.quostomize_be.domain.customizer.member.entity.Member;
-import com.quostomize.quostomize_be.domain.customizer.member.repository.MemberRepository;
 
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
+import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
+import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,7 @@ public class MemberServiceTest {
         // given
         long memberId = 2L;
 
-        Member savedMember = new Member(2L, "USER", "김철수", "cheolsu0708@testmail.com","cheolsu0708", "00000000", "1234561234567", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279");
+        Member savedMember = new Member(2L, "김철수", "cheolsu0708@testmail.com","cheolsu0708", "00000000", "1234561234567", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.MEMBER);
 
 
         // stub
@@ -64,9 +65,9 @@ public class MemberServiceTest {
 
         // given
         List<Member> memberList = new ArrayList<>();
-        memberList.add(new Member(1L, "USER", "김철수", "cheolsu0708@testmail.com","cheolsu0708", "00000000", "1201041234567", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279"));
-        memberList.add(new Member(2L, "USER", "이돌쇠", "stoneiron1228@testmail.com","stoneiron1228", "00000000", "1311082134567", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279"));
-        memberList.add(new Member(3L, "ADMIN", "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279"));
+        memberList.add(new Member(1L, "김철수", "cheolsu0708@testmail.com","cheolsu0708", "00000000", "1201041234567", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.MEMBER));
+        memberList.add(new Member(2L, "이돌쇠", "stoneiron1228@testmail.com","stoneiron1228", "00000000", "1311082134567", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.MEMBER));
+        memberList.add(new Member(3L, "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.MEMBER));
 
         List<Member> savedMemberList = new ArrayList<>(memberList);
 
@@ -87,7 +88,7 @@ public class MemberServiceTest {
     void updateMemberAddressTest() {
         // given
         long memberId = 1L;
-        Member member = new Member(memberId, "ADMIN", "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279");
+        Member member = new Member(memberId, "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
 
         String newAddress = "서울시 강남구 테헤란로 123";
         String newDetailAddress = "극비빌딩 B609호";
@@ -112,7 +113,7 @@ public class MemberServiceTest {
     void updateMemberEmailTest() {
         // given
         long memberId = 1L;
-        Member member = new Member(memberId, "ADMIN", "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279");
+        Member member = new Member(memberId, "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
 
         String newEmail = "updateTest03333@testmail.com";
         UpdateEmailDTO updateEmailDTO = new UpdateEmailDTO(newEmail);
@@ -136,7 +137,7 @@ public class MemberServiceTest {
     void updateMemberPhoneNumberTest() {
         // given
         long memberId = 1L;
-        Member member = new Member(memberId, "ADMIN", "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279");
+        Member member = new Member(memberId, "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
 
         String newPhoneNumber = "01087659876";
         UpdatePhoneNumberDTO updatePhoneNumberDTO = new UpdatePhoneNumberDTO(newPhoneNumber);

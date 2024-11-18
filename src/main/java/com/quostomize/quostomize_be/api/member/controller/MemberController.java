@@ -5,11 +5,16 @@ import com.quostomize.quostomize_be.api.member.dto.UpdateEmailDTO;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdatePhoneNumberDTO;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
-import com.quostomize.quostomize_be.domain.customizer.member.service.MemberService;
+import com.quostomize.quostomize_be.api.member.dto.UpdatePasswordRequest;
+import com.quostomize.quostomize_be.api.member.dto.UpdatePhoneNumberRequest;
+import com.quostomize.quostomize_be.common.jwt.JwtTokenProvider;
+import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,10 +22,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/member")
 @RequiredArgsConstructor
-@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @PatchMapping("/update/password")
+    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal Long memberId,
+                                               @RequestBody @Valid UpdatePasswordRequest request) {
+        memberService.updatePassword(memberId, request.password());
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "멤버 전화번호 수정 API")
+    @PatchMapping("/phone-number")
+    public ResponseEntity<Void> updatePhoneNumber(@AuthenticationPrincipal Long memberId,
+                                                  @RequestBody @Valid UpdatePhoneNumberRequest request) {
+        memberService.updatePhoneNumber(memberId, request.phoneNumber());
+        return ResponseEntity.noContent().build();
+    }
 
     @GetMapping("/{memberId}")
     @Operation(summary = "단일 회원 정보 조회", description = "유저의 memberId를 pathVariable로 해서 회원 정보를 조회합니다.")
@@ -75,5 +95,6 @@ public class MemberController {
         memberService.updateMemberPhoneNumber(memberId, updatePhoneNumberDTO);
         return ResponseEntity.noContent().build();
     }
+
 
 }
