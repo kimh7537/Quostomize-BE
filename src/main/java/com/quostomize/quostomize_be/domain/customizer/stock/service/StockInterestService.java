@@ -108,8 +108,10 @@ public class StockInterestService {
 
         // 카드 혜택 기반 주식 추천
         if (isRecommendByCardBenefit) {
+
             // 카드 혜택 조회
             List<CardBenefit> cardBenefits = cardBenefitRepository.findByCardDetail_CardSequenceId(cardId);
+
             // 카드 혜택 ResponseDto로 변환
             List<CardBenefitResponse> benefits = cardBenefits.stream()
                     .map(Benefit -> {
@@ -137,6 +139,7 @@ public class StockInterestService {
             HashMap<String, HashMap<String, Integer>> upperName = new HashMap<String, HashMap<String, Integer>>();
 
             for (CardBenefitResponse benefit : benefits) {
+
                 if (benefit.isActive() == true) { // 혜택적립이 활성화 되어 있다면,
                     // 상위 분류- 하위 분류 이름, 적립률
                     HashMap<String, Integer> upper = new HashMap<String, Integer>();
@@ -169,6 +172,7 @@ public class StockInterestService {
                         .collect(Collectors.toList());
 
                 for (int i = 0; i < 3; i++) {
+
                     Map.Entry<String, HashMap<String,Integer>> entry = entryListUpper.get(i);
                     String category = entry.getKey();
                     if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
@@ -296,6 +300,7 @@ public class StockInterestService {
 
                 if(lowerName.size() > 1){
                     // 하위분류에 대해서 적립률이 높은순서대로 정렬한 배열 객체 생성
+
                     entryListLower = lowerName.entrySet().stream() .sorted((entry1, entry2) -> {
                                 // 내부 HashMap에서 가장 큰 값을 찾고 내림차순으로 비교
                                 int max1 = Collections.max(entry1.getValue().values());
@@ -452,6 +457,7 @@ public class StockInterestService {
                             lowerIndex += 1; // 하위 인덱스 진행시 사이클 추가
 
                             for (Map.Entry<String, Integer> innerEntry : sortedexample.entrySet()) {
+
                                 if (category.equals("쇼핑")) { // 종목 추천 이때, 해당 종목은
                                     if (innerEntry.getKey().equals("백화점")) {
                                         StockInformation stocks = stockInformationRepository.findByStockCode(69960).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND,new Throwable("상위분류 혹은 하위분류값이 유효하지 않습니다.")));
