@@ -42,7 +42,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.wiremock/wiremock -> aws s3 의존성의 취약점 보완 의존성
 	testImplementation group: 'org.wiremock', name: 'wiremock', version: '3.9.2'
 
-
+	// 문자 인증을 위한 CoolSMS 의존성 추가
+	implementation 'net.nurigo:sdk:4.3.0'
 
 
 
