@@ -11,8 +11,10 @@ import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class MemberQuestionService {
 
     private final MemberRepository memberRepository;
@@ -23,9 +25,15 @@ public class MemberQuestionService {
         this.memberRepository = memberRepository;
     }
 
-    // 문의글 전체 조회
-    public Page<PageMemberQuestionResponse> getAllMemberQuestions(PageRequest pageRequest) {
-        Page<MemberQuestion> questionPage = memberQuestionRepository.findAll(pageRequest);
+    // qna 문의글 전체 조회
+    public Page<PageMemberQuestionResponse> getAllMemberQuestions(Long memberId, String memberRole, PageRequest pageRequest) {
+        Page<MemberQuestion> questionPage;
+        // member_role별 조회 로직 분기
+        if ("ROLE_ADMIN".equals(memberRole)) {
+            questionPage = memberQuestionRepository.findAll(pageRequest);
+        } else {
+            questionPage = memberQuestionRepository.findByMember_MemberId(memberId, pageRequest);
+        }
         return questionPage.map(question -> new PageMemberQuestionResponse(
                 question.getQuestionsSequenceId(),
                 question.getIsPrivate(),
@@ -36,6 +44,7 @@ public class MemberQuestionService {
     }
 
     // qna 문의 생성
+    @Transactional
     public Long createQuestion(MemberQuestionRequest request, Member member) {
         MemberQuestion memberQuestion = MemberQuestion.builder()
                 .isPrivate(request.isPrivate())
@@ -48,6 +57,7 @@ public class MemberQuestionService {
         MemberQuestion savedMemberQuestion = memberQuestionRepository.save(memberQuestion);
         return savedMemberQuestion.getQuestionsSequenceId();
     }
+
     public Member getMemberById(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.MEMBER_INFO_NOT_FOUND));
     }
