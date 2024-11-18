@@ -77,4 +77,32 @@ public class IdempotencyRedisRepository {
                 TimeUnit.MINUTES
         );
     }
+
+    public void saveFailedStatus(String idempotencyKey) {
+        String key = KEY_PREFIX + idempotencyKey;
+
+        IdempotencyResponse failedResponse = IdempotencyResponse.builder()
+                .processStatus(ProcessStatus.FAILED)
+                .build();
+
+        redisTemplate.opsForValue().set(
+                key,
+                failedResponse,
+                RESPONSE_EXPIRATION,
+                TimeUnit.MINUTES
+        );
+    }
+
+
+    public boolean canRetry(String idempotencyKey) {
+        String key = KEY_PREFIX + idempotencyKey;
+        IdempotencyResponse response = (IdempotencyResponse) redisTemplate.opsForValue().get(key);
+        log.info("[실패 상태]");
+        if (response == null) {
+            return false;
+        }
+
+        return response.isFailed();
+    }
+
 }
