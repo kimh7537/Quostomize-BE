@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.api.hello.pointUsageMethod.dto;
+package com.quostomize.quostomize_be.api.pointUsageMethod.dto;
 
 
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
