@@ -1,12 +1,12 @@
 package com.quostomize.quostomize_be.domain.customizer.memberQuestion.service;
 
 import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionRequest;
-import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionResponse;
 import com.quostomize.quostomize_be.api.memberQuestion.dto.PageMemberQuestionResponse;
 import com.quostomize.quostomize_be.domain.customizer.memberQuestion.entity.MemberQuestion;
 import com.quostomize.quostomize_be.domain.customizer.memberQuestion.repository.MemberQuestionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;

@@ -49,4 +49,8 @@ public class MemberQuestion extends BaseTimeEntity {
         this.questionContent = questionContent;
         this.member = member;
     }
+
+    public void markAsAnswered() {
+        this.isAnswered = true;
+    }
 }
