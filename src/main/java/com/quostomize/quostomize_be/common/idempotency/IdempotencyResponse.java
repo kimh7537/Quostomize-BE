@@ -23,4 +23,6 @@ public class IdempotencyResponse implements Serializable {
     public boolean isSucceed() {
         return this.processStatus == ProcessStatus.SUCCESS;
     }
+
+    public boolean isFailed() {return this.processStatus == ProcessStatus.FAILED;}
 }
