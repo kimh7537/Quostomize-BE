@@ -29,7 +29,7 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
         if (idempotencyKey == null) {
             return true;
         }
-        log.info("BREAK POINT1");
+//        log.info("BREAK POINT1");
         ObjectMapper objectMapper = new ObjectMapper();
 
         if (idempotencyRedisRepository.hasSucceedResult(idempotencyKey)) {
@@ -49,25 +49,37 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        if (idempotencyRedisRepository.canRetry(idempotencyKey)) {
+            log.info("[재시도 가능 상태. 처리 진행]");
+            idempotencyRedisRepository.saveStatusProcessing(idempotencyKey);
+            return true;
+        }
+
         // 캐시에 결과가 존재하지 않으면 -> 처리중이란 값을 넣고 컨트롤러를 실행함
         idempotencyRedisRepository.saveStatusProcessing(idempotencyKey);
         return true;
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
         String idempotencyKey = request.getHeader(IDEMPOTENCY_HEADER);
         if (idempotencyKey == null) {
             return;
         }
         ObjectMapper objectMapper = new ObjectMapper();
 
-        final ContentCachingResponseWrapper responseWrapper = (ContentCachingResponseWrapper) response;
-
-        idempotencyRedisRepository.saveSucceedResult(idempotencyKey,
-                objectMapper.readTree(responseWrapper.getContentAsByteArray()));
-
-        responseWrapper.copyBodyToResponse();
+        if (ex != null || response.getStatus() >= 400) {
+            // 요청 처리 중 예외 또는 오류 발생
+            log.warn("[afterCompletion] 요청 처리 실패. FAILED 상태로 전환. idempotencyKey: {}", idempotencyKey);
+            idempotencyRedisRepository.saveFailedStatus(idempotencyKey); // FAILED 상태로 저장
+        } else {
+            // 요청 성공
+            final ContentCachingResponseWrapper responseWrapper = (ContentCachingResponseWrapper) response;
+            idempotencyRedisRepository.saveSucceedResult(idempotencyKey,
+                    objectMapper.readTree(responseWrapper.getContentAsByteArray()));
+            responseWrapper.copyBodyToResponse();
+            log.info("[afterCompletion] 요청 처리 성공. SUCCESS 상태로 전환. idempotencyKey: {}", idempotencyKey);
+        }
     }
 }
