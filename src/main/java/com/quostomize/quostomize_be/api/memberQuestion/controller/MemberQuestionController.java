@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.api.memberQuestion.controller;
 import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionRequest;
 
 
+import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionResponse;
 import com.quostomize.quostomize_be.api.memberQuestion.dto.PageMemberQuestionResponse;
 import com.quostomize.quostomize_be.api.memberQuestion.dto.PageResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
@@ -39,7 +40,7 @@ public class MemberQuestionController {
     }
 
     @GetMapping("")
-    @Operation(summary = "문의글 조회", description = "ADMIN은 전체 문의글을 조회, MEMBER/OLD_MEMBER는 본인이 작성한 글만 조회합니다.")
+    @Operation(summary = "전체 문의글 조회", description = "ADMIN은 전체 문의글을 조회, MEMBER/OLD_MEMBER는 본인이 작성한 글만 조회합니다.")
     public ResponseEntity<ResponseDTO> getAllMemberQuestions(Authentication authentication, @RequestParam(defaultValue = "0") int page) {
         Long memberId = (Long) authentication.getPrincipal();
         String memberRole = authentication.getAuthorities()
@@ -57,5 +58,19 @@ public class MemberQuestionController {
                 questions.getTotalElements() // 전체 데이터 수
         );
         return ResponseEntity.ok(new ResponseDTO<>(pageResponse));
+    }
+
+
+    @GetMapping("/{questionId}")
+    @Operation(summary = "사용자별 특정 문의글 상세 조회", description = "사용자별로 특정 문의글을 상세 조회합니다.")
+    public ResponseEntity<ResponseDTO> getMemberQuestionDetail(Authentication authentication, @PathVariable Long questionId) {
+        Long memberId = (Long) authentication.getPrincipal();
+        String memberRole = authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("UNKNOWN");
+        MemberQuestionResponse memberQuestion = memberQuestionService.getMemberQuestion(memberId, memberRole, questionId);
+        return ResponseEntity.ok(new ResponseDTO<>(memberQuestion));
     }
 }
