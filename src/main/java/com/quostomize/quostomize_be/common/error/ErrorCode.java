@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
-
     // DTO 에서 발생하는 에러
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "I-001", "입력 값이 잘못되었습니다."),
     // 404 오류 -> 객체를 찾을 수 없는 문제
@@ -39,6 +38,7 @@ public enum ErrorCode {
     ROLE_IS_NOT_MATCH(HttpStatus.BAD_REQUEST, "M-101", "해당 ROLE은 변경할 수 없습니다."),
     ROLE_IS_NOT_OLD_MEMBER(HttpStatus.BAD_REQUEST, "M-103", "해당 회원의 ROLE은 OLD_MEMBER가 아닙니다."),
     SAME_PASSWORD(HttpStatus.CONFLICT, "M-301", "이전과 같은 비밀번호로 변경할 수 없습니다."),
+    USER_ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "M-401", "권한이 없어서 접근할 수 없습니다."),
 
     // 고객 관련
     CUSTOMER_CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "U-001", "고객의 카드를 찾을 수 없습니다."),
@@ -52,7 +52,10 @@ public enum ErrorCode {
     
     // 카드 혜택
     CARD_DETAIL_BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "B-201", "해당 카드에 적용된 혜택이 없습니다."),
-    CARD_BENEFIT_RESERVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "B-501", "예약한 혜택 반영에 실패했습니다.");
+    CARD_BENEFIT_RESERVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "B-501", "예약한 혜택 반영에 실패했습니다."),
+
+    // QnA
+    DUPLICATE_REQUEST(HttpStatus.ALREADY_REPORTED, "Q-101", "이미 답변이 등록된 문의글입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
