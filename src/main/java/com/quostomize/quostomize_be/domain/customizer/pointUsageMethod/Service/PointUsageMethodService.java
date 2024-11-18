@@ -8,39 +8,23 @@ import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.Po
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PointUsageMethodService {
 
     private final PointUsageMethodRepository repository;
 
+    @Transactional
     public PointUsageMethod getPointUsageMethod(Long cardSequenceId) {
         return repository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
     }
 
-
-    public PointUsageMethodResponseDto updatedPointUsageMethod(PointUsageMethodRequestDto request) {
-        PointUsageMethod pointUsageMethod = request.toEntity();
-
-        PointUsageMethod existingPointUsage = repository.findByCardDetail_CardSequenceId(request.cardDetail().getCardSequenceId())
-                .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
-
-        existingPointUsage = PointUsageMethod.builder()
-                .pointUsageTypeId(existingPointUsage.getPointUsageTypeId())
-                .cardDetail(existingPointUsage.getCardDetail())
-                .isLotto(request.isActive())
-                .isPayback(request.isActive())
-                .isPieceStock(request.isActive())
-                .build();
-
-        PointUsageMethod savedPointUsageMethod = repository.save(existingPointUsage);
-
-        return PointUsageMethodResponseDto.from(savedPointUsageMethod);
-    }
-
+    @Transactional
     public PointUsageMethod togglePointUsage(Long cardSequenceId, String usageType, boolean isActive) {
         PointUsageMethod pointUsageMethod = repository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
