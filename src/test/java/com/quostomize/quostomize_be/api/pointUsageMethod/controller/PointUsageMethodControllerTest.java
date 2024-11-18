@@ -75,7 +75,7 @@ class PointUsageMethodControllerTest {
 
         // given
         Long cardSequenceId = 1L;
-        PointUsageMethodRequestDto requestDto = new PointUsageMethodRequestDto(null, null, true, "lotto");
+        PointUsageMethodRequestDto requestDto = new PointUsageMethodRequestDto(null, null, true, true,"lotto");
         PointUsageMethod updatedUsageMethod = new PointUsageMethod();
         PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(updatedUsageMethod);
         ResponseDTO<PointUsageMethodResponseDto> expectedResponse = new ResponseDTO<>(responseDto);
