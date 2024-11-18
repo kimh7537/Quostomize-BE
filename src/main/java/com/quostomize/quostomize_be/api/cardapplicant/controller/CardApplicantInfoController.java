@@ -2,7 +2,6 @@ package com.quostomize.quostomize_be.api.cardapplicant.controller;
 
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
-import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.service.CardApplicantInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
