@@ -5,7 +5,6 @@ import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantResponseDto;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.LottoService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +23,6 @@ public class LottoController {
     public ResponseEntity<ResponseDTO<List<LottoParticipantResponseDto>>> registerLottoParticipants() {
         List<LottoParticipantResponseDto> participantResponseDtos = lottoService.registerLottoParticipants();
         return ResponseEntity.ok(new ResponseDTO<>(participantResponseDtos));
-    }
-
-    @PostMapping("/my-card/change-lotto")
-    @Operation(summary = "로또 참여 설정 변경", description = "나의 카드페이지에서 로또 참여 여부를 ON/OFF 시 참여자 수가 변경됩니다.")
-    public ResponseEntity<String> toggleLottoParticipation(@Valid @RequestBody LottoParticipantRequestDto request) {
-        lottoService.toggleLottoParticipation(request);
-        return ResponseEntity.ok("로또 참여 설정이 변경되었습니다.");
     }
 
     @GetMapping("/lottery")
