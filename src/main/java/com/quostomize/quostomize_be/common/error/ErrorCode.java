@@ -39,7 +39,18 @@ public enum ErrorCode {
     CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "카드 정보가 없습니다,"),
     PAYBACK_AND_PIECESTOCK_CONFLICT(HttpStatus.BAD_REQUEST, "M-002", "페이백과 조각투자는 동시에 활성화 할 수 없습니다."),
     MINIMUM_ONE_OPTION_REQUIRED(HttpStatus.BAD_REQUEST, "M-101", "최소 한 가지 이상의 옵션을 선택하세요."),
-    MAXIMUM_TWO_OPTIONS_ALLOWED(HttpStatus.BAD_REQUEST, "M-102", "최대 두 가지의 옵션을 선택할 수 있습니다.")
+    MAXIMUM_TWO_OPTIONS_ALLOWED(HttpStatus.BAD_REQUEST, "M-102", "최대 두 가지의 옵션을 선택할 수 있습니다."),
+
+    // 주식
+    OPENAPI_CONNECT_FAIL(HttpStatus.BAD_REQUEST, "S-001", "오픈 api 테스트가 실패했습니다."),
+
+    //JSON 처리 관련 에러
+    JSON_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "J-001", "JSON 처리 중 오류가 발생했습니다."),
+
+    // SMS 인증
+    SMS_CERTIFICATION_ERROR(HttpStatus.BAD_REQUEST, "M-001", "인증번호가 일치하지 않습니다."),
+    SMS_CERTIFICATION_EXPIRED(HttpStatus.BAD_REQUEST, "M-002", "인증번호가 만료되었습니다."),
+    INVALID_PHONE_FORMAT(HttpStatus.BAD_REQUEST, "M-003", "유효하지 않은 전화번호 형식입니다.")
     ;
 
     private final HttpStatus httpStatus;
