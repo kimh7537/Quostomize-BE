@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.memberQuestion.service;
 
 import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionRequest;
+import com.quostomize.quostomize_be.api.memberQuestion.dto.MemberQuestionResponse;
 import com.quostomize.quostomize_be.api.memberQuestion.dto.PageMemberQuestionResponse;
 import com.quostomize.quostomize_be.domain.customizer.memberQuestion.entity.MemberQuestion;
 import com.quostomize.quostomize_be.domain.customizer.memberQuestion.repository.MemberQuestionRepository;
@@ -25,6 +26,7 @@ public class MemberQuestionService {
         this.memberRepository = memberRepository;
     }
 
+    // TODO: Role 확인 반복 로직은 추후 분리 예정
     // qna 문의글 전체 조회
     public Page<PageMemberQuestionResponse> getAllMemberQuestions(Long memberId, String memberRole, PageRequest pageRequest) {
         Page<MemberQuestion> questionPage;
@@ -41,6 +43,25 @@ public class MemberQuestionService {
                 question.getCategoryCode(),
                 question.getQuestionTitle()
         ));
+    }
+
+    // qna 문의글 사용자별 상세 조회
+    public MemberQuestionResponse getMemberQuestion(Long memberId, String memberRole, Long memberQuestionId) {
+        MemberQuestion question;
+        if ("ROLE_ADMIN".equals(memberRole)) {
+            question = memberQuestionRepository.findById(memberQuestionId).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
+        } else {
+            question = memberQuestionRepository.findByMember_MemberIdAndQuestionsSequenceId(memberId, memberQuestionId).orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
+        }
+
+        return new MemberQuestionResponse(
+                question.getQuestionsSequenceId(),
+                question.getIsAnswered(),
+                question.getCategoryCode(),
+                question.getQuestionTitle(),
+                question.getQuestionContent(),
+                question.getMember().getMemberId()
+        );
     }
 
     // qna 문의 생성
