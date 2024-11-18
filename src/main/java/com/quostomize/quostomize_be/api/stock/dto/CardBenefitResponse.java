@@ -11,8 +11,6 @@ public record CardBenefitResponse(
      @NotNull
      @NotBlank
      String benefitCategoryType, // 상위분류
-     @NotNull
-     @NotBlank
      String franchiseName // 하위분류
 
 ) {
