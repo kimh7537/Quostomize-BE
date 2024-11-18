@@ -5,9 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.net.URI;
-
-
 @Entity
 @Getter
 @NoArgsConstructor
