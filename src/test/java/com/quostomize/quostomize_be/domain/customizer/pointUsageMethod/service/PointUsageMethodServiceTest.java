@@ -1,12 +1,9 @@
 package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service;
 
-
-import com.quostomize.quostomize_be.api.hello.pointUsageMethod.dto.PointUsageMethodResponseDto;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
-import com.quostomize.quostomize_be.domain.customizer.CardDetail.repository.CardDetailRepository;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
-import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.Service.PointUsageMethodService;
+import com.quostomize.quostomize_be.domain.customizer.card.repository.CardRepository;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
 import jakarta.transaction.Transactional;
@@ -32,14 +29,12 @@ class PointUsageMethodServiceTest {
     private PointUsageMethodRepository repository;
 
     @Autowired
-    private CardDetailRepository cardDetailRepository;
+    private CardRepository cardRepository;
 
     @BeforeEach
     void setUp() {
         repository.deleteAll();
-
     }
-
 
     @Test
     @DisplayName("옵션 활성화 수 제한(최소 1개)")
@@ -48,12 +43,12 @@ class PointUsageMethodServiceTest {
         Long cardSequenceId = 1L;
 
         // cardDetail 객체 조회 또는 생성
-        CardDetail cardDetail = cardDetailRepository.findById(cardSequenceId)
+        CardDetail cardDetail = cardRepository.findById(cardSequenceId)
                 .orElseGet(() -> {
                     CardDetail newCardDetail = CardDetail.builder()
                             .cardSequenceId(cardSequenceId)
                             .build();
-                    return cardDetailRepository.save(newCardDetail);
+                    return cardRepository.save(newCardDetail);
                 });
 
         // PointUsageMethod 객체 생성 (cardDetail을 올바르게 설정)
@@ -82,12 +77,12 @@ class PointUsageMethodServiceTest {
         Long cardSequenceId = 1L;
 
         // cardDetail 객체 조회 또는 생성
-        CardDetail cardDetail = cardDetailRepository.findById(cardSequenceId)
+        CardDetail cardDetail = cardRepository.findById(cardSequenceId)
                 .orElseGet(() -> {
                     CardDetail newCardDetail = CardDetail.builder()
                             .cardSequenceId(cardSequenceId)
                             .build();
-                    return cardDetailRepository.save(newCardDetail);
+                    return cardRepository.save(newCardDetail);
                 });
 
         // PointUsageMethod 객체 생성 (cardDetail을 올바르게 설정)
