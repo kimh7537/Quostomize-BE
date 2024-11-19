@@ -3,7 +3,6 @@ package com.quostomize.quostomize_be.domain.auth.service;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdateAddressDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdateEmailDTO;
-import com.quostomize.quostomize_be.api.member.dto.UpdatePhoneNumberDTO;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.auth.component.MemberReader;
@@ -46,17 +45,10 @@ public class MemberService {
         }
     }
 
-    @Transactional
-    public void updatePhoneNumber(Long memberId, String phoneNumber) {
-        Member findMember = memberReader.findById(memberId);
-        String encryptedPhoneNumber = encryptService.encryptPhoneNumber(phoneNumber);
-        findMember.updatePhoneNumber(encryptedPhoneNumber);
-    }
-
     public MemberResponseDTO findByMemberId(Long memberId) {
-        return MemberResponseDTO.fromEntity(memberRepository.findByMemberId(memberId)
-                .orElseThrow(EntityNotFoundException::new)
-        );
+        Member findMember = memberReader.findById(memberId);
+        String decryptedPhoneNumber = encryptService.decryptPhoneNumber(findMember.getMemberPhoneNumber());
+        return MemberResponseDTO.fromEntityWithDecodedPhoneNumber(findMember, decryptedPhoneNumber);
     }
 
     public List<MemberResponseDTO> findAll() {
@@ -64,28 +56,26 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponseDTO updateMemberAddress(Long memberId, UpdateAddressDTO updateAddressDTO) {
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 엔티티입니다."));
+    public void updateMemberAddress(Long memberId, UpdateAddressDTO updateAddressDTO) {
+        Member member =  memberReader.findById(memberId);
 
         member.updateZipCode(updateAddressDTO.zipCode());
         member.updateAddress(updateAddressDTO.newAddress());
         member.updateDetailAddress(updateAddressDTO.newDetailAddress());
-
-        return MemberResponseDTO.fromEntity(member);
     }
 
     @Transactional
-    public MemberResponseDTO updateMemberEmail(Long memberId, UpdateEmailDTO updateEmailDTO) {
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 엔티티입니다."));
-        member.updateEmail(updateEmailDTO.newEmail());
-        return MemberResponseDTO.fromEntity(member);
+    public void updateMemberEmail(Long memberId, String newEmail) {
+        Member member = memberReader.findById(memberId);
+        member.updateEmail(newEmail);
     }
 
+
     @Transactional
-    public MemberResponseDTO updateMemberPhoneNumber(Long memberId, UpdatePhoneNumberDTO updatePhoneNumberDTO) {
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 엔티티입니다."));
-        member.updatePhoneNumber(updatePhoneNumberDTO.newPhoneNumber());
-        return MemberResponseDTO.fromEntity(member);
+    public void updatePhoneNumber(Long memberId, String phoneNumber) {
+        Member findMember = memberReader.findById(memberId);
+        String encryptedPhoneNumber = encryptService.encryptPhoneNumber(phoneNumber);
+        findMember.updatePhoneNumber(encryptedPhoneNumber);
     }
 
 }

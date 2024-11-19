@@ -1,9 +1,9 @@
-package com.quostomize.quostomize_be.api.registration.controller;
+package com.quostomize.quostomize_be.api.auth.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
-import com.quostomize.quostomize_be.domain.customizer.registration.service.MemberService;
+import com.quostomize.quostomize_be.domain.auth.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class MemberControllerTest {
+class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,7 +35,7 @@ class MemberControllerTest {
     private WebApplicationContext context;
 
     @MockBean
-    private MemberService memberService;
+    private AuthService authService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -50,18 +50,25 @@ class MemberControllerTest {
     @Test
     @DisplayName("정보의 요구사항을 갖추고 회원가입 시도")
     public void saveTest() throws Exception {
-        // Given
+        //Given
         MemberRequestDto memberRequestDto = new MemberRequestDto(
-                "John Doe", "john@example.com", "admin123",
-                "", "bv123456", "bv123456",
-                "1234567891111", "birth", "gender",
-                "nickname", "12345678910", "123456", "123456"
+                "John Doe",
+                "john@example.com",
+                "admin123",
+                "bv123456",
+                "1234567891111",
+                "12999",
+                "1234545678912",
+                "testDetailAddress",
+                "01055558888",
+                "123456"
         );
 
-        doNothing().when(memberService).saveMember(any(MemberRequestDto.class));
+
+        doNothing().when(authService).saveMember(any(MemberRequestDto.class));
 
         // expected: 회원가입이 완료 되었습니다.
-        mockMvc.perform(post("/api/member/register")
+        mockMvc.perform(post("/v1/api/auth/join")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberRequestDto)))
                 .andExpect(status().isOk())
@@ -73,12 +80,20 @@ class MemberControllerTest {
     public void returnBadRequest() throws Exception {
         // Given
         MemberRequestDto invalidMemberRequestDto = new MemberRequestDto(
-                "", "", "", "", "", "",
-                "", "", "", "", "", "", ""
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         // expected: 빈 정보를 보낼 때, BadRequest 반환
-        mockMvc.perform(post("/api/member/register")
+        mockMvc.perform(post("/v1/api/auth/join")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidMemberRequestDto)))
                 .andExpect(status().isBadRequest());
@@ -90,23 +105,19 @@ class MemberControllerTest {
     public void returnBadRequest2() throws Exception {
         // Given: 양식과 다른 Email, Password,PhoneNumber, SecondaryCode 및 주민번호, 주소에 관한 정보 미입력으로 총 발생할 에러 10건.
         MemberRequestDto invalidMemberRequestDto = new MemberRequestDto(
-                "안녕",
-                "invalid-email",
-                "user123",
-                "",
-                "short",
-                "short",
-                "",
-                "",
-                "",
-                "",
-                "1234567",
-                "123",
-                "123"
+                "testName2",
+                "test@example.com",
+                "2312gjkdfs",
+                "password123",
+                "1234545678912",
+                "12999",
+                "1234545678912",
+                "testDetailAddress",
+                "01055558888",
+                "123456"
         );
-
         // expected: 요청이 Bad Request를 반환하는지 확인
-        mockMvc.perform(post("/api/member/register")
+        mockMvc.perform(post("/v1/api/auth/join")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidMemberRequestDto)))
                 .andExpect(status().isBadRequest())

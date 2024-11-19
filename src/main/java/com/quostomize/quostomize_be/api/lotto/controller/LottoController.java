@@ -1,6 +1,5 @@
 package com.quostomize.quostomize_be.api.lotto.controller;
 
-import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantRequestDto;
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantResponseDto;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.LottoService;
