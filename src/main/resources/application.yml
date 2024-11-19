@@ -21,6 +21,10 @@ spring:
     apiSecret: ${SMS_API_SECRET_KEY}
     senderNumber: ${SMS_SENDER_NUMBER}
 
+  schedule:
+    cron: 0 0 0 * * ?
+    use: true
+
 aws:
   accessKeyId: ${ACCESS_KEY_ID}
   secretAccessKey: ${SECRET_ACCESS_KEY}

@@ -1,3 +1,5 @@
+package com.quostomize.quostomize_be.domain.customizer.lotto.entity;
+
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import jakarta.persistence.*;

@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
@@ -58,20 +57,6 @@ public class CardDetail extends BaseTimeEntity {
     private int paymentReceiptMethods;
 
     @Builder
-    public CardDetail(int paymentReceiptMethods, int optionalTerms, LocalDate expirationDate, String cvcNumber, String cardPassword, Boolean isPostpaidTransport, Boolean isForeignBlocked, Boolean isAppCard, int cardBrand, int cardColor, String cardNumber) {
-        this.paymentReceiptMethods = paymentReceiptMethods;
-        this.optionalTerms = optionalTerms;
-        this.expirationDate = expirationDate;
-        this.cvcNumber = cvcNumber;
-        this.cardPassword = cardPassword;
-        this.isPostpaidTransport = isPostpaidTransport;
-        this.isForeignBlocked = isForeignBlocked;
-        this.isAppCard = isAppCard;
-        this.cardBrand = cardBrand;
-        this.cardColor = cardColor;
-        this.cardNumber = cardNumber;
-    }
-
     public CardDetail(int paymentReceiptMethods, int optionalTerms, LocalDate expirationDate, String cvcNumber, String cardPassword, Boolean isPostpaidTransport, Boolean isForeignBlocked, Boolean isAppCard, int cardBrand, int cardColor, String cardNumber, long cardSequenceId) {
         this.paymentReceiptMethods = paymentReceiptMethods;
         this.optionalTerms = optionalTerms;
@@ -84,6 +69,7 @@ public class CardDetail extends BaseTimeEntity {
         this.cardBrand = cardBrand;
         this.cardColor = cardColor;
         this.cardNumber = cardNumber;
-        this.cardSequenceId =cardSequenceId;
+        this.cardSequenceId = cardSequenceId;
     }
+
 }
