@@ -1,11 +1,35 @@
 {
-  "mappings": {
-    "properties": {
-      "id": { "type": "keyword" },
-      "stockCode": { "type": "integer" },
-      "stockName": { "type": "text", "analyzer": "standard" },
-      "stockPresentPrice": { "type": "integer" },
-      "stockImage": { "type": "text", "index": false }
+  "properties": {
+    "id": {
+      "type": "long",
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      }
+    },
+    "stock_code": {
+      "type": "integer"
+    },
+    "stock_name": {
+      "type": "text",
+      "analyzer": "nori_analyzer",
+      "search_analyzer": "nori_analyzer"
+    },
+    "stock_present_price": {
+      "type": "integer"
+    },
+    "stock_image": {
+      "type": "text",
+      "index": false
+    },
+    "created_at": {
+      "type": "date",
+      "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"
+    },
+    "modified_at": {
+      "type": "date",
+      "format": "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"
     }
   }
 }
