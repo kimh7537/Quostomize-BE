@@ -23,8 +23,8 @@ public class StockInterestController {
     // 조회 기능
     @GetMapping("/select")
     @Operation(summary = "위시리스토 조회",description = "현재 적용 되어있는 위시리스트를 조회합니다.")
-    public ResponseEntity<ResponseDTO<List<StockInterestDto>>> getStockWishList() {
-        List<StockInterestDto> stockWishList = stockInterestService.getStockWishList();
+    public ResponseEntity<ResponseDTO<List<StockInterestDto>>> getStockWishList(@RequestParam Long cardId) {
+        List<StockInterestDto> stockWishList = stockInterestService.getStockWishList(cardId);
         return ResponseEntity.ok(new ResponseDTO<>(stockWishList));
     }
 
