@@ -1,8 +1,8 @@
 package com.quostomize.quostomize_be.domain.customizer.customer.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
-import com.quostomize.quostomize_be.domain.customizer.registration.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

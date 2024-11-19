@@ -20,7 +20,8 @@ public class CorsConfig {
         config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.setExposedHeaders(List.of("access", "refresh"));
+        config.setExposedHeaders(List.of("accessToken"));
+        config.addExposedHeader("Set-Cookie");
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
