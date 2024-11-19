@@ -3,9 +3,11 @@ package com.quostomize.quostomize_be.domain.auth.service;
 import com.quostomize.quostomize_be.api.auth.dto.*;
 import com.quostomize.quostomize_be.api.auth.dto.MemberLoginIdResponse;
 import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
+import com.quostomize.quostomize_be.api.sms.dto.SmsRequest;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.jwt.*;
+import com.quostomize.quostomize_be.common.sms.service.SmsService;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,6 +35,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final BlackListRepository blackListRepository;
     private final EncryptService encryptService;
+    private final SmsService smsService;
 
     @Value("${jwt.refresh.expiration}")
     private int refreshTokenAge;
@@ -123,28 +126,19 @@ public class AuthService {
         log.info("[로그아웃 된 액세스 토큰 블랙리스트 처리]");
     }
 
-    public void sendSignUpPhoneNumber(SendPhoneRequest request) {
-        validateService.phoneNumberNotExist(request.phoneNumber());
-        //TODO: 핸드폰으로 코드 인증 보내는 로직 실행
+    public void sendFindPasswordPhoneNumber(SmsRequest request) {
+        validateService.phoneNumberExist(request.phone());
+        smsService.sendSms(request);
     }
 
-    public void verifySingUpCode(String phoneNumber, String code) {
-        //TODO: 핸드폰 번호와 전송된 코드가 일치하는지 확인
-    }
+    public FindPasswordResponse verifyPasswordCode(SmsRequest request) {
+        smsService.verifySms(request);
 
-
-    public void sendFindPasswordPhoneNumber(SendPhoneRequest request) {
-        validateService.phoneNumberExist(request.phoneNumber());
-        //TODO: 핸드폰 문자 인증 발송
-    }
-
-    public FindPasswordResponse verifyPasswordCode(String phoneNumber, String code) {
-        //TODO: 핸드폰 문자로 발송한 코드 검증해야 함
-
-        Member findMember = memberRepository.findByMemberPhoneNumber(phoneNumber)
+        Member findMember = memberRepository.findByMemberPhoneNumber(request.phone())
                 .orElseThrow(() -> new AppException(ErrorCode.PHONE_NOT_FOUND));
         String role = findMember.getRole().getKey();
-
+        
+        //비밀번호를 변경하려면 토큰을 검증해야함
         Token token = jwtTokenProvider.createToken(findMember.getMemberId(), role);
         return FindPasswordResponse.from(token.getAccessToken());
     }
