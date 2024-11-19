@@ -14,9 +14,12 @@ public enum ErrorCode {
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "I-201", "해당 Entity를 찾을 수 없습니다."),
 
     // 회원 가입
+    INVALID_LOGIN_ID(HttpStatus.BAD_REQUEST, "A-001","유효하지 않은 아이디입니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "A-002", "유효하지 않은 패스워드입니다."),
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "A-003", "유효하지 않은 전화번호 입니다."),
     CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "A-101", "요청하신 코드가 일치하지 않습니다."),
+    NOT_MATCHED_SECONDARY_AUTH_CODE(HttpStatus.BAD_REQUEST, "A-401", "인증번호가 일치하지 않습니다."),
+    NOT_MATCHED_PASSWORD(HttpStatus.BAD_REQUEST, "A-402", "비밀번호가 일치하지 않습니다."),
     LOGIN_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "A-201", "해당 아이디가 존재하지 않습니다."),
     PHONE_NOT_FOUND(HttpStatus.NOT_FOUND, "A-202", "해당 번호가 존재하지 않습니다."),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "A-203", "해당 이메일이 존재하지 않습니다."),
