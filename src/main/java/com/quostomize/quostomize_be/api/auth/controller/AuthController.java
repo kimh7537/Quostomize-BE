@@ -3,7 +3,6 @@ package com.quostomize.quostomize_be.api.auth.controller;
 import com.quostomize.quostomize_be.api.auth.dto.*;
 import com.quostomize.quostomize_be.api.auth.dto.MemberLoginIdResponse;
 import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
-import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.auth.service.AuthService;
 import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
