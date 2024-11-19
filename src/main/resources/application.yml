@@ -13,7 +13,7 @@ spring:
         format_sql: true
   data:
     redis:
-      host: ${REDIS_URL}
+      host: localhost
       port: 6379
 
   coolsms:
@@ -26,3 +26,22 @@ aws:
   secretAccessKey: ${SECRET_ACCESS_KEY}
   region: ${AWS_REGION}
   bucketName: ${S3_BUCKET_NAME}
+
+jwt:
+  secretKey: ${JWT_SECRET_KEY}
+  access:
+    expiration: 1800000
+
+  refresh:
+    expiration: 259200000
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+
+aes:
+  secret:
+    key: ${AES_SECRET_KEY}
+    salt: ${AES_SECRET_SALT}

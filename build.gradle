@@ -31,10 +31,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-
-
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api:2.3.0'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.3'
 	// https://mvnrepository.com/artifact/software.amazon.awssdk/s3 -> aws s3 로직 의존성
 	testImplementation group: 'software.amazon.awssdk', name: 's3', version: '2.25.40'
 	// https://mvnrepository.com/artifact/commons-io/commons-io -> aws s3 의존성의 취약점 보완 의존성
@@ -44,11 +44,6 @@ dependencies {
 
 	// 문자 인증을 위한 CoolSMS 의존성 추가
 	implementation 'net.nurigo:sdk:4.3.0'
-
-
-
-
-
 
 	//Querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -64,7 +59,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.mockito:mockito-core'
+	testImplementation 'org.mockito:mockito-junit-jupiter'
+	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
