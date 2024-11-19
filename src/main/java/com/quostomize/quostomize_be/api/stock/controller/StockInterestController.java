@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.api.stock.controller;
 
 import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
+import com.quostomize.quostomize_be.api.stock.dto.StockInterestRequestDto;
 import com.quostomize.quostomize_be.api.stock.dto.StockRecommendResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.stock.service.StockInterestService;
@@ -38,8 +39,8 @@ public class StockInterestController {
     // 순위 변경 기능
     @PatchMapping("/select/change-rank")
     @Operation(summary = "위시리스토 순위변경",description = "선택 되어있는 위시리스트의 순위(priority)를 변경 합니다.")
-    public ResponseEntity<Void> switchingStock(@RequestParam int curentOrder, @RequestParam int editOrder){
-        stockInterestService.switchStock(curentOrder,editOrder);
+    public ResponseEntity<Void> switchingStock(@RequestBody List<StockInterestRequestDto> dtos){
+        stockInterestService.switchStock(dtos);
         return  ResponseEntity.noContent().build();
     }
     //선택한 혜택 기반 그리고 결제 내역 기반에 따른 추천로직
