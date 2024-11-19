@@ -1,9 +1,9 @@
-package com.quostomize.quostomize_be.domain.customizer.registration.service;
+package com.quostomize.quostomize_be.domain.auth.service;
 
 import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
-import com.quostomize.quostomize_be.domain.customizer.registration.entity.Member;
-import com.quostomize.quostomize_be.domain.customizer.registration.repository.MemberRepository;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +19,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
-class MemberServiceTest {
+class AuthServiceTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate; //Customer_id 에 test가 영향을 받아 잠시 Fk 비활성화 하기 위해 사용
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private AuthService authService;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -73,20 +76,17 @@ class MemberServiceTest {
                 "testName2",
                 "test@example.com",
                 "testLoginId2",
-                "",
-                "password123",
                 "password123",
                 "1234545678912",
-                "12345",
-                "testDetailAddress",
+                "12999",
+                "1234545678912",
                 "testDetailAddress",
                 "01055558888",
-                "123456",
                 "123456"
         );
 
         // when & then
-        AppException exception = assertThrows(AppException.class, () -> memberService.saveMember(duplicateEmailDto));
+        AppException exception = assertThrows(AppException.class, () -> authService.saveMember(duplicateEmailDto));
         assertEquals("EMAIL_DUPLICATED", exception.getErrorCode().name());
     }
 
@@ -94,24 +94,23 @@ class MemberServiceTest {
     @DisplayName("유효하지 않은 아이디로 회원가입 시도")
     void notValid_LoginId_Exception(){
         // given
+        // 중복된 이메일로 회원가입 시도
         MemberRequestDto notValidLoginId = new MemberRequestDto(
                 "testName2",
                 "test@example.com",
                 "2312gjkdfs",
-                "",
-                "password123",
                 "password123",
                 "1234545678912",
-                "12345",
-                "testDetailAddress",
+                "12999",
+                "1234545678912",
                 "testDetailAddress",
                 "01055558888",
-                "123456",
                 "123456"
         );
 
+
         // when & then
-        AppException exception = assertThrows(AppException.class, () -> memberService.saveMember(notValidLoginId));
+        AppException exception = assertThrows(AppException.class, () -> authService.saveMember(notValidLoginId));
         assertEquals("INVALID_LOGIN_ID", exception.getErrorCode().name());
 
     }

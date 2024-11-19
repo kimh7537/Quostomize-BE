@@ -4,6 +4,7 @@ import com.quostomize.quostomize_be.common.error.exception.FilterAuthenticationE
 import com.quostomize.quostomize_be.domain.auth.constant.TokenConstants;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
