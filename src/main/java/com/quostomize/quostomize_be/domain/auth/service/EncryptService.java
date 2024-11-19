@@ -24,6 +24,28 @@ public class EncryptService {
         return new String(decrypt, StandardCharsets.UTF_8);
     }
 
+    public String encryptSecondaryAuthCode(final String rawSecondaryAuthCode) {
+        byte[] encrypt = aesBytesEncryptor.encrypt(rawSecondaryAuthCode.getBytes(StandardCharsets.UTF_8));
+        return byteArrayToString(encrypt);
+    }
+
+    public String decryptSecondaryAuthCode(final String encryptedSecondaryAuthCode) {
+        byte[] bytes = stringToByteArray(encryptedSecondaryAuthCode);
+        byte[] decrypt = aesBytesEncryptor.decrypt(bytes);
+        return new String(decrypt, StandardCharsets.UTF_8);
+    }
+
+    public String encryptResidenceNumber(final String rawResidenceNumber) {
+        byte[] encrypt = aesBytesEncryptor.encrypt(rawResidenceNumber.getBytes(StandardCharsets.UTF_8));
+        return byteArrayToString(encrypt);
+    }
+
+    public String decryptResidenceNumber(final String encryptedResidenceNumber) {
+        byte[] bytes = stringToByteArray(encryptedResidenceNumber);
+        byte[] decrypt = aesBytesEncryptor.decrypt(bytes);
+        return new String(decrypt, StandardCharsets.UTF_8);
+    }
+
     public String byteArrayToString(byte[] bytes) {
         return Base64.getEncoder().encodeToString(bytes);
     }

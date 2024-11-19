@@ -65,12 +65,20 @@ public class Member extends BaseTimeEntity {
     private MemberRole role;
 
     @Builder
-    public Member(String memberLoginId, String memberPassword, String memberName, String memberPhoneNumber, String memberEmail){
+    public Member(String memberName, String memberEmail, String memberLoginId,
+                  String memberPassword, String residenceNumber, String zipCode, String memberAddress,
+                  String memberDetailAddress, String memberPhoneNumber, String secondaryAuthCode, MemberRole role) {
+        this.memberName = memberName;
+        this.memberEmail = memberEmail;
         this.memberLoginId = memberLoginId;
         this.memberPassword = memberPassword;
-        this.memberName = memberName;
+        this.residenceNumber = residenceNumber;
+        this.zipCode = zipCode;
+        this.memberAddress = memberAddress;
+        this.memberDetailAddress = memberDetailAddress;
         this.memberPhoneNumber = memberPhoneNumber;
-        this.memberEmail = memberEmail;
+        this.secondaryAuthCode = secondaryAuthCode;
+        this.role = role != null ? role : MemberRole.MEMBER; // 기본값 설정
     }
 
     public void updateRole(MemberRole role) {
@@ -85,9 +93,33 @@ public class Member extends BaseTimeEntity {
         this.secondaryAuthCode = secondaryAuthCode;
     }
 
-    public void updatePhoneNumber(String memberPhoneNumber) {
-        this.memberPhoneNumber = memberPhoneNumber;
+    public void updatePhoneNumber(String newPhoneNumber) {
+        if (!this.memberPhoneNumber.equals(newPhoneNumber)) {
+            this.memberPhoneNumber = newPhoneNumber;
+        }
     }
 
+    public void updateZipCode(String newZipCode) {
+        if (!this.memberAddress.equals(newZipCode)) {
+            this.memberAddress = newZipCode;
+        }
+    }
 
+    public void updateAddress(String newAddress) {
+        if (!this.memberAddress.equals(newAddress)) {
+            this.memberAddress = newAddress;
+        }
+    }
+
+    public void updateDetailAddress(String newDetailAddress) {
+        if (!this.memberDetailAddress.equals(newDetailAddress)) {
+            this.memberDetailAddress = newDetailAddress;
+        }
+    }
+
+    public void updateEmail(String newEmail) {
+        if (!this.memberEmail.equals(newEmail)) {
+            this.memberEmail = newEmail;
+        }
+    }
 }

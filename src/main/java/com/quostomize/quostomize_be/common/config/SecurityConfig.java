@@ -9,16 +9,13 @@ import com.quostomize.quostomize_be.common.jwt.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.CorsFilter;
 
@@ -32,6 +29,7 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-ui.html"
+//            "/**"
     };
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -47,35 +45,27 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 
-        AuthenticationManagerBuilder sharedObject = http.getSharedObject(AuthenticationManagerBuilder.class);
-        AuthenticationManager authenticationManager = sharedObject.build();
         http.authenticationManager(authenticationManager);
-
-//        // AuthenticationManager 설정
-//        http.authenticationManager(http.getSharedObject(AuthenticationManagerBuilder.class).build());
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
                 .exceptionHandling(exception ->
                         exception.accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(request -> request
-                                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                                .requestMatchers("/v1/api/admin/**").hasRole("ADMIN")
-                                .requestMatchers(WHITE_LIST).permitAll()
-//                                .requestMatchers(new AntPathRequestMatcher("/v1/api/session/**", HttpMethod.GET.name())).permitAll()
-//                                .requestMatchers(new AntPathRequestMatcher("/v1/api/session", "GET")).authenticated()
-//                                .requestMatchers(HttpMethod.GET, "/v2/api/projects/**").permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                        .requestMatchers("/v1/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers(WHITE_LIST).permitAll()
+                        .anyRequest().authenticated()
                 );
+
         // Custom Filter 추가
         http.addFilter(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtExceptionFilter(), JwtAuthorizationFilter.class)
-                .addFilter(corsFilter);
+                .addFilterBefore(corsFilter, JwtExceptionFilter.class);
 
         return http.build();
     }

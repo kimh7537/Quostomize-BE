@@ -12,11 +12,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByMemberId(long memberId);
+
     Optional<Member> findByMemberLoginId(String loginId);
 
     Optional<Member> findByMemberEmail(String email);
 
     Optional<Member> findByMemberPhoneNumber(String phone);
+
+    Optional<Member> findByResidenceNumber(String phone);
 
     List<Member> findAllByRole(MemberRole memberRole);
 

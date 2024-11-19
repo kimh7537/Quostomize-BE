@@ -18,35 +18,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
+
     @Bean
     public OpenAPI customOpenAPI() {
-
-//        String accessHeaderName = "access";
-//        String refreshHeaderName = "refresh";
-//
-//        // Define the SecurityRequirement to be included in the request
-//        SecurityRequirement securityRequirement = new SecurityRequirement()
-//                .addList(accessHeaderName)
-//                .addList(refreshHeaderName);
-//
-//        Components components = new Components()
-//                .addSecuritySchemes(accessHeaderName, new SecurityScheme()
-//                        .name(accessHeaderName)
-//                        .type(SecurityScheme.Type.APIKEY)
-//                        .in(SecurityScheme.In.HEADER)
-//                        .name(accessHeaderName))
-//                .addSecuritySchemes(refreshHeaderName, new SecurityScheme()
-//                        .name(refreshHeaderName)
-//                        .type(SecurityScheme.Type.APIKEY)
-//                        .in(SecurityScheme.In.HEADER)
-//                        .name(refreshHeaderName));
-
         return new OpenAPI()
                 .addServersItem(new Server().url("https://quostomize.site").description("운영 서버"))
                 .addServersItem(new Server().url("http://13.124.43.174:8080").description("AWS Server"))
-                .addServersItem(new Server().url("http://localhost:8080").description("Local Server"))
-//                .addSecurityItem(securityRequirement)
-//                .components(components);
-        ;
+                .addServersItem(new Server().url("http://localhost:8080").description("개발자 로컬 서버"))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components().addSecuritySchemes("bearerAuth",
+                        new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .in(SecurityScheme.In.HEADER)
+                                .name("Authorization"))
+
+                );
     }
 }

@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.domain.auth.service;
 
 import com.quostomize.quostomize_be.api.auth.dto.*;
 import com.quostomize.quostomize_be.api.auth.dto.MemberLoginIdResponse;
+import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.jwt.*;
@@ -37,26 +38,39 @@ public class AuthService {
     private int refreshTokenAge;
 
     @Transactional
-    public JoinResponse createLoginInfo(JoinRequest request) {
+    public JoinResponse saveMember(MemberRequestDto request) {
         validateService.checkDuplicateLoginId(request.memberLoginId());
+        validateService.checkLoginIdPattern(request.memberLoginId());
         validateService.checkDuplicateEmail(request.memberEmail());
         validateService.checkPasswordPattern(request.memberPassword());
         validateService.checkPhoneNumber(request.memberPhoneNumber());
 
+        log.info("[회원 가입 서비스]: {}, {}", request.memberLoginId(), request.memberName());
+
+        Member member = createMember(request);
+        memberRepository.save(member);
+        return JoinResponse.from(member);
+    }
+
+    private Member createMember(MemberRequestDto request) {
         String encryptedPhoneNumber = encryptService.encryptPhoneNumber(request.memberPhoneNumber());
         validateService.checkDuplicatePhoneNumber(encryptedPhoneNumber);
-        log.info("[회원 가입 서비스]: {}, {}", request.memberEmail(), request.memberName());
+        String encryptedSecondaryAuthCode = encryptService.encryptSecondaryAuthCode(request.secondaryAuthCode());
+        String encryptedResidenceNumber = encryptService.encryptResidenceNumber(request.residenceNumber());
+        validateService.checkResidenceNumber(encryptedPhoneNumber);
 
-        Member newMember = Member.builder()
-                .memberLoginId(request.memberLoginId())
-                .memberEmail(request.memberEmail())
-                .memberPassword(bCryptPasswordEncoder.encode(request.memberPassword()))
+        return Member.builder()
                 .memberName(request.memberName())
+                .memberEmail(request.memberEmail())
+                .memberLoginId(request.memberLoginId())
+                .memberPassword(bCryptPasswordEncoder.encode(request.memberPassword()))
+                .residenceNumber(encryptedResidenceNumber)
+                .zipCode(request.zipCode())
+                .memberAddress(request.memberAddress())
+                .memberDetailAddress(request.memberDetailAddress())
                 .memberPhoneNumber(encryptedPhoneNumber)
+                .secondaryAuthCode(encryptedSecondaryAuthCode)
                 .build();
-        memberRepository.save(newMember);
-
-        return JoinResponse.from(newMember);
     }
 
     @Transactional

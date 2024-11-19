@@ -34,6 +34,7 @@ public class ValidateService {
      * - $: 문자열의 끝
      */
     private static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&.])[A-Za-z\\d@$!%*#?&.]{8,16}$";
+    private static final String LOGINID_PATTERN = "^[a-zA-Z][a-zA-Z0-9_]*$";
     private static final int PHONE_NUMBER_LENGTH = 11;
     private static final String PHONE_NUMBER_PREFIX = "010";
     private final MemberRepository memberRepository;
@@ -44,7 +45,6 @@ public class ValidateService {
             throw new AppException(ErrorCode.LOGIN_ID_DUPLICATED);
         }
     }
-
 
     public void checkDuplicateEmail(String email) {
         if (memberRepository.findByMemberEmail(email).isPresent()) {
@@ -57,6 +57,13 @@ public class ValidateService {
         if (memberRepository.findByMemberPhoneNumber(phone).isPresent()) {
             log.error("[회원 가입 실패]: 존재하는 전화번호 " + phone);
             throw new AppException(ErrorCode.PHONE_NUMBER_DUPLICATED);
+        }
+    }
+
+    public void checkResidenceNumber(String residenceNumber) {
+        if (memberRepository.findByResidenceNumber(residenceNumber).isPresent()) {
+            log.error("[회원 가입 실패]: 존재하는 주민등록번호 " + residenceNumber);
+            throw new AppException(ErrorCode.RESIDENCE_NUMBER_DUPLICATED);
         }
     }
 
@@ -101,6 +108,14 @@ public class ValidateService {
         Matcher matcher = pattern.matcher(password);
         if (!matcher.matches()) {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
+    }
+
+    public void checkLoginIdPattern(String loginId){
+        Pattern pettern = Pattern.compile(LOGINID_PATTERN);
+        Matcher matcher = pettern.matcher(loginId);
+        if (!matcher.matches()) {
+            throw new AppException(ErrorCode.INVALID_LOGIN_ID);
         }
     }
 
