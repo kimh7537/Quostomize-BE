@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/benefit-change")
+@RequestMapping("v1/api/benefit-change")
 @RequiredArgsConstructor
 public class CardBenefitController {
     private final CardBenefitService cardBenefitService;
@@ -37,17 +37,36 @@ public class CardBenefitController {
         return ResponseEntity.ok(new ResponseDTO<>(buttonLabel));
     }
 
-    @PatchMapping()
-    @Operation(summary = "카드 혜택 상세 변경", description = "선택한 항목을 반영하여 카드 혜택을 변경합니다.")
-    public ResponseEntity<Void> updateCardBenefitStatus(@Valid @RequestBody List<CardBenefitRequest> requests) {
-        cardBenefitService.updateCardBenefits(requests);
+//    @PatchMapping()
+//    @Operation(summary = "카드 혜택 상세 변경", description = "선택한 항목을 반영하여 카드 혜택을 변경합니다.")
+//    public ResponseEntity<Void> updateCardBenefitStatus(@Valid @RequestBody List<CardBenefitRequest> requests) {
+//        cardBenefitService.updateCardBenefits(requests);
+//        return ResponseEntity.noContent().build();
+//    }
+
+//     @PatchMapping("/reserve")
+//     @Operation(summary = "카드 혜택 변경 예약 및 반영", description = "변경 가능일 이전에 요청한 사항은 혜택적용일에 자동으로 적용됩니다.")
+//    public ResponseEntity<Void> reserveCardBenefits(@Valid @RequestBody List<CardBenefitRequest> requests) {
+//        cardBenefitService.processCardBenefits(requests);
+//        return ResponseEntity.noContent().build();
+//     }
+
+    // 카드 혜택 변경 시 2차 비밀번호 인증
+    @PatchMapping("/change")
+    @Operation(summary = "카드 혜택 상세 변경", description = "2차 인증 후 선택한 항목을 반영하여 카드 혜택을 변경합니다.")
+    public ResponseEntity<Void> updateCardBenefitStatus(
+            @AuthenticationPrincipal Long memberId,
+            @Valid @RequestBody List<CardBenefitRequest> requests) {
+        cardBenefitService.updateCardBenefits(memberId, requests);
         return ResponseEntity.noContent().build();
     }
 
-     @PatchMapping("/reserve")
-     @Operation(summary = "카드 혜택 변경 예약 및 반영", description = "변경 가능일 이전에 요청한 사항은 혜택적용일에 자동으로 적용됩니다.")
-    public ResponseEntity<Void> reserveCardBenefits(@Valid @RequestBody List<CardBenefitRequest> requests) {
-        cardBenefitService.processCardBenefits(requests);
+    @PatchMapping("/reserve")
+    @Operation(summary = "카드 혜택 변경 예약 및 반영", description = "2차 인증 후 변경 가능일 이전에 요청한 사항은 혜택적용일에 자동으로 적용됩니다.")
+    public ResponseEntity<Void> reserveCardBenefits(
+            @AuthenticationPrincipal Long memberId,
+            @Valid @RequestBody List<CardBenefitRequest> requests) {
+        cardBenefitService.processCardBenefits(memberId, requests);
         return ResponseEntity.noContent().build();
-     }
+    }
 }

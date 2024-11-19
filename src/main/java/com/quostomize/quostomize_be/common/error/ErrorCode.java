@@ -62,6 +62,7 @@ public enum ErrorCode {
     // 카드 혜택
     CARD_DETAIL_BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "B-201", "해당 카드에 적용된 혜택이 없습니다."),
     CARD_BENEFIT_RESERVE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "B-501", "예약한 혜택 반영에 실패했습니다."),
+    SECONDARY_AUTH_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "B-001", "2차 비밀번호가 일치하지 않습니다."),
 
     // 로또 관련 에러
     LOTTO_PARTICIPANT_ALREADY_REGISTERED(HttpStatus.CONFLICT, "L-301", "이미 로또에 참여한 고객입니다."),

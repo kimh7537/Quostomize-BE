@@ -4,6 +4,9 @@ import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
+import com.quostomize.quostomize_be.domain.auth.service.EncryptService;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.BenefitCommonCode;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
@@ -12,6 +15,7 @@ import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.Car
 
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class CardBenefitService {
 
     private final CustomerRepository customerRepository;
@@ -39,12 +44,8 @@ public class CardBenefitService {
 
     private final CardBenefitRepository cardBenefitRepository;
     private final CardDetailRepository cardDetailRepository;
-
-    public CardBenefitService(CardBenefitRepository cardBenefitRepository, CardDetailRepository cardDetailRepository, CustomerRepository customerRepository) {
-        this.cardBenefitRepository = cardBenefitRepository;
-        this.cardDetailRepository = cardDetailRepository;
-        this.customerRepository = customerRepository;
-    }
+    private final MemberRepository memberRepository;
+    private final EncryptService encryptService;
 
     // 혜택 내역 조회
     public List<CardBenefitResponse> findAll(long memberId) {
@@ -109,7 +110,10 @@ public class CardBenefitService {
 
     // 혜택 변경 적용하기
     @Transactional
-    public void updateCardBenefits(List<CardBenefitRequest> cardBenefitRequests) {
+    public void updateCardBenefits(Long memberId, List<CardBenefitRequest> cardBenefitRequests) {
+        // 2차 인증 검증
+        verifySecondaryAuthCode(memberId, cardBenefitRequests.get(0).secondaryAuthCode());
+
         // 한번의 Request에서 cardSequenceId는 동일한 값을 가지므로 첫 번째 요청으로부터 cardSequenceId를 가져옴
         long cardSequenceId = cardBenefitRequests.get(0).cardSequenceId();
         // 1. 동일한 card_sequence_id를 가진 모든 CardBenefit의 is_active를 false로 설정 (최초 1번 호출)
@@ -125,7 +129,10 @@ public class CardBenefitService {
 
     // 혜택 변경 예약 및 반영을 하나의 트랜잭션으로 처리
     @Transactional
-    public void processCardBenefits(List<CardBenefitRequest> cardBenefitRequests) {
+    public void processCardBenefits(Long memberId, List<CardBenefitRequest> cardBenefitRequests) {
+        // 2차 인증 검증
+        verifySecondaryAuthCode(memberId, cardBenefitRequests.get(0).secondaryAuthCode());
+
         if (!cardBenefitRequests.isEmpty()) {
             reserveCardBenefits(cardBenefitRequests);
         }
@@ -177,5 +184,18 @@ public class CardBenefitService {
             cardBenefitRepository.deactivateCardBenefitsByCardSequenceId(cardSequenceid);
         }
         cardBenefitRepository.activateBenefitsForToday(LocalDate.now());
+    }
+
+    @Transactional
+    public void verifySecondaryAuthCode(Long memberId, String secondaryAuthCode) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_INFO_NOT_FOUND));
+
+        String encryptedInputCode = encryptService.encryptSecondaryAuthCode(secondaryAuthCode);
+        String storedEncryptedCode = member.getSecondaryAuthCode();
+
+        if (!encryptedInputCode.equals(storedEncryptedCode)) {
+            throw new AppException(ErrorCode.SECONDARY_AUTH_CODE_NOT_MATCH);
+        }
     }
 }
