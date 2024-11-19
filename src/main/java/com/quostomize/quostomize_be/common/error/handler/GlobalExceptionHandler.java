@@ -68,13 +68,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e,
-                                                                       HttpServletRequest request) {
-        log.error("Illegal Argument Exception 발생: {}", e.getMessage());
+    // 서버 내부 예외 처리 핸들러
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleInternalServerError(RuntimeException e, HttpServletRequest request) {
+        log.error("RuntimeException 발생: {}", e.getMessage());
         log.error("에러가 발생한 지점 {}, {}", request.getMethod(), request.getRequestURI());
-        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.PASSWORD_NOT_MATCH, request);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, request);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
+
+    // Exception 처리 핸들러
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGeneralException(Exception e, HttpServletRequest request) {
+        log.error("Exception 발생: {}", e.getMessage());
+        log.error("에러가 발생한 지점 {}, {}", request.getMethod(), request.getRequestURI());
+        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.GENERAL_ERROR, request);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
 
 }
