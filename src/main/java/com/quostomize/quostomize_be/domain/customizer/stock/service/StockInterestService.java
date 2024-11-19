@@ -30,9 +30,9 @@ public class StockInterestService {
 
     // 위시리스트를 조회합니다.
     @Transactional
-    public List<StockInterestDto> getStockWishList() {
+    public List<StockInterestDto> getStockWishList(Long cardId) {
         // Step 1: Query로 Object[] 결과 받기
-        List<Object[]> results = stockInterestRepository.findAllStockInterestDto();
+        List<Object[]> results = stockInterestRepository.findAllStockInterestDto(cardId);
 
         // Step 2: Object[] 결과를 StockInterestDto로 수동 변환
         List<StockInterestDto> allStockInterestDto = new ArrayList<>();
