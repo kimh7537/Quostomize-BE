@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.stock.service;
 
 import com.quostomize.quostomize_be.api.stock.dto.CardBenefitResponse;
+import com.quostomize.quostomize_be.api.stock.dto.StockInterestRequestDto;
 import com.quostomize.quostomize_be.api.stock.dto.StockRecommendResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
@@ -11,7 +12,6 @@ import com.quostomize.quostomize_be.domain.customizer.stock.common.*;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInformationRepository;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInterestRepository;
 import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,27 +72,28 @@ public class StockInterestService {
 
     // 위시리스트 중 해당 id에 해당 특정항목을 특정 순서(order)로 변경합니다.
     @Transactional
-    public void switchStock(int currentOrder, int editOrder) {
-
-        if (currentOrder == 3) {
-            if (editOrder == 1) { // 현순위 3순위에서 1순위로 바꾸는 경우,
-                stockInterestRepository.switchStock1(3);
-            } else { // 현순위 3순위 여기서 2순위로 바꾸는 경우
-                stockInterestRepository.switchStock3(3);
+    public void switchStock(List<StockInterestRequestDto> stocks) {
+        stocks.forEach(stock -> {
+            if (stock.currentOrder() == 3) {
+                if (stock.editOrder() == 1) { // 현순위 3순위에서 1순위로 바꾸는 경우,
+                    stockInterestRepository.switchStock1(3);
+                } else { // 현순위 3순위 여기서 2순위로 바꾸는 경우
+                    stockInterestRepository.switchStock3(3);
+                }
+            } else if (stock.currentOrder() == 2) {
+                if (stock.editOrder() == 1) { //2순위를 1순위로
+                    stockInterestRepository.switchStock2(2);
+                } else { // 2순위를 3순위로
+                    stockInterestRepository.switchStock4(2);
+                }
+            } else if (stock.currentOrder() == 1) {
+                if (stock.editOrder() == 2) { // 1순위를 2순의로 변경한다.
+                    stockInterestRepository.switchStock5(1);
+                } else { // 1순위를 3순위로 변경한다.
+                    stockInterestRepository.switchStock6(1);
+                }
             }
-        } else if (currentOrder == 2) {
-            if (editOrder == 1) { //2순위를 1순위로
-                stockInterestRepository.switchStock2(2);
-            } else { // 2순위를 3순위로
-                stockInterestRepository.switchStock4(2);
-            }
-        } else if (currentOrder == 1) {
-            if (editOrder == 2) { // 1순위를 2순의로 변경한다.
-                stockInterestRepository.switchStock5(1);
-            } else { // 1순위를 3순위로 변경한다.
-                stockInterestRepository.switchStock6(1);
-            }
-        }
+        });
     }
 
 
