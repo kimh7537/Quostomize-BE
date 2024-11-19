@@ -22,6 +22,25 @@ public enum ErrorCode {
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "A-301", "존재하는 이메일 입니다."),
     PHONE_NUMBER_DUPLICATED(HttpStatus.CONFLICT, "A-302", "존재하는 전화번호입니다."),
 
+    // 고객 관련 에러
+    CUSTOMER_NOT_FOUND(HttpStatus.NOT_FOUND, "C-201", "고객 정보를 찾을 수 없습니다."),
+    CUSTOMER_ALREADY_EXISTS(HttpStatus.CONFLICT, "C-202", "이미 존재하는 고객입니다."),
+
+    // 로또 관련 에러
+    LOTTO_PARTICIPANT_ALREADY_REGISTERED(HttpStatus.CONFLICT, "L-301", "이미 로또에 참여한 고객입니다."),
+    LOTTO_PARTICIPATION_FAILED(HttpStatus.BAD_REQUEST, "L-401", "로또 참여 조건을 충족하지 못했습니다."),
+    INSUFFICIENT_LOTTO_POINTS(HttpStatus.BAD_REQUEST, "L-402", "로또 참여에 필요한 포인트가 부족합니다."),
+
+    // 포인트 관련 에러
+    INSUFFICIENT_POINTS(HttpStatus.BAD_REQUEST, "P-201", "포인트가 부족합니다."),
+    POINT_USAGE_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "P-202", "포인트 사용 한도를 초과했습니다."),
+
+    // 나의 카드 P
+    CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "카드 정보가 없습니다,"),
+    PAYBACK_AND_PIECESTOCK_CONFLICT(HttpStatus.BAD_REQUEST, "M-002", "페이백과 조각투자는 동시에 활성화 할 수 없습니다."),
+    MINIMUM_ONE_OPTION_REQUIRED(HttpStatus.BAD_REQUEST, "M-101", "최소 한 가지 이상의 옵션을 선택하세요."),
+    MAXIMUM_TWO_OPTIONS_ALLOWED(HttpStatus.BAD_REQUEST, "M-102", "최대 두 가지의 옵션을 선택할 수 있습니다."),
+
     // 주식
     OPENAPI_CONNECT_FAIL(HttpStatus.BAD_REQUEST, "S-001", "오픈 api 테스트가 실패했습니다."),
 

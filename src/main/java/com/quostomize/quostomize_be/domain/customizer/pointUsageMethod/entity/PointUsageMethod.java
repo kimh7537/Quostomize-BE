@@ -1,10 +1,10 @@
-package com.quostomize.quostomize_be.domain.customizer.point.entity;
+package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -28,5 +28,15 @@ public class PointUsageMethod extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_sequence_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private CardDetail cardDetail;
+
+    @Builder
+    public PointUsageMethod(Long pointUsageTypeId, Boolean isLotto, Boolean isPayback, Boolean isPieceStock, CardDetail cardDetail) {
+        this.pointUsageTypeId = pointUsageTypeId;
+        this.isLotto = isLotto;
+        this.isPayback = isPayback;
+        this.isPieceStock = isPieceStock;
+        this.cardDetail = cardDetail;
+    }
 }
