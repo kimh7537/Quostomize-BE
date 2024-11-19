@@ -1,6 +1,6 @@
 package com.quostomize.quostomize_be.domain.customizer.registration.service;
 
-import com.quostomize.quostomize_be.api.registration.dto.MemberRequestDto;
+import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.registration.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.registration.repository.MemberRepository;

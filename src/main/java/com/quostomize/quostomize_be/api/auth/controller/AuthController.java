@@ -2,7 +2,8 @@ package com.quostomize.quostomize_be.api.auth.controller;
 
 import com.quostomize.quostomize_be.api.auth.dto.*;
 import com.quostomize.quostomize_be.api.auth.dto.MemberLoginIdResponse;
-import com.quostomize.quostomize_be.api.member.dto.UpdatePasswordRequest;
+import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
+import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.auth.service.AuthService;
 import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -26,10 +26,10 @@ public class AuthController {
     private final AuthService authService;
     private final MemberService memberService;
 
-    @Operation(summary = "회원 가입 API")
     @PostMapping("/join")
-    public ResponseEntity<JoinResponse> joinAuth(@RequestBody @Valid JoinRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.createLoginInfo(request));
+    @Operation(summary = "회원 등록", description = "새로운 회원을 등록합니다.")
+    public ResponseEntity<JoinResponse> joinAuth(@RequestBody @Valid MemberRequestDto request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.saveMember(request));
     }
 
     @PostMapping("/reissue")

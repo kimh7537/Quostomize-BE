@@ -2,17 +2,15 @@ package com.quostomize.quostomize_be.api.registration.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quostomize.quostomize_be.api.registration.dto.MemberRequestDto;
+import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
 import com.quostomize.quostomize_be.domain.customizer.registration.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;

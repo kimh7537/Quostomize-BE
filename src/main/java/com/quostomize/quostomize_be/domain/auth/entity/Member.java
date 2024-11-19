@@ -65,8 +65,9 @@ public class Member extends BaseTimeEntity {
     private MemberRole role;
 
     @Builder
-    public Member(Long memberId, String memberName, String memberEmail, String memberLoginId, String memberPassword, String residenceNumber, String zipCode, String memberAddress, String memberDetailAddress, String memberPhoneNumber, String secondaryAuthCode, MemberRole role) {
-        this.memberId = memberId;
+    public Member(String memberName, String memberEmail, String memberLoginId,
+                  String memberPassword, String residenceNumber, String zipCode, String memberAddress,
+                  String memberDetailAddress, String memberPhoneNumber, String secondaryAuthCode, MemberRole role) {
         this.memberName = memberName;
         this.memberEmail = memberEmail;
         this.memberLoginId = memberLoginId;
