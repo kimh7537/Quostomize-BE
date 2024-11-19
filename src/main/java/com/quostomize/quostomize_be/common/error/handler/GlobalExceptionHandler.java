@@ -73,7 +73,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                         HttpServletRequest request) {
         log.error("Illegal Argument Exception 발생: {}", e.getMessage());
         log.error("에러가 발생한 지점 {}, {}", request.getMethod(), request.getRequestURI());
-        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.PASSWORD_NOT_MATCH, request);
+        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.NOT_MATCHED_PASSWORD, request);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
