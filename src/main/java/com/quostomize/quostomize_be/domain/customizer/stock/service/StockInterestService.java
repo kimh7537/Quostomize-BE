@@ -9,9 +9,11 @@ import com.quostomize.quostomize_be.common.s3.S3Service;
 import com.quostomize.quostomize_be.domain.customizer.benefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.benefit.repository.CardBenefitRepository;
 import com.quostomize.quostomize_be.domain.customizer.stock.common.*;
+import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInformationRepository;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInterestRepository;
 import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StockInterestService {
 
     private final StockInterestRepository stockInterestRepository;
@@ -29,7 +32,6 @@ public class StockInterestService {
     private final StockInformationRepository stockInformationRepository;
 
     // 위시리스트를 조회합니다.
-    @Transactional
     public List<StockInterestDto> getStockWishList(Long cardId) {
         // Step 1: Query로 Object[] 결과 받기
         List<Object[]> results = stockInterestRepository.findAllStockInterestDto(cardId);
@@ -146,5 +148,14 @@ public class StockInterestService {
          else { // 결제 내역 기반 주식 추천
         }
         return recommendResponses; // 추천종목 리턴
+    }
+
+
+
+    @Transactional
+    public void saveStockToStockInterest(String stockName){
+        StockInformation stockInformation = stockInformationRepository.findByStockName(stockName)
+                .orElseThrow(() -> new EntityNotFoundException("해당 주식 정보를 찾을 수 없음"));
+
     }
 }

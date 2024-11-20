@@ -8,6 +8,7 @@ import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.stock.elasticSearch.StockInformationSearchService;
 import com.quostomize.quostomize_be.domain.customizer.stock.service.StockInformationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/stocks")
+@RequestMapping("/v1/api/stocks")
 @RequiredArgsConstructor
+@Tag(name = "주식 정보 API", description = "내 게좌에 있는 주식 정보를 가져오고 검색할 수 있음")
 public class StockInformationController {
 
     private final StockInformationService stockInformationService;

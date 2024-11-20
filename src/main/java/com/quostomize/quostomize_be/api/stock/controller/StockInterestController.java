@@ -6,15 +6,18 @@ import com.quostomize.quostomize_be.api.stock.dto.StockRecommendResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.stock.service.StockInterestService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/stocks")
+@RequestMapping("/v1/api/stocks")
 @RequiredArgsConstructor
+@Tag(name = "위시리스트 API", description = "위시리스트를 조회, 변경, 수정할 수 있는 api 입니다.")
 public class StockInterestController {
 
 
@@ -50,4 +53,13 @@ public class StockInterestController {
         List<StockRecommendResponse> cardBenefit = stockInterestService.getCardBenefit(cardId,isRecommendByCardBenefit);
         return ResponseEntity.ok(new ResponseDTO<>(cardBenefit));
     }
+
+//    @PostMapping("/recommendations")
+//    @Operation(summary = "위시리스트 종목 추가",description = "사용자가 선택한 주식을 위시리스트 페이지에 추가할 수 있도록 요청을 보내고 추가한다.")
+//    public ResponseEntity<Void> saveRecommamdStocks(@AuthenticationPrincipal Long memberId, @RequestParam String stockName){
+//
+//
+//        ResponseEntity.status(HttpStatus.CREATED).build()
+//    }
+
 }

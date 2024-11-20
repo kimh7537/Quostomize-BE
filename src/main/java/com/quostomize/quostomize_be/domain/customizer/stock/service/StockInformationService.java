@@ -33,6 +33,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class StockInformationService {
 
     @Value("${appkey}")

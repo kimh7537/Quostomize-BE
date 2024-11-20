@@ -9,4 +9,6 @@ public interface StockInformationRepository extends JpaRepository<StockInformati
 
     Optional<StockInformation> findByStockCode(Integer stockCode);
 
+    Optional<StockInformation> findByStockName(String stockName);
+
 }

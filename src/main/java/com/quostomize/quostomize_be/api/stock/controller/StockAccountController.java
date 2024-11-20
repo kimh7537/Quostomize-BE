@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.api.stock.dto.StockAccountStatusResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.stock.service.StockAccountService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,10 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/stocks/accounts")
+@RequestMapping("/v1/api/stocks/accounts")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "주식 계좌 연동 API", description = "주식 계좌 보유 현황을 파악하고 상황에 따라 다른 페이지를 보여줌")
 public class StockAccountController {
 
     private final StockAccountService stockAccountService;
