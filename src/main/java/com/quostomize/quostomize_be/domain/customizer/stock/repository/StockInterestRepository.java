@@ -20,46 +20,46 @@ public interface StockInterestRepository extends JpaRepository <StockInterest,Lo
 
     // 해당 order 에 맞는 wish항목을 삭제합니다.
     @Modifying
-    @Query("DELETE FROM StockInterest si WHERE si.priority = :od")
-    void DeleteStockById(@Param("od")int order);
+    @Query("DELETE FROM StockInterest si WHERE si.priority = :od AND si.customer.cardDetail.cardSequenceId = :cardId")
+    void DeleteStockById(@Param("od")int order ,@Param("cardId")Long cardId);
 
     // 위시리스트 순위 1위를 삭제한 경우, 2순위를 1순위로 , 3순위를 2순위로 변경합니다.
     @Modifying
-    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 1 WHEN si.priority = 3 THEN 2 ELSE si.priority END")
-    void switchStockDeleteOrder1();
+    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 1 WHEN si.priority = 3 THEN 2 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
+    void switchStockDeleteOrder1(@Param("cardId")Long cardId);
 
     // 위시리스트 순위 2위를 삭제한 경우, 3순위를 2순위로 변경합니다.
     @Modifying
-    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 3 THEN 2 ELSE si.priority END")
-    void switchStockDeleteOrder2();
+    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 3 THEN 2 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
+    void switchStockDeleteOrder2(@Param("cardId")Long cardId);
 
     //  3순위 에 위시리스트를 1순위로 옮기는 경우, 1순위 ->2순위 2순위 ->3순위  3순위 -> 1순위로 변경합니다.
     @Modifying
-    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 1 THEN 2 WHEN si.priority = :currentOrder THEN 1 WHEN si.priority = 2 THEN 3 ELSE si.priority END")
-    void switchStock1(@Param("currentOrder") int currentOrder);
+    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 1 THEN 2 WHEN si.priority = :currentOrder THEN 1 WHEN si.priority = 2 THEN 3 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
+    void switchStock1(@Param("currentOrder") int currentOrder ,@Param("cardId")Long cardId);
 
     //  3순위에서 2순위로 옮기는 경우, 2순위는 3순위로 현재순위(3순위)는 2순위로 변경합니다.
     @Modifying
-    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 3 WHEN si.priority = :currentOrder THEN 2 ELSE si.priority END")
-    void switchStock3(@Param("currentOrder") int currentOrder);
+    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 3 WHEN si.priority = :currentOrder THEN 2 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
+    void switchStock3(@Param("currentOrder") int currentOrder ,@Param("cardId")Long cardId);
 
     //  2순위 에 위시리스트를 1순위로 옮기는 경우, 1순위를 ->2순위 2순위 -> 1순위 3순위 -> 3순위 로 변경합니다.
     @Modifying
-    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 1 THEN 2 WHEN si.priority = :currentOrder THEN 1 ELSE si.priority END")
-    void switchStock2(@Param("currentOrder") int currentOrder);
+    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 1 THEN 2 WHEN si.priority = :currentOrder THEN 1 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
+    void switchStock2(@Param("currentOrder") int currentOrder ,@Param("cardId")Long cardId);
 
     // 2순위에 위시리스트를 3순위로 옮기는 경우,  3순위를 2순위로, 현재순위(2순위)를 3순위로 변경합니다.
     @Modifying
-    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 3 THEN 2 WHEN si.priority = :currentOrder THEN 3 ELSE si.priority END")
-    void switchStock4(@Param("currentOrder") int currentOrder);
+    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 3 THEN 2 WHEN si.priority = :currentOrder THEN 3 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
+    void switchStock4(@Param("currentOrder") int currentOrder ,@Param("cardId")Long cardId);
 
     // 1순위를 2순위로 옮기는 경우, 1순위는 2순위로, 2순위는 1순위로 변경합니다.
     @Modifying
-    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 1 WHEN si.priority = :currentOrder THEN 2 ELSE si.priority END")
-    void switchStock5(@Param("currentOrder") int currentOrder);
+    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 1 WHEN si.priority = :currentOrder THEN 2 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
+    void switchStock5(@Param("currentOrder") int currentOrder ,@Param("cardId")Long cardId);
 
     // 1순위를 3순위로 옮기는 경우, 2순위는 1순위로, 3순위는 2순위로 , 1순위는 3순위로 변경합니다.
     @Modifying
-    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 1  WHEN si.priority = 3 THEN 2 WHEN si.priority = :currentOrder THEN 3 ELSE si.priority END")
-    void switchStock6(@Param("currentOrder") int currentOrder);
+    @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 1  WHEN si.priority = 3 THEN 2 WHEN si.priority = :currentOrder THEN 3 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
+    void switchStock6(@Param("currentOrder") int currentOrder ,@Param("cardId")Long cardId);
 }
