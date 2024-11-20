@@ -1,40 +1,51 @@
 package com.quostomize.quostomize_be.domain.customizer.stock.elasticSearch;
 
-import jakarta.persistence.Id;
+import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+@Setter
 @Builder
-@Mapping(mappingPath = "static/elastic-mapping.json")
-@Setting(settingPath = "static/elastic-token.json")
+@Setting(settingPath = "es-config/es-analyzer.json")
 @Document(indexName = "stock_informations")
 public class StockInformationDocument {
-    @Id
-    @Field(type = FieldType.Keyword)
-    private Long id;
 
-    @Field(type = FieldType.Integer)
+    @Id
+    @Field(name = "id", type = FieldType.Long)
+    private Long stockInformationId;
+
+    @Field(name = "stock_code", type = FieldType.Integer)
     private Integer stockCode;
 
-    @Field(type = FieldType.Text, analyzer = "nori_analyzer", searchAnalyzer = "nori_analyzer")
+    @Field(name = "stock_name", type = FieldType.Text, analyzer = "my_nori_analyzer", searchAnalyzer = "my_nori_analyzer")
     private String stockName;
 
-    @Field(type = FieldType.Integer)
+    @Field(name = "stock_present_price", type = FieldType.Integer)
     private Integer stockPresentPrice;
 
-    @Field(type = FieldType.Text, index = false)
+    @Field(name = "stock_image", type = FieldType.Text, index = false)
     private String stockImage;
 
-    @Field(type = FieldType.Date, format = DateFormat.date_time)
-    private String createdAt;
+    @Field(name = "created_at", type = FieldType.Date, format = DateFormat.date_hour_minute_second)
+    private LocalDateTime createdAt;
 
-    @Field(type = FieldType.Date, format = DateFormat.date_time)
-    private String modifiedAt;
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_fraction)
+    private OffsetDateTime modifiedAt;
 
+
+    public StockInformation toEntity() {
+        return StockInformation.builder()
+                .stockCode(this.stockCode)
+                .stockName(this.stockName)
+                .stockPresentPrice(this.stockPresentPrice)
+                .stockImage(this.stockImage)
+                .build();
+    }
 }

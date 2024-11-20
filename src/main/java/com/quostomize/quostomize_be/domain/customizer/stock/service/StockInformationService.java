@@ -237,6 +237,8 @@ public class StockInformationService {
     }
 
 
+    //주식 정보 데이터가 이미 존재하면 업데이트, 없으면 새로 만들어서 저장함
+    //현재가 정보를 여러 명의 사용자가 동시에 접근해서 업데이트하면 오류가 발생할 수도 있음 -> 동시성 synchronized
     private synchronized StockInformation updateOrCreateStockInformation(StockInformationData data) {
         return stockInformationRepository.findByStockCode(data.getStockCode())
                 .map(existing -> {
@@ -246,6 +248,7 @@ public class StockInformationService {
                 .orElseGet(() -> createNewStockInformation(data));
     }
 
+    //새로 주식 정보를 만들어서 저장함
     private StockInformation createNewStockInformation(StockInformationData data) {
         StockInformation newStock = StockInformation.builder()
                 .stockCode(data.getStockCode())

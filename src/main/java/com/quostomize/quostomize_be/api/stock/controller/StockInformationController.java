@@ -3,7 +3,8 @@ package com.quostomize.quostomize_be.api.stock.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quostomize.quostomize_be.api.stock.dto.StockInformationResponse;
-import com.quostomize.quostomize_be.domain.customizer.stock.elasticSearch.StockInformationDocument;
+import com.quostomize.quostomize_be.api.stock.dto.StockSearchResponse;
+import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.stock.elasticSearch.StockInformationSearchService;
 import com.quostomize.quostomize_be.domain.customizer.stock.service.StockInformationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/stocks")
@@ -30,14 +32,26 @@ public class StockInformationController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping
-    public List<StockInformationDocument> search(@RequestParam("keyword") String keyword) {
-        return stockInformationSearchService.searchStockInformationDocument(keyword);
-    }
 
-    @PostMapping
-    public StockInformationDocument create(@RequestBody StockInformationDocument itemDocument) {
-        return stockInformationSearchService.createStockInformationDocument(itemDocument);
+    @GetMapping("/search")
+    @Operation(summary = "검색해서 주식 종목 가져오기", description = "주식 정보를 검색해서 가져올 수 있음")
+    public ResponseEntity<ResponseDTO<List<StockSearchResponse>>> searchPost(@RequestParam(value = "keyword") String keyword) {
+
+        // Service에서 검색된 Document를 Response DTO로 변환
+        List<StockSearchResponse> responses = stockInformationSearchService.search(keyword)
+                .stream()
+                .map(document -> {
+                    return new StockSearchResponse(
+                            document.getStockInformationId(),
+                            document.getStockCode(),
+                            document.getStockName(),
+                            document.getStockPresentPrice(),
+                            document.getStockImage()
+                    );
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new ResponseDTO<>(responses));
     }
 
 }
