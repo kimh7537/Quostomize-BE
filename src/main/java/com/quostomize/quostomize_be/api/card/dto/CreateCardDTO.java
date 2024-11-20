@@ -4,6 +4,7 @@ import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.ToString;
 
 public record CreateCardDTO(
         @NotNull
