@@ -13,7 +13,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @Builder
-@Setting(settingPath = "es-config/es-analyzer.json")
+//@Setting(settingPath = "es-config/es-analyzer.json")
 @Document(indexName = "stock_informations")
 public class StockInformationDocument {
 
