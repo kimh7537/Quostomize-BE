@@ -5,8 +5,8 @@ import jakarta.validation.constraints.*;
 public record CardApplicantDTO(
 
         /*
-        * 카드정보에 들어갈 정보들
-        * */
+         * 카드정보에 들어갈 정보들
+         * */
 
         @NotNull
         @NotBlank
@@ -45,8 +45,8 @@ public record CardApplicantDTO(
         int paymentReceiptMethods,
 
         /*
-        * 카드 신청인 정보에 들어갈 정보
-        * */
+         * 카드 신청인 정보에 들어갈 정보
+         * */
 
         @NotNull
         @NotBlank
@@ -97,7 +97,15 @@ public record CardApplicantDTO(
         @NotNull
         @NotBlank
         @Size(max = 100)
-        String homeDetailAddress
+        String homeDetailAddress,
 
+        @NotNull
+        Boolean isLotto,
+
+        @NotNull
+        Boolean isPayback,
+
+        @NotNull
+        Boolean isPieceStock
 ) {
 }

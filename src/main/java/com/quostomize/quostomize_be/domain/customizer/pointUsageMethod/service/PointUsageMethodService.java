@@ -3,6 +3,8 @@ package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service;
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantRequestDto;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
+import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
+import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.LottoService;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
@@ -15,12 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PointUsageMethodService {
-    private final PointUsageMethodRepository repository;
+
+    private final PointUsageMethodRepository pointUsageMethodRepository;
     private final LottoService lottoService;
+    private final CardDetailRepository cardDetailRepository;
 
     @Transactional
     public PointUsageMethod getPointUsageMethod(Long cardSequenceId) {
-        return repository.findByCardDetail_CardSequenceId(cardSequenceId)
+        return pointUsageMethodRepository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
     }
 
@@ -67,7 +71,7 @@ public class PointUsageMethodService {
         PointUsageMethod updatedPointUsage = builder.build();
         validateActiveOptions(updatedPointUsage);
 
-        return repository.save(updatedPointUsage);
+        return pointUsageMethodRepository.save(updatedPointUsage);
     }
 
     private void validateActiveOptions(PointUsageMethod pointUsageMethod) {
@@ -81,5 +85,31 @@ public class PointUsageMethodService {
         if (activeCount > 2) {
             throw new AppException(ErrorCode.MAXIMUM_TWO_OPTIONS_ALLOWED);
         }
+    }
+
+    @Transactional
+    public PointUsageMethod createPointUsageMethod(Long cardId, Boolean stock, Boolean lotto, Boolean payback) {
+        // 카드 정보 조회
+        CardDetail cardDetail = cardDetailRepository.findById(cardId)
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
+
+        // 페이백과 조각투자 동시 선택 검증
+        if (payback && stock) {
+            throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
+        }
+
+        // 포인트 사용 방법 생성
+        PointUsageMethod pointUsageMethod = PointUsageMethod.builder()
+                .isLotto(lotto)
+                .isPayback(payback)
+                .isPieceStock(stock)
+                .cardDetail(cardDetail)
+                .build();
+
+        // 활성화된 옵션 수 검증
+        validateActiveOptions(pointUsageMethod);
+
+        // 저장 및 반환
+        return pointUsageMethodRepository.save(pointUsageMethod);
     }
 }
