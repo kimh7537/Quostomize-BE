@@ -35,25 +35,25 @@ public class StockInformationController {
     }
 
 
-    @GetMapping("/search")
-    @Operation(summary = "검색해서 주식 종목 가져오기", description = "주식 정보를 검색해서 가져올 수 있음")
-    public ResponseEntity<ResponseDTO<List<StockSearchResponse>>> searchPost(@RequestParam(value = "keyword") String keyword) {
-
-        // Service에서 검색된 Document를 Response DTO로 변환
-        List<StockSearchResponse> responses = stockInformationSearchService.search(keyword)
-                .stream()
-                .map(document -> {
-                    return new StockSearchResponse(
-                            document.getStockInformationId(),
-                            document.getStockCode(),
-                            document.getStockName(),
-                            document.getStockPresentPrice(),
-                            document.getStockImage()
-                    );
-                })
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(new ResponseDTO<>(responses));
-    }
+//    @GetMapping("/search")
+//    @Operation(summary = "검색해서 주식 종목 가져오기", description = "주식 정보를 검색해서 가져올 수 있음")
+//    public ResponseEntity<ResponseDTO<List<StockSearchResponse>>> searchPost(@RequestParam(value = "keyword") String keyword) {
+//
+//        // Service에서 검색된 Document를 Response DTO로 변환
+//        List<StockSearchResponse> responses = stockInformationSearchService.search(keyword)
+//                .stream()
+//                .map(document -> {
+//                    return new StockSearchResponse(
+//                            document.getStockInformationId(),
+//                            document.getStockCode(),
+//                            document.getStockName(),
+//                            document.getStockPresentPrice(),
+//                            document.getStockImage()
+//                    );
+//                })
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(new ResponseDTO<>(responses));
+//    }
 
 }
