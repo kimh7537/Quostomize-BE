@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.api.hello.controller;
+package com.quostomize.quostomize_be.api.health.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
