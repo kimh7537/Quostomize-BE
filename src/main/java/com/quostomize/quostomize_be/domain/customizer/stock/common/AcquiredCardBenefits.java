@@ -1,7 +1,8 @@
 package com.quostomize.quostomize_be.domain.customizer.stock.common;
 
 import com.quostomize.quostomize_be.api.stock.dto.CardBenefitResponse;
-import com.quostomize.quostomize_be.domain.customizer.benefit.entity.CardBenefit;
+import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
+
 
 import java.util.List;
 import java.util.stream.Collectors;

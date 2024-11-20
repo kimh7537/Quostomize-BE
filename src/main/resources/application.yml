@@ -16,21 +16,54 @@ spring:
         format_sql: true
   data:
     redis:
-      host: ${REDIS_URL}
+      host: localhost
       port: 6379
-
     elasticsearch:
       repositories:
         enabled: true
-  elasticsearch:
-    uris: http://localhost:9200
+      elasticsearch:
+        uris: http://localhost:9200
 
-  jmx:
-    enabled: false
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
-      - org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
+      jmx:
+        enabled: false
+      autoconfigure:
+        exclude:
+          - org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
+          - org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
+
+  coolsms:
+    apiKey: ${SMS_API_KEY}
+    apiSecret: ${SMS_API_SECRET_KEY}
+    senderNumber: ${SMS_SENDER_NUMBER}
+
+  schedule:
+    cron: 0 0 0 * * ?
+    use: true
+
+aws:
+  accessKeyId: ${ACCESS_KEY_ID}
+  secretAccessKey: ${SECRET_ACCESS_KEY}
+  region: ${AWS_REGION}
+  bucketName: ${S3_BUCKET_NAME}
+
+jwt:
+  secretKey: ${JWT_SECRET_KEY}
+  access:
+    expiration: 1800000
+
+  refresh:
+    expiration: 259200000
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+
+aes:
+  secret:
+    key: ${AES_SECRET_KEY}
+    salt: ${AES_SECRET_SALT}
 
 logging:
   level:
@@ -42,9 +75,3 @@ logging:
 
 appkey: ${OPENAPI_APPKEY}
 appsecret: ${OPENAPI_APPSECRET}
-
-aws:
-  accessKeyId: ${ACCESS_KEY_ID}
-  secretAccessKey: ${SECRET_ACCESS_KEY}
-  region: ${AWS_REGION}
-  bucketName: ${S3_BUCKET_NAME}
