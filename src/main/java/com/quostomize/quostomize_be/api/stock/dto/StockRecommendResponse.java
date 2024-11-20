@@ -3,9 +3,7 @@ package com.quostomize.quostomize_be.api.stock.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record StockInterestDto (
-        @NotNull
-        Integer priority,
+public record StockRecommendResponse(
         @NotNull
         @NotBlank
         String stockName,
@@ -15,7 +13,9 @@ public record StockInterestDto (
         @NotBlank
         String stockImage
 ) {
-    public StockInterestDto withStockImage(String newStockImage) {
-        return new StockInterestDto(priority, stockName, stockPresentPrice, newStockImage);
+    public StockRecommendResponse(String stockName, Integer stockPresentPrice, String stockImage) {
+        this.stockName = stockName;
+        this.stockPresentPrice = stockPresentPrice;
+        this.stockImage = stockImage;
     }
 }

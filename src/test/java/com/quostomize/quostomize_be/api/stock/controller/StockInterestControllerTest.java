@@ -1,7 +1,8 @@
-package com.quostomize.quostomize_be.api.hello.controller;
+package com.quostomize.quostomize_be.api.stock.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
+import com.quostomize.quostomize_be.api.stock.dto.StockRecommendResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,4 +81,18 @@ class StockInterestControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    @Test
+    @DisplayName("종목 추천")
+    public void getRecommendStocks() throws Exception {
+        List<StockRecommendResponse> expectedDto = new ArrayList<>();
+        expectedDto.add(new StockRecommendResponse("밀리의 서재",130000,"image/quokka.png"));
+        expectedDto.add(new StockRecommendResponse("현대 홈쇼핑",130000,"image/quokka.png"));
+        expectedDto.add(new StockRecommendResponse("sk 주유소",130000,"image/quokka.png"));
+        String json = objectMapper.writeValueAsString(expectedDto);
+
+        //then
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/stocks/recommendations").contentType(MediaType.APPLICATION_JSON).content(json).param("cardId","10").param("isRecommendByCardBenefit","true"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
 }
