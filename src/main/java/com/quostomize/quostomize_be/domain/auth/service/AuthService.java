@@ -10,6 +10,10 @@ import com.quostomize.quostomize_be.common.jwt.*;
 import com.quostomize.quostomize_be.common.sms.service.SmsService;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
+import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
+import com.quostomize.quostomize_be.domain.customizer.cardapplication.repository.CardApplicantInfoRepository;
+import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
+import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +33,8 @@ public class AuthService {
     private static final String REFRESH_TOKEN = "refreshToken";
 
     private final MemberRepository memberRepository;
+    private final CardApplicantInfoRepository cardApplicantInfoRepository;
+    private final CustomerRepository customerRepository;
     private final ValidateService validateService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -51,8 +57,19 @@ public class AuthService {
         log.info("[회원 가입 서비스]: {}, {}", request.memberLoginId(), request.memberName());
 
         Member member = createMember(request);
-        memberRepository.save(member);
+        Member saved = memberRepository.save(member);
+        createCustomerIfCardApplicantExists(request.residenceNumber(), saved); //회원 가입하고 카드 신청 이력이 있으면 customer 테이블에 값을 넣어줌
         return JoinResponse.from(member);
+    }
+
+    private void createCustomerIfCardApplicantExists(String residenceNumber, Member savedMember) {
+        cardApplicantInfoRepository.findByResidenceNumber(residenceNumber).ifPresent(cardApplicantInfo -> {
+            Customer customer = Customer.builder()
+                    .cardDetail(cardApplicantInfo.getCardDetail())
+                    .member(savedMember)
+                    .build();
+            customerRepository.save(customer);
+        });
     }
 
     private Member createMember(MemberRequestDto request) {

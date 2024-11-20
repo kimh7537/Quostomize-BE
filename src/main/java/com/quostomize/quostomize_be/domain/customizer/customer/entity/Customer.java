@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInterest;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +34,11 @@ public class Customer extends BaseTimeEntity {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     List<StockInterest> stockInterests = new ArrayList<>();
 
+    @Builder
+    public Customer(Member member, CardDetail cardDetail) {
+        this.member = member;
+        this.cardDetail = cardDetail;
+    }
 
     public void addStockInterest(StockInterest stockInterest) {
         stockInterests.add(stockInterest);
