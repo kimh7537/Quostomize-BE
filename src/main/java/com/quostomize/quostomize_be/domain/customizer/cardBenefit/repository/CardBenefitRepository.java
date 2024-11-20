@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -24,4 +25,6 @@ public interface CardBenefitRepository extends JpaRepository<CardBenefit, Long> 
     @Modifying
     @Query("update CardBenefit cb set cb.isActive = true where cb.benefitEffectiveDate = :today and cb.isActive = false")
     void activateBenefitsForToday(@Param("today") LocalDate today);
+
+    List<CardBenefit> findByCardDetail_CardSequenceId(Long cardId);
 }
