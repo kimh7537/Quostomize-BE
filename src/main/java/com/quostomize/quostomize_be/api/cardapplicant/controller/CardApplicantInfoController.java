@@ -11,10 +11,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -94,7 +94,8 @@ public class CardApplicantInfoController {
                     )}
             )
     )
-    public ResponseEntity<Void> createCardApplicant(@RequestBody CardApplicantDTO cardApplicantDTO) {
-        return ResponseEntity.created(URI.create("/api/cardApplicants/"+cardApplicantInfoService.createCardApplicant(cardApplicantDTO))).build();
+    public ResponseEntity<CardApplicantDetailsDTO> createCardApplicant(@RequestBody CardApplicantDTO cardApplicantDTO) {
+        CardApplicantDetailsDTO result = cardApplicantInfoService.createCardApplicant(cardApplicantDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }

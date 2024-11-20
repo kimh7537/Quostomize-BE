@@ -7,6 +7,7 @@ import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.repository.CardApplicantInfoRepository;
+import com.quostomize.quostomize_be.domain.customizer.point.service.CardPointService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -22,8 +23,8 @@ public class CardApplicantInfoService {
 
     @Lazy
     private final CardService cardService;
-
     private final CardApplicantInfoRepository cardApplicantInfoRepository;
+    private final CardPointService cardPointService;  // 카드 생성 시 카드 포인트 생성
 
     public List<CardApplicantDetailsDTO> getCardApplicantsList() {
         return cardApplicantInfoRepository.findAll().stream().map(
@@ -42,10 +43,15 @@ public class CardApplicantInfoService {
     public CardApplicantDetailsDTO createCardApplicant(CardApplicantDTO cardApplicantDTO) {
         // 실제로는 신청 때 바로 카드가 생성되지는 않는다.
         // 암호화는 아직 되어있지 않음
+        // 1. 카드 생성
         CreateCardDTO createCardDTO = CreateCardDTO.fromApplicant(cardApplicantDTO);
         CardDetail newCard = cardService.createCard(createCardDTO);
 
+        // 2. 카드 포인트 생성 (초기값 0)
+        cardPointService.createCardPoint(newCard.getCardSequenceId());
+
         // 반환값을 주어야 하나...?
+        // 3. 카드 신청 정보 저장
         CardApplicantInfo newCardApplicantInfo = cardApplicantInfoRepository.save(CardApplicantInfo.builder()
                 .residenceNumber(cardApplicantDTO.residenceNumber())
                 .applicantName(cardApplicantDTO.applicantName())

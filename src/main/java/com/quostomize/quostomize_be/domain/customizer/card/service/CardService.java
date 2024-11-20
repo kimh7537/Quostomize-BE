@@ -2,9 +2,10 @@ package com.quostomize.quostomize_be.domain.customizer.card.service;
 
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
-import com.quostomize.quostomize_be.domain.customizer.card.repository.CardRepository;
+import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +15,10 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class CardService {
 
-    private final CardRepository cardRepository;
+    private final CardDetailRepository cardDetailRepository;
     private final Random random = new Random();
 
 //    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -53,6 +55,6 @@ public class CardService {
                 .paymentReceiptMethods(createCardDTO.paymentReceiptMethods())
                 .build();
 
-        return cardRepository.save(cardDetail);
+        return cardDetailRepository.save(cardDetail);
     }
 }
