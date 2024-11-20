@@ -31,8 +31,8 @@ public class StockInterestController {
     // 삭제 기능
     @DeleteMapping("/select")
     @Operation(summary = "위시리스토 삭제",description = "선택한 위시항목에 대해서 삭제합니다.")
-    public ResponseEntity<Void> deleteStock(@RequestParam int order){
-        stockInterestService.deleteStock(order);
+    public ResponseEntity<Void> deleteStock(@RequestParam int order, @RequestParam Long cardId){
+        stockInterestService.deleteStock(order,cardId);
         return ResponseEntity.noContent().build();
     }
 
