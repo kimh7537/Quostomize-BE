@@ -15,20 +15,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-public class StockInformationSearchService {
-
-    private final ElasticsearchOperations elasticsearchOperations;
-
-    public List<StockInformationDocument> search(String stockName){
-        Query query = QueryBuilders.match(queryBuilder -> queryBuilder.field("stock_name").query(stockName));
-        NativeQuery nativeQuery = NativeQuery.builder().withQuery(query).build();
-        SearchHits<StockInformationDocument> result = elasticsearchOperations.search(nativeQuery, StockInformationDocument.class);
-        return result
-                .stream()
-                .map(SearchHit::getContent)
-                .collect(Collectors.toList());
-    }
-
-}
+//@Service
+//@RequiredArgsConstructor
+//public class StockInformationSearchService {
+//
+//    private final ElasticsearchOperations elasticsearchOperations;
+//
+//    public List<StockInformationDocument> search(String stockName){
+//        Query query = QueryBuilders.match(queryBuilder -> queryBuilder.field("stock_name").query(stockName));
+//        NativeQuery nativeQuery = NativeQuery.builder().withQuery(query).build();
+//        SearchHits<StockInformationDocument> result = elasticsearchOperations.search(nativeQuery, StockInformationDocument.class);
+//        return result
+//                .stream()
+//                .map(SearchHit::getContent)
+//                .collect(Collectors.toList());
+//    }
+//
+//}
