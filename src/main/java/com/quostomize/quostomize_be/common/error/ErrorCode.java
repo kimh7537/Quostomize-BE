@@ -81,7 +81,7 @@ public enum ErrorCode {
 
     // 주식
     OPENAPI_CONNECT_FAIL(HttpStatus.BAD_REQUEST, "S-001", "오픈 api 테스트가 실패했습니다."),
-
+    MORE_THAN_LIMIT(HttpStatus.BAD_REQUEST, "S-002", "위시리스트에 최대 3개의 종목만 추가할 수 있습니다."),
     //JSON 처리 관련 에러
     JSON_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "J-001", "JSON 처리 중 오류가 발생했습니다."),
 
