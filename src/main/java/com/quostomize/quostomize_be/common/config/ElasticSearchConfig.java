@@ -1,13 +1,16 @@
 package com.quostomize.quostomize_be.common.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "org.springframework.data.elasticsearch.repository")
+@EnableElasticsearchRepositories(basePackages = "com.quostomize.quostomize_be.domain.customizer.stock.elasticSearch")
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
+
+    @Value("${spring.elasticsearch.uris}")
 
     @Override
     public ClientConfiguration clientConfiguration() {
@@ -15,4 +18,5 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
                 .connectedTo("localhost:9200")
                 .build();
     }
+
 }
