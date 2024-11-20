@@ -34,6 +34,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 	// https://mvnrepository.com/artifact/software.amazon.awssdk/s3 -> aws s3 로직 의존성
 	testImplementation group: 'software.amazon.awssdk', name: 's3', version: '2.25.40'
