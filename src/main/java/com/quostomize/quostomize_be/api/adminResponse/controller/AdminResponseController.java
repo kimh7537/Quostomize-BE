@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/qnas")
+@RequestMapping("/v1/api/qnas")
 public class AdminResponseController {
 
     private AdminResponseService adminResponseService;

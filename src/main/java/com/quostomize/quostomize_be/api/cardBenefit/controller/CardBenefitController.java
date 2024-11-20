@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("v1/api/benefit-change")
+@RequestMapping("/v1/api/benefit-change")
 @RequiredArgsConstructor
 public class CardBenefitController {
     private final CardBenefitService cardBenefitService;

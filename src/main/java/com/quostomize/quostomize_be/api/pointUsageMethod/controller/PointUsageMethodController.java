@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/my-card")
+@RequestMapping("/v1/api/my-card")
 @RequiredArgsConstructor
 
 public class PointUsageMethodController {

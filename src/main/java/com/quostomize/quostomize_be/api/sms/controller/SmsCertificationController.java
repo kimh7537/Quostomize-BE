@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/card/validation-member")
+@RequestMapping("/v1/api/sms")
 public class SmsCertificationController {
 
     private final SmsService smsService;
