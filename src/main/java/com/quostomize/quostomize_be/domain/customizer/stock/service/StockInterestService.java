@@ -59,14 +59,14 @@ public class StockInterestService {
 
     // 위시리스트 중 해당 id에 해당하는 특정항목을 제거합니다.
     @Transactional
-    public void deleteStock(int order) {
+    public void deleteStock(int order, Long cardId) {
 
         if (order == 1) {
-            stockInterestRepository.DeleteStockById(order);
-            stockInterestRepository.switchStockDeleteOrder1();
+            stockInterestRepository.DeleteStockById(order,cardId);
+            stockInterestRepository.switchStockDeleteOrder1(cardId);
         } else {
-            stockInterestRepository.DeleteStockById(order);
-            stockInterestRepository.switchStockDeleteOrder2();
+            stockInterestRepository.DeleteStockById(order,cardId);
+            stockInterestRepository.switchStockDeleteOrder2(cardId);
         }
     }
 
@@ -76,21 +76,21 @@ public class StockInterestService {
         stocks.forEach(stock -> {
             if (stock.currentOrder() == 3) {
                 if (stock.editOrder() == 1) { // 현순위 3순위에서 1순위로 바꾸는 경우,
-                    stockInterestRepository.switchStock1(3);
+                    stockInterestRepository.switchStock1(3, stock.cardId());
                 } else { // 현순위 3순위 여기서 2순위로 바꾸는 경우
-                    stockInterestRepository.switchStock3(3);
+                    stockInterestRepository.switchStock3(3, stock.cardId());
                 }
             } else if (stock.currentOrder() == 2) {
                 if (stock.editOrder() == 1) { //2순위를 1순위로
-                    stockInterestRepository.switchStock2(2);
+                    stockInterestRepository.switchStock2(2, stock.cardId());
                 } else { // 2순위를 3순위로
-                    stockInterestRepository.switchStock4(2);
+                    stockInterestRepository.switchStock4(2, stock.cardId());
                 }
             } else if (stock.currentOrder() == 1) {
                 if (stock.editOrder() == 2) { // 1순위를 2순의로 변경한다.
-                    stockInterestRepository.switchStock5(1);
+                    stockInterestRepository.switchStock5(1, stock.cardId());
                 } else { // 1순위를 3순위로 변경한다.
-                    stockInterestRepository.switchStock6(1);
+                    stockInterestRepository.switchStock6(1, stock.cardId());
                 }
             }
         });
