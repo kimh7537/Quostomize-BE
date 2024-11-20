@@ -1,18 +1,17 @@
 package com.quostomize.quostomize_be.domain.customizer.stock.service;
 
-import com.quostomize.quostomize_be.api.stock.dto.CardBenefitResponse;
-import com.quostomize.quostomize_be.api.stock.dto.StockInterestRequestDto;
-import com.quostomize.quostomize_be.api.stock.dto.StockRecommendResponse;
+import com.quostomize.quostomize_be.api.stock.dto.*;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.s3.S3Service;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
+import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.stock.common.*;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
+import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInterest;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInformationRepository;
 import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInterestRepository;
-import com.quostomize.quostomize_be.api.stock.dto.StockInterestDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -153,9 +152,48 @@ public class StockInterestService {
 
 
     @Transactional
-    public void saveStockToStockInterest(String stockName){
-        StockInformation stockInformation = stockInformationRepository.findByStockName(stockName)
-                .orElseThrow(() -> new EntityNotFoundException("해당 주식 정보를 찾을 수 없음"));
+    public void saveStockToStockInterest(Long memberId, String stockName){
+        StockInformation stockInformation = findStockInformation(stockName);
+        StockAddInterest stockAddInterest = findCustomerWithStockInterest(memberId);
+        validateStockInterestLimit(stockAddInterest);
+        int nextPriority = calculateNextPriority(stockAddInterest.customer());
+        StockInterest stockInterest = createStockInterest(nextPriority, stockInformation, stockAddInterest.customer());
+        saveStockInterest(stockAddInterest.customer(), stockInterest);
+    }
 
+    private StockInformation findStockInformation(String stockName) {
+        return stockInformationRepository.findByStockName(stockName)
+                .orElseThrow(() -> new EntityNotFoundException("해당 주식 정보를 찾을 수 없음"));
+    }
+
+    private StockAddInterest findCustomerWithStockInterest(Long memberId) {
+        return stockInterestRepository.findCustomerWithStockInterest(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("엔티티를 찾을 수 없음"));
+    }
+
+    private void validateStockInterestLimit(StockAddInterest stockAddInterest) {
+        if (stockAddInterest.stockInterestCount() >= 3) {
+            throw new AppException(ErrorCode.MORE_THAN_LIMIT);
+        }
+    }
+
+    private StockInterest createStockInterest(int priority, StockInformation stockInformation, Customer customer) {
+        return StockInterest.builder()
+                .priority(priority)
+                .stockInformation(stockInformation)
+                .customer(customer)
+                .build();
+    }
+
+    private int calculateNextPriority(Customer customer) {
+        return customer.getStockInterests().stream()
+                .mapToInt(StockInterest::getPriority)
+                .max()
+                .orElse(0) + 1;
+    }
+
+    private void saveStockInterest(Customer customer, StockInterest stockInterest) {
+        customer.addStockInterest(stockInterest);
+        stockInterestRepository.save(stockInterest);
     }
 }

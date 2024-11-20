@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,12 +55,11 @@ public class StockInterestController {
         return ResponseEntity.ok(new ResponseDTO<>(cardBenefit));
     }
 
-//    @PostMapping("/recommendations")
-//    @Operation(summary = "위시리스트 종목 추가",description = "사용자가 선택한 주식을 위시리스트 페이지에 추가할 수 있도록 요청을 보내고 추가한다.")
-//    public ResponseEntity<Void> saveRecommamdStocks(@AuthenticationPrincipal Long memberId, @RequestParam String stockName){
-//
-//
-//        ResponseEntity.status(HttpStatus.CREATED).build()
-//    }
+    @GetMapping("/recommendations/add")
+    @Operation(summary = "위시리스트 종목 추가",description = "사용자가 선택한 주식을 위시리스트 페이지에 추가할 수 있도록 요청을 보내고 추가한다.")
+    public ResponseEntity<Void> saveRecommamdStocks(@AuthenticationPrincipal Long memberId, @RequestParam String stockName){
+        stockInterestService.saveStockToStockInterest(memberId, stockName);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
 }

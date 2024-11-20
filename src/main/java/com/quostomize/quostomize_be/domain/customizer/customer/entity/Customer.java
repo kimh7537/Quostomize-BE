@@ -3,9 +3,13 @@ package com.quostomize.quostomize_be.domain.customizer.customer.entity;
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
+import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInterest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +29,13 @@ public class Customer extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_sequence_id", nullable = false)
     private CardDetail cardDetail;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    List<StockInterest> stockInterests = new ArrayList<>();
+
+
+    public void addStockInterest(StockInterest stockInterest) {
+        stockInterests.add(stockInterest);
+        stockInterest.updateCustomer(this);
+    }
 }
