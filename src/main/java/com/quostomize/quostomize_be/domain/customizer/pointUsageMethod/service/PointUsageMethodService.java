@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service;
 
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantRequestDto;
+import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
@@ -12,19 +13,30 @@ import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.Po
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class PointUsageMethodService {
 
     private final PointUsageMethodRepository pointUsageMethodRepository;
     private final LottoService lottoService;
     private final CardDetailRepository cardDetailRepository;
     private final CustomerRepository customerRepository;
+
+    @Transactional
+    public List<PointUsageMethodResponse> getMyCardDetails(Long memberId) {
+        long cardSequenceId = getCardSequenceIdForMember(memberId);
+        log.info("cardSequenceId: {}", cardSequenceId);
+        return pointUsageMethodRepository.findMyCardDetails(cardSequenceId);
+    }
 
     @Transactional
     public PointUsageMethod getPointUsageMethod(Long memberId) {
@@ -43,19 +55,6 @@ public class PointUsageMethodService {
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Member with ID " + memberId + " does not exist."));
     }
-
-
-    //
-//    // 혜택 내역 조회
-//    public List<CardBenefitResponse> findAll(long memberId) {
-//        long cardSequenceId = getCardSequenceIdForMember(memberId);
-//        Set<CardBenefit> cardBenefits = cardBenefitRepository.findCardBenefitsByCardDetailCardSequenceIdAndIsActive(cardSequenceId, true);
-//        return cardBenefits.stream().map(CardBenefitResponse::from).collect(Collectors.toList());
-//    }
-//
-//    @Query("select cb from CardBenefit cb where cb.cardDetail.cardSequenceId = :cardSequenceId and cb.isActive = :isActive")
-//    Set<CardBenefit> findCardBenefitsByCardDetailCardSequenceIdAndIsActive(@Param("cardSequenceId") long cardSequenceId, @Param("isActive") boolean isActive);
-
 
     @Transactional
     public PointUsageMethod togglePointUsage(Long cardSequenceId, String usageType, boolean isActive) {

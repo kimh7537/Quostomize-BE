@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.api.pointUsageMethod.controller;
 
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodRequestDto;
+import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponseDto;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
@@ -34,29 +35,12 @@ public class PointUsageMethodController {
     private final PointUsageMethodService pointUsageMethodService;
 //    private final LottoService lottoService;
 
-    @GetMapping(value = "/{cardSequenceId}") //로그인 하면 변경?
+    @GetMapping()
     @Operation(summary = "모든 나의 카드 정보 조회", description = "카드 생성시 설정된 나의 카드 정보(이미지, 혜택, 옵션)을 조회한다.")
-    public ResponseEntity<ResponseDTO> getPointUsageMethod(
-            @AuthenticationPrincipal Long memberId
-    ) {
-        PointUsageMethod pointUsageMethod = pointUsageMethodService.getPointUsageMethod(memberId);
-        PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(pointUsageMethod);
-
-        ResponseDTO<PointUsageMethodResponseDto> response = new ResponseDTO(responseDto);
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ResponseDTO> getMyCardDetails(@AuthenticationPrincipal Long memberId) {
+        List<PointUsageMethodResponse> myCardDetails = pointUsageMethodService.getMyCardDetails(memberId);
+        return ResponseEntity.ok(new ResponseDTO<>(myCardDetails));
     }
-
-//    @GetMapping()
-//    @Operation(summary = "카드 혜택 내역 조회", description = "로그인한 고객의 현재 적용된 카드 혜택을 조회합니다.")
-//    public ResponseEntity<ResponseDTO> getCardBenefitStatus(@AuthenticationPrincipal Long memberId) {
-//        List<CardBenefitResponse> benefits = cardBenefitService.findAll(memberId);
-//        return ResponseEntity.ok(new ResponseDTO<>(benefits));
-//    }
-//
-//
-
-
 
     @PostMapping(value = "/{cardSequenceId}")
     @Operation(summary = "포인트 사용 옵션 변경", description = "포인트 사용 옵션 활성 상태를 변경합니다.(on/off)")
