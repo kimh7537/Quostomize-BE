@@ -4,14 +4,13 @@ import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "benefit_common_codes")
 public class BenefitCommonCode extends BaseTimeEntity {
-
-    public BenefitCommonCode() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

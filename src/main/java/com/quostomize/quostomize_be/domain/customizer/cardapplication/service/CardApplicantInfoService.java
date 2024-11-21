@@ -1,8 +1,10 @@
 package com.quostomize.quostomize_be.domain.customizer.cardapplication.service;
 
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
+import com.quostomize.quostomize_be.api.cardapplicant.dto.BenefitHierarchyDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
+import com.quostomize.quostomize_be.domain.customizer.benefit.repository.BenefitCommonCodeRepository;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
@@ -27,6 +29,11 @@ public class CardApplicantInfoService {
     private final CardApplicantInfoRepository cardApplicantInfoRepository;
     private final CardPointService cardPointService;  // 카드 생성 시 카드 포인트 생성
     private final PointUsageMethodService pointUsageMethodService;
+    private final BenefitCommonCodeRepository benefitCommonCodeRepository;
+
+    public List<BenefitHierarchyDTO> getBenefitInformation(){
+        return benefitCommonCodeRepository.findAllBenefitHierarchy();
+    }
 
     public List<CardApplicantDetailsDTO> getCardApplicantsList() {
         return cardApplicantInfoRepository.findAll().stream().map(
