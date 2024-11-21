@@ -5,6 +5,7 @@ public record PointUsageMethodResponse(
         Boolean isLotto,
         Boolean isPayback,
         Boolean isPieceStock,
+        Long cardSequenceId,
         Integer cardColor,
         String cardNumber,
         Long benefitId,

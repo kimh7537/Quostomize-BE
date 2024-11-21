@@ -36,6 +36,7 @@ public class PointUsageMethodRepositoryImpl implements PointUsageMethodRepositor
                         pum.isLotto,
                         pum.isPayback,
                         pum.isPieceStock,
+                        cd.cardSequenceId,
                         cd.cardColor,
                         cd.cardNumber,
                         cb.benefitId,
