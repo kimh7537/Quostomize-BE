@@ -3,11 +3,15 @@ package com.quostomize.quostomize_be.domain.customizer.cardapplication.service;
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
+import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
+import com.quostomize.quostomize_be.domain.auth.service.EncryptService;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.repository.CardApplicantInfoRepository;
+import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
+import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import com.quostomize.quostomize_be.domain.customizer.point.service.CardPointService;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service.PointUsageMethodService;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,6 +34,9 @@ public class CardApplicantInfoService {
     private final CardPointService cardPointService;  // 카드 생성 시 카드 포인트 생성
     private final PointUsageMethodService pointUsageMethodService;
     private final CardBenefitService cardBenefitService;
+    private final MemberRepository memberRepository;
+    private final CustomerRepository customerRepository;
+    private final EncryptService encryptService;
 
     public List<CardApplicantDetailsDTO> getCardApplicantsList() {
         return cardApplicantInfoRepository.findAll().stream().map(
@@ -47,46 +54,81 @@ public class CardApplicantInfoService {
     @Transactional
     public CardApplicantDetailsDTO createCardApplicant(CardApplicantDTO cardApplicantDTO) {
         // 1. 카드 생성
-        CreateCardDTO createCardDTO = CreateCardDTO.fromApplicant(cardApplicantDTO);
-        CardDetail newCard = cardService.createCard(createCardDTO);
+        CardDetail newCard = createCardDetail(cardApplicantDTO);
 
         // 2. 카드 신청 정보 저장
-        CardApplicantInfo newCardApplicantInfo = cardApplicantInfoRepository.save(CardApplicantInfo.builder()
-                .residenceNumber(cardApplicantDTO.residenceNumber())
-                .applicantName(cardApplicantDTO.applicantName())
-                .englishName(cardApplicantDTO.englishName())
-                .zipCode(cardApplicantDTO.zipCode())
-                .shippingAddress(cardApplicantDTO.shippingAddress())
-                .shippingDetailAddress(cardApplicantDTO.shippingDetailAddress())
-                .applicantEmail(cardApplicantDTO.applicantEmail())
-                .phoneNumber(cardApplicantDTO.phoneNumber())
-                .homeAddress(cardApplicantDTO.homeAddress())
-                .homeDetailAddress(cardApplicantDTO.homeDetailAddress())
-                .cardDetail(newCard)
-                .build()
-        );
+        CardApplicantInfo newCardApplicantInfo = createCardApplicantInfo(cardApplicantDTO, newCard);
 
-        // 3. 카드 혜택 생성
-        List<CardApplicantDTO.CardBenefitInfo> benefits = cardApplicantDTO.benefits().stream()
+        // 3. 카드 관련 부가 서비스 설정
+        setupCardServices(newCard, cardApplicantDTO);
+
+        // 4. 회원-카드 매핑 customer 추가
+        mapMemberToCard(cardApplicantDTO.residenceNumber(), newCard);
+
+        return CardApplicantDetailsDTO.fromEntity(newCardApplicantInfo);
+    }
+
+    private CardDetail createCardDetail(CardApplicantDTO cardApplicantDTO) {
+        CreateCardDTO createCardDTO = CreateCardDTO.fromApplicant(cardApplicantDTO);
+        return cardService.createCard(createCardDTO);
+    }
+
+    private CardApplicantInfo createCardApplicantInfo(CardApplicantDTO dto, CardDetail cardDetail) {
+        return cardApplicantInfoRepository.save(CardApplicantInfo.builder()
+                .residenceNumber(dto.residenceNumber())
+                .applicantName(dto.applicantName())
+                .englishName(dto.englishName())
+                .zipCode(dto.zipCode())
+                .shippingAddress(dto.shippingAddress())
+                .shippingDetailAddress(dto.shippingDetailAddress())
+                .applicantEmail(dto.applicantEmail())
+                .phoneNumber(dto.phoneNumber())
+                .homeAddress(dto.homeAddress())
+                .homeDetailAddress(dto.homeDetailAddress())
+                .cardDetail(cardDetail)
+                .build());
+    }
+
+    private void setupCardServices(CardDetail cardDetail, CardApplicantDTO dto) {
+        // 카드 혜택 설정
+        setupCardBenefits(cardDetail, dto.benefits());
+
+        // 카드 포인트 생성
+        cardPointService.createCardPoint(cardDetail.getCardSequenceId());
+
+        // 포인트 사용 방법 설정
+        setupPointUsageMethod(cardDetail.getCardSequenceId(), dto);
+    }
+
+    private void setupCardBenefits(CardDetail cardDetail, List<CardApplicantDTO.CardBenefitInfo> benefits) {
+        List<CardApplicantDTO.CardBenefitInfo> cardBenefits = benefits.stream()
                 .map(benefit -> new CardApplicantDTO.CardBenefitInfo(
                         benefit.upperCategoryId(),
                         benefit.lowerCategoryId(),
                         benefit.benefitRate()
                 ))
                 .collect(Collectors.toList());
-        cardBenefitService.createInitialCardBenefits(newCard, benefits);
+        cardBenefitService.createInitialCardBenefits(cardDetail, cardBenefits);
+    }
 
-        // 4. 카드 포인트 생성 (초기값 0)
-        cardPointService.createCardPoint(newCard.getCardSequenceId());
-
-        // 5. 포인트 사용 방법 생성 (사용자 선택값 적용)
+    private void setupPointUsageMethod(Long cardSequenceId, CardApplicantDTO dto) {
         pointUsageMethodService.createPointUsageMethod(
-                newCard.getCardSequenceId(),
-                cardApplicantDTO.isPieceStock(),
-                cardApplicantDTO.isLotto(),
-                cardApplicantDTO.isPayback()
+                cardSequenceId,
+                dto.isPieceStock(),
+                dto.isLotto(),
+                dto.isPayback()
         );
+    }
 
-        return CardApplicantDetailsDTO.fromEntity(newCardApplicantInfo);
+    private void mapMemberToCard(String residenceNumber, CardDetail cardDetail) {
+        String encryptedResidenceNumber = encryptService.encryptResidenceNumber(residenceNumber);
+        memberRepository.findByResidenceNumber(encryptedResidenceNumber)
+                .ifPresent(member -> {
+                    Customer customer = Customer.builder()
+                            .member(member)
+                            .cardDetail(cardDetail)
+                            .build();
+                    customerRepository.save(customer);
+                });
     }
 }
