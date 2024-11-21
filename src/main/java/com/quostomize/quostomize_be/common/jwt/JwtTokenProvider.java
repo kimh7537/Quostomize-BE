@@ -43,7 +43,7 @@ public class JwtTokenProvider {
     public String resolveAccessToken(String authorizationHeader) {
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             throw new FilterAuthenticationException("Bearer 토큰이 존재하지 않습니다.");
-        }
+    }
         return getBearer(authorizationHeader);
     }
 

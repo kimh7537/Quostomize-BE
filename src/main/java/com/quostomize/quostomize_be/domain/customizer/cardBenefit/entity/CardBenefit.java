@@ -10,11 +10,9 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "card_benefits")
 public class CardBenefit extends BaseTimeEntity {
-
-    public CardBenefit() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

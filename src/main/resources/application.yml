@@ -16,7 +16,7 @@ spring:
         format_sql: true
   data:
     redis:
-      host: localhost
+      host: ${REDIS_URL}
       port: 6379
     elasticsearch:
       repositories:
@@ -50,7 +50,6 @@ jwt:
   secretKey: ${JWT_SECRET_KEY}
   access:
     expiration: 1800000
-
   refresh:
     expiration: 259200000
 
