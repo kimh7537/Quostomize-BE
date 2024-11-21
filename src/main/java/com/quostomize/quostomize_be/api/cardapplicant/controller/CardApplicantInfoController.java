@@ -1,5 +1,6 @@
 package com.quostomize.quostomize_be.api.cardapplicant.controller;
 
+import com.quostomize.quostomize_be.api.cardapplicant.dto.BenefitHierarchyDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
@@ -24,6 +25,14 @@ import java.util.List;
 public class CardApplicantInfoController {
 
     private final CardApplicantInfoService cardApplicantInfoService;
+
+    @GetMapping("/search-benefit")
+    @Operation(summary = "가맹점 정보 조회", description = "페이지 진입 시 모든 상위 분류 와 하위 분류의  가맹점 이름을 조회한다.")
+    public ResponseEntity<ResponseDTO> searchBenefit(){
+        List<BenefitHierarchyDTO> benefitInformation = cardApplicantInfoService.getBenefitInformation();
+        return ResponseEntity.ok(new ResponseDTO<>(benefitInformation));
+    }
+
 
     @GetMapping
     @Operation(summary = "모든 신청 내역을 조회", description = "사용자 관계 없이 모든 카드 신청 내역을 조회하는 api입니다.")
