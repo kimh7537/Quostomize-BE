@@ -2,11 +2,9 @@ package com.quostomize.quostomize_be.domain.customizer.stock.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.net.URI;
-
 
 @Entity
 @Getter
@@ -30,4 +28,16 @@ public class StockInformation extends BaseTimeEntity {
 
     @Column(name = "stock_image", nullable = false)
     private String stockImage;
+
+    @Builder
+    public StockInformation(Integer stockCode, String stockName, Integer stockPresentPrice, String stockImage) {
+        this.stockCode = stockCode;
+        this.stockName = stockName;
+        this.stockPresentPrice = stockPresentPrice;
+        this.stockImage = stockImage;
+    }
+
+    public void updatePresentPrice(Integer stockPresentPrice) {
+        this.stockPresentPrice = stockPresentPrice;
+    }
 }

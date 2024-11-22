@@ -19,10 +19,10 @@ public class DailyLottoWinner extends BaseTimeEntity {
     @Column(name = "daily_lotto_winner_id")
     private Long dailyLottoWinnerId;
 
+    @Column(name = "lotto_date", nullable = false)
+    private LocalDate lottoDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
-    @Column(name = "lotto_date", nullable = false)
-    private LocalDate lottoDate;
 }

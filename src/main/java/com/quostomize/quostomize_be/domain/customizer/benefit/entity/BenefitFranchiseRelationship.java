@@ -21,6 +21,6 @@ public class BenefitFranchiseRelationship extends BaseTimeEntity {
     private Franchise franchise;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lower_category_id", nullable = false)
-    private BenefitCommonCode lowerCategory;
+    @JoinColumn(name = "benefit_common_id", nullable = false)
+    private BenefitCommonCode benefitCommonCode;
 }
