@@ -15,6 +15,7 @@ import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import com.quostomize.quostomize_be.domain.customizer.point.service.CardPointService;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service.PointUsageMethodService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,7 @@ import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -147,5 +149,91 @@ class CardApplicantInfoServiceTest {
                 .memberPassword("password")
                 .residenceNumber("encrypted_990505-1234567")
                 .build();
+    }
+
+    @Test
+    @DisplayName("카드 신청 내역 목록 조회 성공")
+    void getCardApplicantsListSuccess() {
+        // Given
+        CardDetail cardDetail = createTestCardDetail();
+        List<CardApplicantInfo> applicantInfos = List.of(
+                createTestCardApplicantInfo(cardDetail),
+                createTestCardApplicantInfo(cardDetail)
+        );
+
+        when(cardApplicantInfoRepository.findAll()).thenReturn(applicantInfos);
+
+        // When
+        List<CardApplicantDetailsDTO> results = cardApplicantInfoService.getCardApplicantsList();
+
+        // Then
+        assertNotNull(results);
+        assertEquals(2, results.size());
+        assertEquals("홍길동", results.get(0).applicantName());
+        assertEquals("HONGGILDONG", results.get(0).englishName());
+        verify(cardApplicantInfoRepository).findAll();
+    }
+
+    @Test
+    @DisplayName("카드 신청 상세 내역 조회 성공")
+    void getCardApplicantsDetailsSuccess() {
+        // Given
+        CardDetail cardDetail = createTestCardDetail();
+        CardApplicantInfo cardApplicantInfo = createTestCardApplicantInfo(cardDetail);
+        Long cardApplicantInfoId = 1L;
+
+        when(cardApplicantInfoRepository.findByCardApplicantInfoId(cardApplicantInfoId))
+                .thenReturn(Optional.of(cardApplicantInfo));
+
+        // When
+        CardApplicantDetailsDTO result = cardApplicantInfoService.getCardApplicantsDetails(cardApplicantInfoId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals("홍길동", result.applicantName());
+        assertEquals("HONGGILDONG", result.englishName());
+        verify(cardApplicantInfoRepository).findByCardApplicantInfoId(cardApplicantInfoId);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 카드 신청 내역 조회 시 예외 발생")
+    void getCardApplicantsDetailsNotFound() {
+        // Given
+        Long nonExistentId = 999L;
+        when(cardApplicantInfoRepository.findByCardApplicantInfoId(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(EntityNotFoundException.class, () ->
+                cardApplicantInfoService.getCardApplicantsDetails(nonExistentId)
+        );
+        verify(cardApplicantInfoRepository).findByCardApplicantInfoId(nonExistentId);
+    }
+
+    @Test
+    @DisplayName("카드 신청 시 회원이 존재하지 않는 경우")
+    void createCardApplicantWithNonExistentMember() {
+        // Given
+        CardApplicantDTO requestDto = createTestCardApplicantDTO();
+        CardDetail cardDetail = createTestCardDetail();
+        CardApplicantInfo cardApplicantInfo = createTestCardApplicantInfo(cardDetail);
+
+        when(cardService.createCard(any(CreateCardDTO.class))).thenReturn(cardDetail);
+        when(cardApplicantInfoRepository.save(any(CardApplicantInfo.class))).thenReturn(cardApplicantInfo);
+        when(encryptService.encryptResidenceNumber(anyString())).thenReturn("encrypted");
+        when(memberRepository.findByResidenceNumber(anyString())).thenReturn(Optional.empty());
+        when(cardPointService.createCardPoint(anyLong())).thenReturn(null);
+        when(pointUsageMethodService.createPointUsageMethod(anyLong(), anyBoolean(), anyBoolean(), anyBoolean()))
+                .thenReturn(null);
+
+        // When
+        CardApplicantDetailsDTO result = cardApplicantInfoService.createCardApplicant(requestDto);
+
+        // Then
+        assertNotNull(result);
+        verify(cardService).createCard(any(CreateCardDTO.class));
+        verify(cardApplicantInfoRepository).save(any(CardApplicantInfo.class));
+        verify(memberRepository).findByResidenceNumber(anyString());
+        verify(customerRepository, never()).save(any(Customer.class));
     }
 }
