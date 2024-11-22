@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.domain.customizer.cardBenefit.service;
 
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
+import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDTO;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
@@ -200,4 +201,28 @@ public class CardBenefitService {
             throw new AppException(ErrorCode.SECONDARY_AUTH_CODE_NOT_MATCH);
         }
     }
+
+    // 카드 생성 시 카드 혜택 적용
+    @Transactional
+    public void createInitialCardBenefits(CardDetail cardDetail, List<CardApplicantDTO.CardBenefitInfo> benefits) {
+        List<CardBenefit> cardBenefits = benefits.stream()
+                .map(benefit -> CardBenefit.builder()
+                        .cardDetail(cardDetail)
+                        .benefitEffectiveDate(LocalDate.now())
+                        .benefitRate(benefit.benefitRate())
+                        .isActive(true)
+                        .upperCategory(BenefitCommonCode.builder()
+                                .benefitCommonId(benefit.upperCategoryId())
+                                .build())
+                        .lowerCategory(benefit.lowerCategoryId() != null
+                                ? BenefitCommonCode.builder()
+                                .benefitCommonId(benefit.lowerCategoryId())
+                                .build()
+                                : null)
+                        .build())
+                .collect(Collectors.toList());
+
+        cardBenefitRepository.saveAll(cardBenefits);
+    }
+
 }

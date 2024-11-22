@@ -1,29 +1,20 @@
 package com.quostomize.quostomize_be.api.pointUsageMethod.controller;
 
 
-import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodRequestDto;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponseDto;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
-import com.quostomize.quostomize_be.common.error.ErrorCode;
-import com.quostomize.quostomize_be.common.error.exception.AppException;
-import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
-import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service.PointUsageMethodService;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @RestController
