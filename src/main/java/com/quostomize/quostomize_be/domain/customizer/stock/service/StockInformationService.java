@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quostomize.quostomize_be.api.stock.dto.StockInformationResponse;
+import com.quostomize.quostomize_be.api.stock.dto.StockSearchResponse;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.error.exception.JsonProcessingAppException;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockAccount;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockHolding;
@@ -189,11 +192,20 @@ public class StockInformationService {
 //                stockOne.setFlttRt(parseText(node, "fltt_rt")); //등략율
                 stockOne.setHldgQty(parseText(node, "hldg_qty")); //보유 주식 수
                 stockOne.setEvluPflsRt(parseText(node, "evlu_pfls_rt")); //매수가와 현재가 등략율
+                stockOne.setStockImage(getStockInformationURL(parseText(node, "pdno")));
                 stockOneResponses.add(stockOne);
             }
         }
         return stockOneResponses;
     }
+
+    // StockInformation에서 최신화된 이미지 URL을 가져옴
+    private String getStockInformationURL(String stockCode) {
+        return stockInformationRepository.findByStockCode(Integer.valueOf(stockCode))
+                .map(StockInformation::getStockImage)
+                .orElseThrow(() -> new EntityNotFoundException("엔티티를 찾을 수 없음"));
+    }
+
 
     // Helper method to parse StockAllResponse list
     private List<StockInformationResponse.StockAllResponse> parseStockAllResponses(JsonNode output2Node) {
@@ -255,7 +267,7 @@ public class StockInformationService {
                 .stockCode(data.getStockCode())
                 .stockName(data.getStockName())
                 .stockPresentPrice(data.getPresentPrice())
-                .stockImage("http://example.com")
+                .stockImage("image/quokka.png")
                 .build();
         return stockInformationRepository.save(newStock);
     }
@@ -302,6 +314,18 @@ public class StockInformationService {
 
     private String parseText(JsonNode node, String fieldName) {
         return node.path(fieldName).asText();
+    }
+
+
+
+    //JPA로 주식 검색 함수 구현
+    public List<StockSearchResponse> searchByKeyword(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            throw new AppException(ErrorCode.ENTITY_NOT_FOUND);
+        }
+        return stockInformationRepository.findByKeyword(keyword).stream()
+                .map(StockSearchResponse::from)
+                .collect(Collectors.toList());
     }
 
 
