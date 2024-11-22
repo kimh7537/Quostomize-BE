@@ -35,6 +35,15 @@ public class StockInformationController {
     }
 
 
+    //ELK로 포팅전 JPA로 검색 기능 구현
+    @GetMapping("/search")
+    @Operation(summary = "검색해서 주식 종목 가져오기", description = "주식 정보를 검색해서 가져올 수 있음")
+    public ResponseEntity<ResponseDTO<List<StockSearchResponse>>> searchPost(@RequestParam(value = "keyword") String keyword) {
+        List<StockSearchResponse> responses = stockInformationService.searchByKeyword(keyword);
+        return ResponseEntity.ok(new ResponseDTO<>(responses));
+    }
+
+
 //    @GetMapping("/search")
 //    @Operation(summary = "검색해서 주식 종목 가져오기", description = "주식 정보를 검색해서 가져올 수 있음")
 //    public ResponseEntity<ResponseDTO<List<StockSearchResponse>>> searchPost(@RequestParam(value = "keyword") String keyword) {
