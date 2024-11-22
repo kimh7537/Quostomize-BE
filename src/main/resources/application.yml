@@ -50,7 +50,6 @@ jwt:
   secretKey: ${JWT_SECRET_KEY}
   access:
     expiration: 1800000
-
   refresh:
     expiration: 259200000
 

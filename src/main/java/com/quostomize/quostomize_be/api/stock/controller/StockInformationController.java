@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/v1/api/stocks")
 @RequiredArgsConstructor
-@Tag(name = "주식 정보 API", description = "내 게좌에 있는 주식 정보를 가져오고 검색할 수 있음")
+@Tag(name = "주식 정보 API", description = "내 계좌에 있는 주식 정보를 가져오고 검색할 수 있음")
 public class StockInformationController {
 
     private final StockInformationService stockInformationService;
 //    private final StockInformationSearchService stockInformationSearchService;
 
     @GetMapping("/lists/{stockAccountId}")
-    @Operation(summary = "계좌 정보로 보유 주식 가져오기", description = "연결된 게좌 정보를 OpenAPI를 활용해 보유한 주식 정보를 모두 가져옴")
+    @Operation(summary = "계좌 정보로 보유 주식 가져오기", description = "연결된 계좌 정보를 OpenAPI를 활용해 보유한 주식 정보를 모두 가져옴")
     public ResponseEntity<StockInformationResponse> getStockBalance(@PathVariable long stockAccountId){
         StockInformationResponse response =  stockInformationService.showStockInformation(stockAccountId);
         return ResponseEntity.status(HttpStatus.OK).body(response);

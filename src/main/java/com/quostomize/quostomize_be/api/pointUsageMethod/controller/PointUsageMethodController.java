@@ -2,39 +2,36 @@ package com.quostomize.quostomize_be.api.pointUsageMethod.controller;
 
 
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodRequestDto;
+import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponseDto;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service.PointUsageMethodService;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/v1/api/my-card")
 @RequiredArgsConstructor
-
+@Tag(name = "나의 카드 페이지 관련 API", description = "나의 카드 관련 API 모음")
 public class PointUsageMethodController {
 
     private final PointUsageMethodService pointUsageMethodService;
 //    private final LottoService lottoService;
 
-    @GetMapping(value = "/{cardSequenceId}") //로그인 하면 변경?
-    @Operation(summary = "포인트 사용 옵션 조회", description = "카드 생성시 설정된 포인트 사용 옵션을 조회한다.")
-    public ResponseEntity<ResponseDTO> getPointUsageMethod(
-            @PathVariable Long cardSequenceId
-    ) {
-
-        PointUsageMethod pointUsageMethod = pointUsageMethodService.getPointUsageMethod(cardSequenceId);
-        PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(pointUsageMethod);
-
-        ResponseDTO<PointUsageMethodResponseDto> response = new ResponseDTO(responseDto);
-
-        return ResponseEntity.ok(response);
+    @GetMapping()
+    @Operation(summary = "모든 나의 카드 정보 조회", description = "카드 생성시 설정된 나의 카드 정보(이미지, 혜택, 옵션)을 조회한다.")
+    public ResponseEntity<ResponseDTO> getMyCardDetails(@AuthenticationPrincipal Long memberId) {
+        List<PointUsageMethodResponse> myCardDetails = pointUsageMethodService.getMyCardDetails(memberId);
+        return ResponseEntity.ok(new ResponseDTO<>(myCardDetails));
     }
-
 
     @PostMapping(value = "/{cardSequenceId}")
     @Operation(summary = "포인트 사용 옵션 변경", description = "포인트 사용 옵션 활성 상태를 변경합니다.(on/off)")

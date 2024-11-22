@@ -1,31 +1,59 @@
 package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service;
 
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantRequestDto;
+import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
+import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
+import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.LottoService;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class PointUsageMethodService {
 
     private final PointUsageMethodRepository pointUsageMethodRepository;
     private final LottoService lottoService;
     private final CardDetailRepository cardDetailRepository;
+    private final CustomerRepository customerRepository;
 
     @Transactional
-    public PointUsageMethod getPointUsageMethod(Long cardSequenceId) {
+    public List<PointUsageMethodResponse> getMyCardDetails(Long memberId) {
+        long cardSequenceId = getCardSequenceIdForMember(memberId);
+        log.info("cardSequenceId: {}", cardSequenceId);
+        return pointUsageMethodRepository.findMyCardDetails(cardSequenceId);
+    }
+
+    @Transactional
+    public PointUsageMethod getPointUsageMethod(Long memberId) {
+        long cardSequenceId = getCardSequenceIdForMember(memberId);
         return pointUsageMethodRepository.findByCardDetail_CardSequenceId(cardSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
+    }
+
+    private long getCardSequenceIdForMember(Long memberId) {
+        return customerRepository.findByMember_MemberId(memberId)
+                .map(customer -> {
+                    if (customer.getCardDetail() == null) {
+                        throw new EntityNotFoundException("Card details not found for Customer ID " + customer.getCustomerId());
+                    }
+                    return customer.getCardDetail().getCardSequenceId();
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Member with ID " + memberId + " does not exist."));
     }
 
     @Transactional

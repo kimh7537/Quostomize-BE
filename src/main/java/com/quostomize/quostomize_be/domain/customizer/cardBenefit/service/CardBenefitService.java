@@ -17,6 +17,7 @@ import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.Car
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class CardBenefitService {
 
     private final CustomerRepository customerRepository;
@@ -57,10 +59,10 @@ public class CardBenefitService {
 
     // 사용자의 카드id 조회
     private long getCardSequenceIdForMember(long memberId) {
-        Customer customer = customerRepository.findByMember_MemberId(memberId)
+        Customer customer = customerRepository.findByMember_MemberId(memberId) //1
                 .orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_CARD_NOT_FOUND));
-        System.out.println("customer.getCustomerId() = " + customer.getCustomerId());
-        return customer.getCustomerId();
+        log.info("Customer card ID found: {}", customer.getCardDetail().getCardSequenceId());
+        return customer.getCardDetail().getCardSequenceId();
     }
 
     // 혜택 변경 가능일자 계산
