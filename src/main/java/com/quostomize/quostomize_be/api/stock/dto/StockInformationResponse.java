@@ -23,6 +23,7 @@ public record StockInformationResponse(
 //        private String flttRt; // 등락율
         private String hldgQty; // 보유수량
         private String evluPflsRt; // 평가 손익율
+        private String stockImage; //주식 이미지 url
     }
 
     @Getter
