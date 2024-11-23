@@ -48,9 +48,11 @@ public class PointUsageMethodService {
     private long getCardSequenceIdForMember(Long memberId) {
         return customerRepository.findByMember_MemberId(memberId)
                 .map(customer -> {
+                    log.info("customer: {}", customer);
                     if (customer.getCardDetail() == null) {
                         throw new EntityNotFoundException("Card details not found for Customer ID " + customer.getCustomerId());
                     }
+                    log.info("cardDetail: {}", customer.getCardDetail());
                     return customer.getCardDetail().getCardSequenceId();
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Member with ID " + memberId + " does not exist."));

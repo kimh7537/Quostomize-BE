@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
@@ -19,7 +18,7 @@ public class CustomSecurityContextFactory implements WithSecurityContextFactory<
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final EncryptService encryptService;
+    private final TestEncryptConfig testEncryptConfig;
 
     @Override
     public SecurityContext createSecurityContext(MockUser annotation) {
@@ -28,12 +27,12 @@ public class CustomSecurityContextFactory implements WithSecurityContextFactory<
                 .memberLoginId(annotation.memberLoginId())
                 .memberPassword(bCryptPasswordEncoder.encode(annotation.memberPassword()))
                 .memberEmail(annotation.memberEmail())
-                .residenceNumber(encryptService.encryptResidenceNumber(annotation.residenceNumber()))
+                .residenceNumber(testEncryptConfig.encryptResidenceNumber(annotation.residenceNumber()))
                 .zipCode(annotation.zipCode())
                 .memberAddress(annotation.memberAddress())
                 .memberDetailAddress(annotation.memberDetailAddress())
-                .memberPhoneNumber(encryptService.encryptPhoneNumber(annotation.memberPhoneNumber()))
-                .secondaryAuthCode(encryptService.decryptSecondaryAuthCode(annotation.secodaryAuthCode()))
+                .memberPhoneNumber(testEncryptConfig.encryptPhoneNumber(annotation.memberPhoneNumber()))
+                .secondaryAuthCode(testEncryptConfig.decryptSecondaryAuthCode(annotation.secodaryAuthCode()))
                 .build();
 
         Member saved = memberRepository.save(member);

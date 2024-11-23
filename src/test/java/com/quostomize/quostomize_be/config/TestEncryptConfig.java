@@ -1,15 +1,16 @@
 package com.quostomize.quostomize_be.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.encrypt.AesBytesEncryptor;
-import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-@Service
+
+@Configuration
 @RequiredArgsConstructor
-public class EncryptService {
+public class TestEncryptConfig {
 
     private final AesBytesEncryptor aesBytesEncryptor;
 

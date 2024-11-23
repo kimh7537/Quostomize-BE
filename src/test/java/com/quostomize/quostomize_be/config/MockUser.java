@@ -10,7 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 @WithSecurityContext(factory = CustomSecurityContextFactory.class)
 public @interface MockUser {
     
-        String memberName() default "기합";
+        String memberName() default "박기합";
 
         String memberLoginId() default "gihab1234";
 

@@ -1,17 +1,54 @@
 spring:
+  h2:
+    console:
+      enabled: true  # H2 Console을 사용할지 여부 (H2 Console은 H2 Database를 UI로 제공해주는 기능)
+      path: /h2-console  # H2 Console의 Path
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:mem:testDB
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
+        show_sql: true
   data:
     redis:
-      host: {REDIS_URL}
+      host: localhost
       port: 6379
+  coolsms:
+    apiKey: test-api-key
+    apiSecret: test-api-secret
+    senderNumber: test-number
+aws:
+  accessKeyId: test-access-key
+  secretAccessKey: test-secret-key
+  region: test-region
+  bucketName: test-bucket
+jwt:
+  secretKey: VGhpcyBpcyBhIHNlY3VyZSBKV1Qgc2VjcmV0IGtleSBnZW5lcmF0ZWQgYmFzZTY0IGVuY29kZWQ=
+  access:
+    expiration: 1800000
+  refresh:
+    expiration: 259200000
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+aes:
+  secret:
+    key: b2UgbnVtbXkgd2UgdW5vIG5vbm9uIGd5bTIgdG5yciBlbGllIHNtIHR1bnMgdW5vZw==
+    salt: F1A2B3C4D5E6F7890ABCDEF123456789
+appkey: test-appkey
+appsecret: test-appsecret
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
