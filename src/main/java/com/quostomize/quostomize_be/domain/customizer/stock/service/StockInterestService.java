@@ -154,7 +154,7 @@ public class StockInterestService {
 
 
     @Transactional
-    void saveStockToStockInterest(Long memberId, String stockName){
+    public void saveStockToStockInterest(Long memberId, String stockName){
         StockInformation stockInformation = findStockInformation(stockName);
         Customer customer = findCustomerWithLock(memberId);
         validateStockInterestLimit(new StockAddInterest(customer, customer.getStockInterests().size())); //관심주식이 3개 이상일때 막는 로직
