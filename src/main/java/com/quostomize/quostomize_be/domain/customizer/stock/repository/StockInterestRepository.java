@@ -1,8 +1,11 @@
 package com.quostomize.quostomize_be.domain.customizer.stock.repository;
 
 import com.quostomize.quostomize_be.api.stock.dto.StockAddInterest;
+import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInterest;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -62,16 +65,5 @@ public interface StockInterestRepository extends JpaRepository <StockInterest,Lo
     @Modifying
     @Query("UPDATE StockInterest si SET si.priority = CASE WHEN si.priority = 2 THEN 1  WHEN si.priority = 3 THEN 2 WHEN si.priority = :currentOrder THEN 3 ELSE si.priority END WHERE si.customer.cardDetail.cardSequenceId = :cardId")
     void switchStock6(@Param("currentOrder") int currentOrder ,@Param("cardId")Long cardId);
-
-
-    @Query("SELECT new com.quostomize.quostomize_be.api.stock.dto.StockAddInterest(c, COUNT(si)) " +
-            "FROM Customer c " +
-            "LEFT JOIN c.stockInterests si " +
-            "JOIN c.member m " +
-            "WHERE m.memberId = :memberId " +
-            "GROUP BY c")
-    Optional<StockAddInterest> findCustomerWithStockInterest(@Param("memberId") Long memberId);
-
-
 
 }
