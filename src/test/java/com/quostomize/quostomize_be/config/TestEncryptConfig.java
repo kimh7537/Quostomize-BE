@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.encrypt.AesBytesEncryptor;
 
@@ -8,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 
-@Configuration
+@TestConfiguration
 @RequiredArgsConstructor
 public class TestEncryptConfig {
 

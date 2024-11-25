@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthService {
-    
+
     private static final String REFRESH_TOKEN = "refreshToken";
 
     private final MemberRepository memberRepository;
