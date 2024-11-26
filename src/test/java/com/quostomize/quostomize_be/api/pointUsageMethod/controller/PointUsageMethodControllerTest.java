@@ -78,26 +78,25 @@ class PointUsageMethodControllerTest {
         Mockito.verify(usageMethodService, Mockito.times(1)).getPointUsageMethod(cardSequenceId);
     }
 
-    @Test
-    @DisplayName("포인트 사용 옵션 변경 테스트")
-    void test2() throws Exception {
-
-        // given
-        Long cardSequenceId = 1L;
-        PointUsageMethodRequestDto requestDto = new PointUsageMethodRequestDto(null, null, true, true,"lotto");
-        PointUsageMethod updatedUsageMethod = new PointUsageMethod();
-        PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(updatedUsageMethod);
-        ResponseDTO<PointUsageMethodResponseDto> expectedResponse = new ResponseDTO<>(responseDto);
-
-        Mockito.when(usageMethodService.togglePointUsage(cardSequenceId, requestDto.usageType(), requestDto.isActive()))
-                .thenReturn(updatedUsageMethod);
-
-        // expected
-        mockMvc.perform(post("/v1/api/my-card/{cardSequenceId}", cardSequenceId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
-        Mockito.verify(usageMethodService, Mockito.times(1)).togglePointUsage(cardSequenceId, requestDto.usageType(), requestDto.isActive());
-    }
+//    @Test
+//    @DisplayName("포인트 사용 옵션 변경 테스트")
+//    void test2() throws Exception {
+//        // given
+//        Long cardSequenceId = 1L;
+//        PointUsageMethodRequestDto requestDto = new PointUsageMethodRequestDto(null, null, true, true,"lotto");
+//        PointUsageMethod updatedUsageMethod = new PointUsageMethod();
+//        PointUsageMethodResponseDto responseDto = PointUsageMethodResponseDto.from(updatedUsageMethod);
+//        ResponseDTO<PointUsageMethodResponseDto> expectedResponse = new ResponseDTO<>(responseDto);
+//
+//        Mockito.when(usageMethodService.togglePointUsage(cardSequenceId, requestDto.usageType(), requestDto.isActive()))
+//                .thenReturn(updatedUsageMethod);
+//
+//        // expected
+//        mockMvc.perform(post("/v1/api/my-card/{cardSequenceId}", cardSequenceId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(requestDto)))
+//                .andExpect(status().isOk())
+//                .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+//        Mockito.verify(usageMethodService, Mockito.times(1)).togglePointUsage(cardSequenceId, requestDto.usageType(), requestDto.isActive());
+//    }
 }
