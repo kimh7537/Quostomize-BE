@@ -16,7 +16,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT c FROM Customer c " +
-            "JOIN FETCH c.stockInterests si " +
+            "LEFT JOIN FETCH c.stockInterests si " +
             "JOIN c.member m " +
             "WHERE m.memberId = :memberId")
     Optional<Customer> findCustomerWithLock(@Param("memberId") Long memberId);
