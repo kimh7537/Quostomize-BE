@@ -73,7 +73,9 @@ public class CardService {
                         card.getExpirationDate(),
                         card.getOptionalTerms(),
                         card.getPaymentReceiptMethods(),
-                        card.getStatus()
+                        card.getStatus(),
+                        card.getCreatedAt(),
+                        card.getModifiedAt()
                 ));
     }
 }
