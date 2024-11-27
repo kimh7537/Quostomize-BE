@@ -4,6 +4,7 @@ import com.quostomize.quostomize_be.api.admin.dto.PageAdminResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.admin.service.AdminService;
+import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,17 @@ public class AdminController {
     }
 
     @GetMapping("/card-info")
-    @Operation(summary = "모든 카드 조회", description = "ADMIN은 모든 카드를 조회할 수 있습니다.")
+    @Operation(summary = "모든 카드 조회", description = "ADMIN은 필터 및 정렬 옵션을 사용하여 모든 카드를 조회할 수 있습니다.")
     public ResponseEntity<ResponseDTO> getCardInfo(
-            Authentication authentication, @RequestParam(defaultValue = "0") int page) {
-        Page<CardDetailResponse> cards = adminService.getCardDetailsForAdmin(authentication, page);
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "DESC") String sortDirection,
+            @RequestParam(required = false) String status) {
+        CardStatus cardStatus = null;
+        if (status != null && !status.isEmpty()) {
+            cardStatus = CardStatus.fromKey(status);
+        }
+        Page<CardDetailResponse> cards = adminService.getFilteredCards(auth, page, sortDirection, cardStatus);
         PageAdminResponse response = new PageAdminResponse(cards);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
