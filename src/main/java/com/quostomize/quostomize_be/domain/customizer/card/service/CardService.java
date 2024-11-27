@@ -97,4 +97,8 @@ public class CardService {
                         card.getModifiedAt()
                 ));
     }
+
+    public Page<CardDetail> getCardBySearchTerm(Pageable pageable, String searchTerm) {
+        return cardDetailRepository.findBySearchTerm(pageable, searchTerm);
+    }
 }
