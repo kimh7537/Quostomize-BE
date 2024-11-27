@@ -1,13 +1,10 @@
 package com.quostomize.quostomize_be.api.pointUsageMethod.controller;
 
 
-import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodRequestDto;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
-import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponseDto;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.*;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service.PointUsageMethodService;
-import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -37,7 +34,7 @@ public class PointUsageMethodController {
     @Operation(summary = "일일복권 포인트 사용 옵션 변경", description = "포인트 사용 옵션 활성 상태를 변경합니다.(on/off)")
     public ResponseEntity<ResponseDTO> updateLotto(
             @PathVariable Long cardSequenceId,
-            @RequestBody LottoRequestDto request) {
+            @RequestBody @Valid LottoRequestDto request) {
         pointUsageMethodService.updateLotto(cardSequenceId, request);
         return ResponseEntity.noContent().build();
     }
@@ -46,7 +43,7 @@ public class PointUsageMethodController {
     @Operation(summary = "페이백 포인트 사용 옵션 변경", description = "포인트 사용 옵션 활성 상태를 변경합니다.(on/off)")
     public ResponseEntity<ResponseDTO> updatePayback(
             @PathVariable Long cardSequenceId,
-            @RequestBody PaybackRequestDto request) {
+            @RequestBody @Valid PaybackRequestDto request) {
         pointUsageMethodService.updatePayback(cardSequenceId, request);
         return ResponseEntity.noContent().build();
     }
@@ -55,7 +52,7 @@ public class PointUsageMethodController {
     @Operation(summary = "조각투자 포인트 사용 옵션 변경", description = "포인트 사용 옵션 활성 상태를 변경합니다.(on/off)")
     public ResponseEntity<ResponseDTO> updatePieceStock(
             @PathVariable Long cardSequenceId,
-            @RequestBody PieceStockRequestDto request) {
+            @RequestBody @Valid PieceStockRequestDto request) {
         pointUsageMethodService.updatePieceStock(cardSequenceId, request);
         return ResponseEntity.noContent().build();
     }
