@@ -60,7 +60,7 @@ public class CardDetail extends BaseTimeEntity {
 
     @Column(name = "card_status", nullable = false)
     @Enumerated(EnumType.STRING)
-    @ColumnDefault(value = "'CREARTION_PENDING'")
+    @ColumnDefault(value = "'CREATION_PENDING'")
     private CardStatus status;
 
     @Builder
