@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.card.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
+import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -55,6 +57,11 @@ public class CardDetail extends BaseTimeEntity {
 
     @Column(name = "payment_receipt_methods", nullable = false)
     private int paymentReceiptMethods;
+
+    @Column(name = "card_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault(value = "'CREARTION_PENDING'")
+    private CardStatus status;
 
     @Builder
     public CardDetail(int paymentReceiptMethods, int optionalTerms, LocalDate expirationDate, String cvcNumber, String cardPassword, Boolean isPostpaidTransport, Boolean isForeignBlocked, Boolean isAppCard, int cardBrand, int cardColor, String cardNumber, long cardSequenceId) {
