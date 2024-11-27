@@ -20,7 +20,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
- public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 
@@ -36,6 +36,18 @@ public class AdminController {
             cardStatus = CardStatus.fromKey(status);
         }
         Page<CardDetailResponse> cards = adminService.getFilteredCards(auth, page, sortDirection, cardStatus);
+        PageAdminResponse response = new PageAdminResponse(cards);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
+    @GetMapping("/card-search")
+    @Operation(summary = "모든 카드 검색", description = "ADMIN은 cardNumber로 검색하여 모든 카드를 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> search(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam String searchTerm
+    ) {
+        Page<CardDetailResponse> cards = adminService.getSearchCards(auth, page, searchTerm);
         PageAdminResponse response = new PageAdminResponse(cards);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
