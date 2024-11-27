@@ -3,9 +3,11 @@ package com.quostomize.quostomize_be.domain.admin.service;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
+import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,8 +24,18 @@ public class AdminService {
         this.cardService = cardService;
     }
 
-    public Page<CardDetailResponse> getCardDetailsForAdmin(Authentication authentication, int page) {
-        String memberRole = authentication.getAuthorities()
+    public Page<CardDetailResponse> getFilteredCards(Authentication auth, int page, String sortDirection, CardStatus status) {
+        validateAdmin(auth);
+        Sort sort = Sort.by(sortDirection.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, 20, sort);
+        if (status == null) {
+            return cardService.getPagedCards(pageable);
+        }
+        return cardService.getStatusCards(pageable, status);
+    }
+
+    public void validateAdmin(Authentication auth) {
+        String memberRole = auth.getAuthorities()
                 .stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
@@ -31,7 +43,5 @@ public class AdminService {
         if (!"ROLE_ADMIN".equals(memberRole)) {
             throw new AppException(ErrorCode.ENTITY_NOT_FOUND);
         }
-        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by(Sort.Order.desc("createdAt")));
-        return cardService.findPagedCardDetails(pageRequest);
     }
 }
