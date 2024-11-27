@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.domain.admin.service;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
+import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import org.springframework.data.domain.Page;
@@ -29,29 +30,32 @@ public class AdminService {
         Sort sort = Sort.by(sortDirection.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, 20, sort);
         if (status == null) {
-            return cardService.getPagedCards(pageable);
+            return cardService.getPagedCards(pageable).map(this::convertResponse);
         }
-        return cardService.getStatusCards(pageable, status);
+        return cardService.getStatusCards(pageable, status).map(this::convertResponse);
     }
 
     public Page<CardDetailResponse> getSearchCards(Authentication auth, int page, String searchTerm) {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
-        return cardService.getCardBySearchTerm(pageable, searchTerm)
-                .map(card -> new CardDetailResponse(
-                        card.getCardSequenceId(),
-                        card.getCardNumber(),
-                        card.getCardBrand(),
-                        card.getIsAppCard(),
-                        card.getIsForeignBlocked(),
-                        card.getIsPostpaidTransport(),
-                        card.getExpirationDate(),
-                        card.getOptionalTerms(),
-                        card.getPaymentReceiptMethods(),
-                        card.getStatus(),
-                        card.getCreatedAt(),
-                        card.getModifiedAt()
-                ));
+        return cardService.getCardBySearchTerm(pageable, searchTerm).map(this::convertResponse);
+    }
+
+    public CardDetailResponse convertResponse(CardDetail card) {
+        return new CardDetailResponse(
+                card.getCardSequenceId(),
+                card.getCardNumber(),
+                card.getCardBrand(),
+                card.getIsAppCard(),
+                card.getIsForeignBlocked(),
+                card.getIsPostpaidTransport(),
+                card.getExpirationDate(),
+                card.getOptionalTerms(),
+                card.getPaymentReceiptMethods(),
+                card.getStatus(),
+                card.getCreatedAt(),
+                card.getModifiedAt()
+        );
     }
 
     public void validateAdmin(Authentication auth) {
