@@ -7,6 +7,7 @@ import com.quostomize.quostomize_be.common.s3.S3Service;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.entity.CardBenefit;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
+import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import com.quostomize.quostomize_be.domain.customizer.stock.common.*;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInterest;
@@ -29,6 +30,7 @@ public class StockInterestService {
     private final S3Service s3Service;
     private final CardBenefitRepository cardBenefitRepository;
     private final StockInformationRepository stockInformationRepository;
+    private final CustomerRepository customerRepository;
 
     // 위시리스트를 조회합니다.
     public List<StockInterestDto> getStockWishList(Long cardId) {
@@ -154,11 +156,11 @@ public class StockInterestService {
     @Transactional
     public void saveStockToStockInterest(Long memberId, String stockName){
         StockInformation stockInformation = findStockInformation(stockName);
-        StockAddInterest stockAddInterest = findCustomerWithStockInterest(memberId);
-        validateStockInterestLimit(stockAddInterest);
-        int nextPriority = calculateNextPriority(stockAddInterest.customer());
-        StockInterest stockInterest = createStockInterest(nextPriority, stockInformation, stockAddInterest.customer());
-        saveStockInterest(stockAddInterest.customer(), stockInterest);
+        Customer customer = findCustomerWithLock(memberId);
+        validateStockInterestLimit(new StockAddInterest(customer, customer.getStockInterests().size())); //관심주식이 3개 이상일때 막는 로직
+        int nextPriority = calculateNextPriority(customer);
+        StockInterest stockInterest = createStockInterest(nextPriority, stockInformation, customer);
+        saveStockInterest(customer, stockInterest);
     }
 
     private StockInformation findStockInformation(String stockName) {
@@ -166,9 +168,9 @@ public class StockInterestService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 주식 정보를 찾을 수 없음"));
     }
 
-    private StockAddInterest findCustomerWithStockInterest(Long memberId) {
-        return stockInterestRepository.findCustomerWithStockInterest(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("엔티티를 찾을 수 없음"));
+    private Customer findCustomerWithLock(Long memberId) {
+        return customerRepository.findCustomerWithLock(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
     }
 
     private void validateStockInterestLimit(StockAddInterest stockAddInterest) {

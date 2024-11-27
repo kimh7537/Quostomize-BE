@@ -8,6 +8,7 @@ import com.quostomize.quostomize_be.api.stock.dto.StockSearchResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.error.exception.JsonProcessingAppException;
+import com.quostomize.quostomize_be.common.s3.S3Service;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockAccount;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockHolding;
 import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
@@ -50,12 +51,14 @@ public class StockInformationService {
     private final StockAccountRepository stockAccountRepository;
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
+    private final S3Service s3Service;
 
     @Autowired
-    public StockInformationService(StockInformationRepository stockInformationRepository, StockHoldingRepository stockHoldingRepository, StockAccountRepository stockAccountRepository, ObjectMapper objectMapper) {
+    public StockInformationService(StockInformationRepository stockInformationRepository, StockHoldingRepository stockHoldingRepository, StockAccountRepository stockAccountRepository, ObjectMapper objectMapper, S3Service s3Service) {
         this.stockInformationRepository = stockInformationRepository;
         this.stockHoldingRepository = stockHoldingRepository;
         this.stockAccountRepository = stockAccountRepository;
+        this.s3Service = s3Service;
         this.restClient = RestClient.builder()
                 .baseUrl("https://openapi.koreainvestment.com:9443")
                 .build();
@@ -192,7 +195,7 @@ public class StockInformationService {
 //                stockOne.setFlttRt(parseText(node, "fltt_rt")); //등략율
                 stockOne.setHldgQty(parseText(node, "hldg_qty")); //보유 주식 수
                 stockOne.setEvluPflsRt(parseText(node, "evlu_pfls_rt")); //매수가와 현재가 등략율
-                stockOne.setStockImage(getStockInformationURL(parseText(node, "pdno")));
+                stockOne.setStockImage(s3Service.getPreSignedUrl(getStockInformationURL(parseText(node, "pdno"))));
                 stockOneResponses.add(stockOne);
             }
         }
