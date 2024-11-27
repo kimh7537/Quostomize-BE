@@ -2,7 +2,7 @@ package com.quostomize.quostomize_be.domain.customizer.card.service;
 
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
-import com.quostomize.quostomize_be.domain.customizer.card.repository.CardRepository;
+import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class CardServiceTest {
     private CardService cardService;
 
     @Mock
-    private CardRepository cardRepository;
+    private CardDetailRepository cardDetailRepository;
 
     @Mock
     private Random random;
@@ -35,7 +35,7 @@ class CardServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        cardService = new CardService(cardRepository);
+        cardService = new CardService(cardDetailRepository);
     }
 
     @Test
@@ -71,7 +71,7 @@ class CardServiceTest {
                 .paymentReceiptMethods(0)
                 .build();
 
-        when(cardRepository.save(any(CardDetail.class))).thenReturn(expectedCardDetail);
+        when(cardDetailRepository.save(any(CardDetail.class))).thenReturn(expectedCardDetail);
 
         // when
         CardDetail createdCard = cardService.createCard(createCardDTO);
@@ -87,7 +87,7 @@ class CardServiceTest {
         assertEquals(expectedCardDetail.getPaymentReceiptMethods(), createdCard.getPaymentReceiptMethods());
 
         // Repository의 save 메소드가 호출되었는지 확인
-        verify(cardRepository).save(any(CardDetail.class));
+        verify(cardDetailRepository).save(any(CardDetail.class));
     }
 
     @Test

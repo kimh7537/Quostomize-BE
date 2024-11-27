@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service;
 
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantRequestDto;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.*;
+import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;

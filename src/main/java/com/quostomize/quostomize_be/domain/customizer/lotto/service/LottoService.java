@@ -2,7 +2,7 @@ package com.quostomize.quostomize_be.domain.customizer.lotto.service;
 
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantRequestDto;
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantResponseDto;
-import com.quostomize.quostomize_be.api.point.dto.PointUsageMethodRequestDto;
+import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodRequest;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
@@ -10,9 +10,9 @@ import com.quostomize.quostomize_be.domain.customizer.customer.repository.Custom
 import com.quostomize.quostomize_be.domain.customizer.lotto.entity.DailyLottoParticipant;
 import com.quostomize.quostomize_be.domain.customizer.lotto.repository.DailyLottoParticipantRepository;
 import com.quostomize.quostomize_be.domain.customizer.point.entity.CardPoint;
-import com.quostomize.quostomize_be.domain.customizer.point.entity.PointUsageMethod;
 import com.quostomize.quostomize_be.domain.customizer.point.repository.CardPointRepository;
-import com.quostomize.quostomize_be.domain.customizer.point.repository.PointUsageMethodRepository;
+import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.entity.PointUsageMethod;
+import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.repository.PointUsageMethodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -43,11 +43,19 @@ public class LottoService {
     @Transactional
     @CacheEvict(value = "lottoParticipantsCount", allEntries = true)
     public List<LottoParticipantResponseDto> registerLottoParticipants() {
-        return pointUsageMethodRepository.findAllByIsLottoTrue().stream()
+        // 기존 참여자 모두 제거
+        dailyLottoParticipantRepository.deleteAll();
+        dailyLottoParticipantRepository.resetAutoIncrement();
+
+        List<LottoParticipantResponseDto> participants = pointUsageMethodRepository.findAllByIsLottoTrue().stream()
                 .map(this::processPointUsageMethod)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
+
+        redisTemplate.opsForValue().set(LOTTO_PARTICIPANTS_COUNT_KEY, String.valueOf(participants.size()));
+
+        return participants;
     }
 
     // 사용자의 로또 참여 설정을 ON/OFF 하고, 참여자를 추가하거나 제거
@@ -58,7 +66,7 @@ public class LottoService {
                 .findByCardDetail_CardSequenceId(request.cardSequenceId())
                 .orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
 
-        PointUsageMethodRequestDto dto = PointUsageMethodRequestDto.from(pointUsageMethod, request);
+        PointUsageMethodRequest dto = PointUsageMethodRequest.from(pointUsageMethod, request);
         PointUsageMethod updatedPointUsageMethod = dto.toEntity();
 
         Consumer<Long> action = request.isLottoOn()
@@ -89,7 +97,7 @@ public class LottoService {
                     .customer(customer)
                     .build();
             dailyLottoParticipantRepository.save(participant);
-            incrementLottoParticipantsCount();
+//            incrementLottoParticipantsCount();
             return Optional.of(new LottoParticipantResponseDto(customer.getCustomerId(), "Successfully registered for lotto"));
         }
         return Optional.empty();

@@ -4,6 +4,9 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 1
+      max-lifetime: 30000
   jpa:
     hibernate:
       ddl-auto: none
@@ -15,8 +18,59 @@ spring:
     redis:
       host: ${REDIS_URL}
       port: 6379
+    elasticsearch:
+      repositories:
+        enabled: true
+      elasticsearch:
+        uris: http://localhost:9200
+
+      jmx:
+        enabled: false
+      autoconfigure:
+        exclude:
+          - org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration
+          - org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration
+
+  coolsms:
+    apiKey: ${SMS_API_KEY}
+    apiSecret: ${SMS_API_SECRET_KEY}
+    senderNumber: ${SMS_SENDER_NUMBER}
+
+  schedule:
+    cron: 0 0 0 * * ?
+    use: true
+
 aws:
   accessKeyId: ${ACCESS_KEY_ID}
   secretAccessKey: ${SECRET_ACCESS_KEY}
   region: ${AWS_REGION}
   bucketName: ${S3_BUCKET_NAME}
+
+jwt:
+  secretKey: ${JWT_SECRET_KEY}
+  access:
+    expiration: 1800000
+  refresh:
+    expiration: 259200000
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+
+aes:
+  secret:
+    key: ${AES_SECRET_KEY}
+    salt: ${AES_SECRET_SALT}
+
+logging:
+  level:
+    root: INFO
+    sun.rmi: WARN
+    javax.management: WARN
+    jdk.internal.httpclient: WARN
+    org.springframework.web.client.RestClient: INFO  # RestClient 관련 로그만 보고 싶을 때
+
+appkey: ${OPENAPI_APPKEY}
+appsecret: ${OPENAPI_APPSECRET}
