@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.api.card.dto;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record CardDetailResponse(
         Long cardSequenceId,
@@ -14,6 +15,8 @@ public record CardDetailResponse(
         LocalDate expirationDate,
         int optionalTerms,
         int paymentReceiptMethods,
-        CardStatus cardStatus
+        CardStatus cardStatus,
+        LocalDateTime createdAt,
+        LocalDateTime modifiedAt
 ) {
 }
