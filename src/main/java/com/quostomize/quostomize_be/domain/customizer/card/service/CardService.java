@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.domain.customizer.card.service;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
+import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -61,8 +62,26 @@ public class CardService {
         return cardDetailRepository.save(cardDetail);
     }
 
-    public Page<CardDetailResponse> findPagedCardDetails(Pageable pageable) {
+    public Page<CardDetailResponse> getPagedCards(Pageable pageable) {
         return cardDetailRepository.findAll(pageable)
+                .map(card -> new CardDetailResponse(
+                        card.getCardSequenceId(),
+                        card.getCardNumber(),
+                        card.getCardBrand(),
+                        card.getIsAppCard(),
+                        card.getIsForeignBlocked(),
+                        card.getIsPostpaidTransport(),
+                        card.getExpirationDate(),
+                        card.getOptionalTerms(),
+                        card.getPaymentReceiptMethods(),
+                        card.getStatus(),
+                        card.getCreatedAt(),
+                        card.getModifiedAt()
+                ));
+    }
+
+    public Page<CardDetailResponse> getStatusCards(Pageable pageable, CardStatus status) {
+        return cardDetailRepository.findByStatus(pageable, status)
                 .map(card -> new CardDetailResponse(
                         card.getCardSequenceId(),
                         card.getCardNumber(),
