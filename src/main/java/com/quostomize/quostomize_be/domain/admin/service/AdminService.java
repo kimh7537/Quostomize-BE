@@ -34,6 +34,26 @@ public class AdminService {
         return cardService.getStatusCards(pageable, status);
     }
 
+    public Page<CardDetailResponse> getSearchCards(Authentication auth, int page, String searchTerm) {
+        validateAdmin(auth);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
+        return cardService.getCardBySearchTerm(pageable, searchTerm)
+                .map(card -> new CardDetailResponse(
+                        card.getCardSequenceId(),
+                        card.getCardNumber(),
+                        card.getCardBrand(),
+                        card.getIsAppCard(),
+                        card.getIsForeignBlocked(),
+                        card.getIsPostpaidTransport(),
+                        card.getExpirationDate(),
+                        card.getOptionalTerms(),
+                        card.getPaymentReceiptMethods(),
+                        card.getStatus(),
+                        card.getCreatedAt(),
+                        card.getModifiedAt()
+                ));
+    }
+
     public void validateAdmin(Authentication auth) {
         String memberRole = auth.getAuthorities()
                 .stream()
