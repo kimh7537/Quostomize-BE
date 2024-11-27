@@ -39,4 +39,22 @@ public class PointUsageMethod extends BaseTimeEntity {
         this.isPieceStock = isPieceStock;
         this.cardDetail = cardDetail;
     }
+
+    public void toggleLotto(boolean lotto) {
+        this.isLotto = lotto;
+    }
+
+    public void togglePayback(boolean payback) {
+        this.isPayback = payback;
+    }
+
+    public void togglePieceStock(boolean pieceStock) {
+        this.isPieceStock = pieceStock;
+    }
+
+    public void updateStates(boolean lotto, boolean payback, boolean pieceStock) {
+        this.isLotto = lotto;
+        this.isPayback = payback;
+        this.isPieceStock = pieceStock;
+    }
 }
