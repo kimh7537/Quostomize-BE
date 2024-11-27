@@ -7,6 +7,7 @@ import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class AdminService {
         if (!"ROLE_ADMIN".equals(memberRole)) {
             throw new AppException(ErrorCode.ENTITY_NOT_FOUND);
         }
-        Pageable pageable = PageRequest.of(page, 20);
-        return cardService.findPagedCardDetails(pageable);
+        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by(Sort.Order.desc("createdAt")));
+        return cardService.findPagedCardDetails(pageRequest);
     }
 }
