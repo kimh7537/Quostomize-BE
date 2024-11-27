@@ -62,40 +62,12 @@ public class CardService {
         return cardDetailRepository.save(cardDetail);
     }
 
-    public Page<CardDetailResponse> getPagedCards(Pageable pageable) {
-        return cardDetailRepository.findAll(pageable)
-                .map(card -> new CardDetailResponse(
-                        card.getCardSequenceId(),
-                        card.getCardNumber(),
-                        card.getCardBrand(),
-                        card.getIsAppCard(),
-                        card.getIsForeignBlocked(),
-                        card.getIsPostpaidTransport(),
-                        card.getExpirationDate(),
-                        card.getOptionalTerms(),
-                        card.getPaymentReceiptMethods(),
-                        card.getStatus(),
-                        card.getCreatedAt(),
-                        card.getModifiedAt()
-                ));
+    public Page<CardDetail> getPagedCards(Pageable pageable) {
+        return cardDetailRepository.findAll(pageable);
     }
 
-    public Page<CardDetailResponse> getStatusCards(Pageable pageable, CardStatus status) {
-        return cardDetailRepository.findByStatus(pageable, status)
-                .map(card -> new CardDetailResponse(
-                        card.getCardSequenceId(),
-                        card.getCardNumber(),
-                        card.getCardBrand(),
-                        card.getIsAppCard(),
-                        card.getIsForeignBlocked(),
-                        card.getIsPostpaidTransport(),
-                        card.getExpirationDate(),
-                        card.getOptionalTerms(),
-                        card.getPaymentReceiptMethods(),
-                        card.getStatus(),
-                        card.getCreatedAt(),
-                        card.getModifiedAt()
-                ));
+    public Page<CardDetail> getStatusCards(Pageable pageable, CardStatus status) {
+        return cardDetailRepository.findByStatus(pageable, status);
     }
 
     public Page<CardDetail> getCardBySearchTerm(Pageable pageable, String searchTerm) {
