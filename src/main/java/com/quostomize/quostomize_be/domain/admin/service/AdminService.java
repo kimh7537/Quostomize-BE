@@ -41,6 +41,12 @@ public class AdminService {
         return cardService.getCardBySearchTerm(pageable, searchTerm).map(this::convertResponse);
     }
 
+    public Page<CardDetailResponse> getMemberIdCards(Authentication auth, int page, Long memberId) {
+        validateAdmin(auth);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
+        return cardService.getCardByMemberId(pageable, memberId).map(this::convertResponse);
+    }
+
     public CardDetailResponse convertResponse(CardDetail card) {
         return new CardDetailResponse(
                 card.getCardSequenceId(),
