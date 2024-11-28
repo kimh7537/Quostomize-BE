@@ -45,6 +45,7 @@ public enum ErrorCode {
     ROLE_IS_NOT_OLD_MEMBER(HttpStatus.BAD_REQUEST, "M-103", "해당 회원의 ROLE은 OLD_MEMBER가 아닙니다."),
     SAME_PASSWORD(HttpStatus.CONFLICT, "M-301", "이전과 같은 비밀번호로 변경할 수 없습니다."),
     USER_ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "M-401", "권한이 없어서 접근할 수 없습니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-404", "해당 MEMBER를 찾을 수 없습니다."),
 
     // 고객 관련
     CUSTOMER_CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "U-001", "고객의 카드를 찾을 수 없습니다."),
