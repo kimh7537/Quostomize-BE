@@ -51,4 +51,16 @@ public class AdminController {
         PageAdminResponse response = new PageAdminResponse(cards);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
+
+    @GetMapping("/cancel-pending-info")
+    @Operation(summary = "해지 대기 카드 조회", description = "ADMIN은 정렬 옵션을 사용하여 해지 대기 카드를 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getCancelPendingInfo(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "DESC") String sortDirection) {
+        CardStatus catdStatus = CardStatus.CANCELLATION_PENDING;
+        Page<CardDetailResponse> cards = adminService.getFilteredCards(auth, page, sortDirection, catdStatus);
+        PageAdminResponse response = new PageAdminResponse(cards);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
 }
