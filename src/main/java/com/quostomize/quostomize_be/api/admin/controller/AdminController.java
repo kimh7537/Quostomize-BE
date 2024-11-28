@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.api.admin.controller;
 
 import com.quostomize.quostomize_be.api.admin.dto.PageAdminResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
+import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.admin.service.AdminService;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
@@ -9,10 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/api/admin")
@@ -75,4 +74,15 @@ public class AdminController {
         PageAdminResponse response = new PageAdminResponse(cards);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
+
+    @PatchMapping("/status-change")
+    @Operation(summary = "카드 상태 변경", description = "ADMIN은 카드 상태를 변경할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> updateStatus(
+            @AuthenticationPrincipal Long memberId,
+            @RequestBody CardStatusRequest request
+    ) {
+        adminService.updateCardStatus(memberId, request);
+        return ResponseEntity.noContent().build();
+    }
+    // TODO: 거절 로직 API 개발 필요
 }
