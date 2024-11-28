@@ -88,6 +88,14 @@ public class CardService {
 
     @Transactional
     public void updateCardStatus(CardStatusRequest request) {
+        CardDetail card = cardDetailRepository.findById(request.cardSequenceId())
+                        .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
+        if (card.getStatus() == CardStatus.CANCELLED) {
+            throw new AppException(ErrorCode.CARD_STATUS_CHANGE_NOT_ALLOWED);
+        }
+        if (!isValidStatus(card.getStatus(), request.status())) {
+            throw new AppException(ErrorCode.CARD_STATUS_CHANGE_NOT_ALLOWED);
+        }
         cardDetailRepository.updateStatus(request.status(), request.cardSequenceId());
     }
 
@@ -99,5 +107,14 @@ public class CardService {
         if (!encryptedInputCode.equals(storedEncryptedCode)) {
             throw new AppException(ErrorCode.SECONDARY_AUTH_CODE_NOT_MATCH);
         }
+    }
+
+    private boolean isValidStatus(CardStatus currentStatus, CardStatus newStatus) {
+        return switch (currentStatus) {
+            case CREATION_PENDING -> newStatus == CardStatus.ACTIVE || newStatus == CardStatus.CANCELLED;
+            case ACTIVE -> newStatus == CardStatus.CANCELLED || newStatus == CardStatus.CANCELLATION_PENDING;
+            case CANCELLATION_PENDING -> newStatus == CardStatus.CANCELLED;
+            default -> false;
+        };
     }
 }
