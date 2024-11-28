@@ -1,7 +1,11 @@
 package com.quostomize.quostomize_be.domain.customizer.card.service;
 
-import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
+import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
+import com.quostomize.quostomize_be.common.error.exception.AppException;
+import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
+import com.quostomize.quostomize_be.domain.auth.service.EncryptService;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
@@ -25,6 +29,8 @@ public class CardService {
 
     private final CardDetailRepository cardDetailRepository;
     private final CustomerRepository customerRepository;
+    private final MemberRepository memberRepository;
+    private final EncryptService encryptService;
     private final Random random = new Random();
 
 //    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -78,5 +84,20 @@ public class CardService {
 
     public Page<CardDetail> getCardByMemberId(Pageable pageable, Long memberId) {
         return customerRepository.findCardByMemberId(pageable, memberId);
+    }
+
+    @Transactional
+    public void updateCardStatus(CardStatusRequest request) {
+        cardDetailRepository.updateStatus(request.status(), request.cardSequenceId());
+    }
+
+    @Transactional
+    public void verifySecondaryAuthCode(Long memberId, String secondaryAuthCode) {
+        String storedEncryptedCode = memberRepository.findSecondaryAuthCodeById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_INFO_NOT_FOUND));
+        String encryptedInputCode = encryptService.encryptSecondaryAuthCode(secondaryAuthCode);
+        if (!encryptedInputCode.equals(storedEncryptedCode)) {
+            throw new AppException(ErrorCode.SECONDARY_AUTH_CODE_NOT_MATCH);
+        }
     }
 }
