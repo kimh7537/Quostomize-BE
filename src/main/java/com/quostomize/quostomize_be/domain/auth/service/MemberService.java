@@ -62,6 +62,8 @@ public class MemberService {
 
     public Page<Member> getRoleMembers(Pageable pageable, MemberRole role) {return memberRepository.findByRole(pageable, role);}
 
+    public Page<Member> getMemberById(Pageable pageable, String searchTerm) {return memberRepository.findByMemberLoginId(pageable, searchTerm);}
+
     @Transactional
     public void updateMemberAddress(Long memberId, UpdateAddressDTO updateAddressDTO) {
         Member member =  memberReader.findById(memberId);
