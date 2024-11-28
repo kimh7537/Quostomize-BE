@@ -1,5 +1,6 @@
 package com.quostomize.quostomize_be.domain.auth.service;
 
+import com.quostomize.quostomize_be.api.auth.dto.MemberRoleRequest;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdateAddressDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdateEmailDTO;
@@ -81,12 +82,35 @@ public class MemberService {
         member.updateEmail(newEmail);
     }
 
-
     @Transactional
     public void updatePhoneNumber(Long memberId, String phoneNumber) {
         Member findMember = memberReader.findById(memberId);
         String encryptedPhoneNumber = encryptService.encryptPhoneNumber(phoneNumber);
         findMember.updatePhoneNumber(encryptedPhoneNumber);
+    }
+
+    @Transactional
+    public void updateMemberRole(MemberRoleRequest request) {
+        Member member = memberRepository.findByMemberId(request.memberId())
+                        .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
+        if (member.getRole() == MemberRole.OLD_MEMBER) {
+            throw new AppException(ErrorCode.ROLE_IS_NOT_MATCH);
+        }
+        if ((member.getRole() == MemberRole.SUSPENDED_MEMBER && request.role() != MemberRole.MEMBER)
+                || (member.getRole() == MemberRole.MEMBER && request.role() != MemberRole.SUSPENDED_MEMBER)) {
+            throw new AppException(ErrorCode.ROLE_IS_NOT_MATCH);
+        }
+        memberRepository.updateRole(request.role(), request.memberId());
+    }
+
+    @Transactional
+    public void verifySecondaryAuthCode(Long adminId, String secondaryAuthCode) {
+        String storedEncryptedCode = memberRepository.findSecondaryAuthCodeById(adminId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_INFO_NOT_FOUND));
+        String encryptedInputCode = encryptService.encryptSecondaryAuthCode(secondaryAuthCode);
+        if (!encryptedInputCode.equals(storedEncryptedCode)) {
+            throw new AppException(ErrorCode.SECONDARY_AUTH_CODE_NOT_MATCH);
+        }
     }
 
 }
