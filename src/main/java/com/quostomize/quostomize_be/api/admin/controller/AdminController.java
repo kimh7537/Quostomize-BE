@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.api.admin.controller;
 
 import com.quostomize.quostomize_be.api.admin.dto.PageAdminResponse;
 import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
+import com.quostomize.quostomize_be.api.auth.dto.MemberRoleRequest;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
 import com.quostomize.quostomize_be.api.payment.dto.PaymentRecordResponse;
@@ -125,6 +126,16 @@ public class AdminController {
         Page<MemberResponse> members = adminService.getSearchMembers(auth, page, searchTerm);
         PageAdminResponse response = new PageAdminResponse(members);
         return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
+    @PatchMapping("/member-role-change")
+    @Operation(summary = "고객 상태 변경", description = "ADMIN은 고객 상태를 변경할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> updateMemberRole(
+            @AuthenticationPrincipal Long adminId,
+            @RequestBody MemberRoleRequest request
+    ) {
+        adminService.updateMemberRole(adminId, request);
+        return ResponseEntity.noContent().build();
     }
 
     // 결제내역
