@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.domain.admin.service;
 import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
+import com.quostomize.quostomize_be.api.payment.dto.PaymentRecordResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
@@ -11,6 +12,8 @@ import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
+import com.quostomize.quostomize_be.domain.customizer.payment.entity.PaymentRecord;
+import com.quostomize.quostomize_be.domain.customizer.payment.service.PaymentRecordService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,10 +30,12 @@ public class AdminService {
 
     private final CardService cardService;
     private final MemberService memberService;
+    private final PaymentRecordService paymentRecordService;
 
-    public AdminService(CardService cardService, MemberService memberService) {
+    public AdminService(CardService cardService, MemberService memberService, PaymentRecordService paymentRecordService) {
         this.cardService = cardService;
         this.memberService = memberService;
+        this.paymentRecordService = paymentRecordService;
     }
     
     // 카드
@@ -78,6 +83,14 @@ public class AdminService {
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
         return memberService.getMemberById(pageable, searchTerm).map(this::convertMemberResponse);
     }
+
+    // 결제내역
+    public Page<PaymentRecordResponse> getFilteredRecords(Authentication auth, int page, String sortDirection) {
+        validateAdmin(auth);
+        Sort sort = Sort.by(sortDirection.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, 20, sort);
+        return paymentRecordService.getPagedRecords(pageable).map(this::convertRecordsResponse);
+    }
     
     // 공통
     public CardDetailResponse convertCardResponse(CardDetail card) {
@@ -109,6 +122,18 @@ public class AdminService {
                 member.getRole(),
                 member.getCreatedAt(),
                 member.getModifiedAt()
+        );
+    }
+
+    public PaymentRecordResponse convertRecordsResponse(PaymentRecord record) {
+        return new PaymentRecordResponse(
+                record.getPaymentRecordId(),
+                record.getIndustryType(),
+                record.getBusinessRegistrationNumber(),
+                record.getTotalPaymentAmount(),
+                record.getCardDetail().getCardSequenceId(),
+                record.getCreatedAt(),
+                record.getModifiedAt()
         );
     }
 
