@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
+import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.Random;
 public class CardService {
 
     private final CardDetailRepository cardDetailRepository;
+    private final CustomerRepository customerRepository;
     private final Random random = new Random();
 
 //    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -72,5 +74,9 @@ public class CardService {
 
     public Page<CardDetail> getCardBySearchTerm(Pageable pageable, String searchTerm) {
         return cardDetailRepository.findBySearchTerm(pageable, searchTerm);
+    }
+
+    public Page<CardDetail> getCardByMemberId(Pageable pageable, Long memberId) {
+        return customerRepository.findCardByMemberId(pageable, memberId);
     }
 }
