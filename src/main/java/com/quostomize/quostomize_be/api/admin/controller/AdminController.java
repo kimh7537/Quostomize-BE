@@ -1,10 +1,12 @@
 package com.quostomize.quostomize_be.api.admin.controller;
 
 import com.quostomize.quostomize_be.api.admin.dto.PageAdminResponse;
+import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.admin.service.AdminService;
+import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
@@ -22,7 +24,8 @@ public class AdminController {
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
-
+    
+    // 카드
     @GetMapping("/card-info")
     @Operation(summary = "모든 카드 조회", description = "ADMIN은 필터 및 정렬 옵션을 사용하여 모든 카드를 조회할 수 있습니다.")
     public ResponseEntity<ResponseDTO> getCardInfo(
@@ -85,4 +88,22 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
     // TODO: 거절 로직 API 개발 필요
+
+    // 멤버
+    @GetMapping("/member-info")
+    @Operation(summary = "모든 고객 조회", description = "ADMIN은 필터 및 정렬 옵션을 사용하여 모든 고객을 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getMemberInfo(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "DESC") String sortDirection,
+            @RequestParam(required = false) String memberRole) {
+        MemberRole role = null;
+        if (memberRole != null && !memberRole.isEmpty()) {
+            role = MemberRole.fromKey(memberRole);
+        }
+        Page<MemberResponse> members = adminService.getFilteredMembers(auth, page, sortDirection, role);
+        PageAdminResponse response = new PageAdminResponse(members);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
 }
