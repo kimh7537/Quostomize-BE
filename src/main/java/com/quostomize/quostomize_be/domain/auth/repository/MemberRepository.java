@@ -44,4 +44,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Page<Member> findAll(Pageable pageable);
     Page<Member> findByRoleIn(Pageable pageable, List<MemberRole> memberRole);
     Page<Member> findByMemberLoginId(Pageable pageable, String loginId);
+    Page<Member> findByMemberId(Pageable pageable, Long memberId);
 }
