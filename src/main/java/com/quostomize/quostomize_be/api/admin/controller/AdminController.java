@@ -4,6 +4,7 @@ import com.quostomize.quostomize_be.api.admin.dto.PageAdminResponse;
 import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
+import com.quostomize.quostomize_be.api.payment.dto.PaymentRecordResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.admin.service.AdminService;
 import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
@@ -115,6 +116,19 @@ public class AdminController {
     ) {
         Page<MemberResponse> members = adminService.getSearchMembers(auth, page, searchTerm);
         PageAdminResponse response = new PageAdminResponse(members);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
+    // 결제내역
+    @GetMapping("/payment-record-info")
+    @Operation(summary = "모든 결제내역 조회", description = "ADMIN은 정렬 옵션을 사용하여 모든 결제내역을 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getPaymentRecordInfo(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "DESC") String sortDirection
+    ) {
+        Page<PaymentRecordResponse> records = adminService.getFilteredRecords(auth, page, sortDirection);
+        PageAdminResponse response = new PageAdminResponse(records);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
 
