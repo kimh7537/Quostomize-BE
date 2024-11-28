@@ -60,7 +60,7 @@ public class MemberService {
 
     public Page<Member> getPagedMembers(Pageable pageable) {return memberRepository.findAll(pageable);}
 
-    public Page<Member> getRoleMembers(Pageable pageable, MemberRole role) {return memberRepository.findByRole(pageable, role);}
+    public Page<Member> getRoleMembers(Pageable pageable, List<MemberRole> roles) {return memberRepository.findByRoleIn(pageable, roles);}
 
     public Page<Member> getMemberById(Pageable pageable, String searchTerm) {return memberRepository.findByMemberLoginId(pageable, searchTerm);}
 
