@@ -72,6 +72,12 @@ public class AdminService {
         }
         return memberService.getRoleMembers(pageable, role).map(this::convertMemberResponse);
     }
+
+    public Page<MemberResponse> getSearchMembers(Authentication auth, int page, String searchTerm) {
+        validateAdmin(auth);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
+        return memberService.getMemberById(pageable, searchTerm).map(this::convertMemberResponse);
+    }
     
     // 공통
     public CardDetailResponse convertCardResponse(CardDetail card) {
