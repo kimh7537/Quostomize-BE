@@ -42,7 +42,7 @@ public class AdminController {
 
     @GetMapping("/card-search")
     @Operation(summary = "모든 카드 검색", description = "ADMIN은 cardNumber로 검색하여 모든 카드를 조회할 수 있습니다.")
-    public ResponseEntity<ResponseDTO> search(
+    public ResponseEntity<ResponseDTO> getSearchCard(
             Authentication auth,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam String searchTerm
@@ -60,6 +60,18 @@ public class AdminController {
             @RequestParam(defaultValue = "DESC") String sortDirection) {
         CardStatus catdStatus = CardStatus.CANCELLATION_PENDING;
         Page<CardDetailResponse> cards = adminService.getFilteredCards(auth, page, sortDirection, catdStatus);
+        PageAdminResponse response = new PageAdminResponse(cards);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
+    @GetMapping("/cancel-pending-search")
+    @Operation(summary = "해지 대기 카드 검색", description = "ADMIN은 memberId로 해지 대기 카드를 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getCancelPendingSearch(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam Long memberId
+    ) {
+        Page<CardDetailResponse> cards = adminService.getMemberIdCards(auth, page, memberId);
         PageAdminResponse response = new PageAdminResponse(cards);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
