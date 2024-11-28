@@ -13,6 +13,7 @@ import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import com.quostomize.quostomize_be.domain.customizer.payment.entity.PaymentRecord;
+import com.quostomize.quostomize_be.domain.customizer.payment.enums.RecordSearchType;
 import com.quostomize.quostomize_be.domain.customizer.payment.service.PaymentRecordService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -90,6 +91,17 @@ public class AdminService {
         Sort sort = Sort.by(sortDirection.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, 20, sort);
         return paymentRecordService.getPagedRecords(pageable).map(this::convertRecordsResponse);
+    }
+
+    public Page<PaymentRecordResponse> getSearchRecords(Authentication auth, int page, Long searchAmount, RecordSearchType recordSearchType) {
+        validateAdmin(auth);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
+        Page<PaymentRecord> records = switch (recordSearchType) {
+            case GREATER -> paymentRecordService.getGreaterRecords(pageable, searchAmount);
+            case LESS -> paymentRecordService.getLessRecords(pageable, searchAmount);
+            case EQUAL -> paymentRecordService.getEqualRecords(pageable, searchAmount);
+        };
+        return records.map(this::convertRecordsResponse);
     }
     
     // 공통
