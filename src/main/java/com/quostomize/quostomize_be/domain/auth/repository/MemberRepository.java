@@ -45,4 +45,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Page<Member> findByRoleIn(Pageable pageable, List<MemberRole> memberRole);
     Page<Member> findByMemberLoginId(Pageable pageable, String loginId);
     Page<Member> findByMemberId(Pageable pageable, Long memberId);
+
+    @Modifying
+    @Query("update Member m set m.role = :newRole where m.memberId = :memberId")
+    void updateRole(@Param("newRole") MemberRole newRole, @Param("memberId") Long memberId);
 }
