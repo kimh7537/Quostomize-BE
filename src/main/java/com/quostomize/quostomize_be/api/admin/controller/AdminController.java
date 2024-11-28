@@ -106,4 +106,16 @@ public class AdminController {
         return ResponseEntity.ok(new ResponseDTO(response));
     }
 
+    @GetMapping("/member-search")
+    @Operation(summary = "모든 고객 검색", description = "ADMIN은 memberLoginId로 검색하여 모든 고객을 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getMemberSearch(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam String searchTerm
+    ) {
+        Page<MemberResponse> members = adminService.getSearchMembers(auth, page, searchTerm);
+        PageAdminResponse response = new PageAdminResponse(members);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
 }
