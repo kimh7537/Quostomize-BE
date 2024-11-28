@@ -17,6 +17,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/v1/api/admin")
 public class AdminController {
@@ -99,11 +103,14 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "DESC") String sortDirection,
             @RequestParam(required = false) String memberRole) {
-        MemberRole role = null;
+        List<MemberRole> roles = null;
         if (memberRole != null && !memberRole.isEmpty()) {
-            role = MemberRole.fromKey(memberRole);
+            roles = Arrays.stream(memberRole.split(","))
+                    .map(String::trim)
+                    .map(MemberRole::fromKey)
+                    .collect(Collectors.toList());
         }
-        Page<MemberResponse> members = adminService.getFilteredMembers(auth, page, sortDirection, role);
+        Page<MemberResponse> members = adminService.getFilteredMembers(auth, page, sortDirection, roles);
         PageAdminResponse response = new PageAdminResponse(members);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
