@@ -97,7 +97,7 @@ public class AdminController {
 
     // 멤버
     @GetMapping("/member-info")
-    @Operation(summary = "모든 고객 조회", description = "ADMIN은 필터 및 정렬 옵션을 사용하여 모든 고객을 조회할 수 있습니다.")
+    @Operation(summary = "모든 고객 조회", description = "ADMIN은 필터 및 정렬 옵션을 사용하여 모든 고객을 조회할 수 있습니다. (옵션 다중 선택 가능)")
     public ResponseEntity<ResponseDTO> getMemberInfo(
             Authentication auth,
             @RequestParam(defaultValue = "0") int page,
@@ -116,7 +116,7 @@ public class AdminController {
     }
 
     @GetMapping("/member-search")
-    @Operation(summary = "모든 고객 검색", description = "ADMIN은 memberLoginId로 검색하여 모든 고객을 조회할 수 있습니다.")
+    @Operation(summary = "모든 고객 검색", description = "ADMIN은 memberLoginId/memberId로 검색하여 모든 고객을 조회할 수 있습니다.")
     public ResponseEntity<ResponseDTO> getMemberSearch(
             Authentication auth,
             @RequestParam(defaultValue = "0") int page,
