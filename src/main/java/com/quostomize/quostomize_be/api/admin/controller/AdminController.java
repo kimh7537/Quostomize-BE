@@ -9,6 +9,7 @@ import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.admin.service.AdminService;
 import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
+import com.quostomize.quostomize_be.domain.customizer.payment.enums.RecordSearchType;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -128,6 +129,26 @@ public class AdminController {
             @RequestParam(defaultValue = "DESC") String sortDirection
     ) {
         Page<PaymentRecordResponse> records = adminService.getFilteredRecords(auth, page, sortDirection);
+        PageAdminResponse response = new PageAdminResponse(records);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
+    @GetMapping("/payment-record-search")
+    @Operation(summary = "모든 결제내역 검색", description = "ADMIN은 입력 금액을 기준으로 이상/이하/동일 totalPaymentAmount를 가진 결제내역을 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getPaymentRecordSearch(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam Long searchAmount,
+            @RequestParam(required = false) String searchType
+    ) {
+        RecordSearchType type = null;
+        if (searchType != null && !searchType.isEmpty()) {
+            type = RecordSearchType.fromKey(searchType);
+        }
+        if (type == null) {
+            type = RecordSearchType.EQUAL;
+        }
+        Page<PaymentRecordResponse> records = adminService.getSearchRecords(auth, page, searchAmount, type);
         PageAdminResponse response = new PageAdminResponse(records);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
