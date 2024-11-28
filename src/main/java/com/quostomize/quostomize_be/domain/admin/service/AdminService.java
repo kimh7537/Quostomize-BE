@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.admin.service;
 
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
+import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +47,12 @@ public class AdminService {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
         return cardService.getCardByMemberId(pageable, memberId).map(this::convertResponse);
+    }
+
+    @Transactional
+    public void updateCardStatus(@AuthenticationPrincipal Long memberId, CardStatusRequest request) {
+        cardService.verifySecondaryAuthCode(memberId, request.secondaryAuthCode());
+        cardService.updateCardStatus(request);
     }
 
     public CardDetailResponse convertResponse(CardDetail card) {
