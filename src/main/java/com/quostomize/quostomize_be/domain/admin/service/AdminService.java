@@ -84,7 +84,11 @@ public class AdminService {
     public Page<MemberResponse> getSearchMembers(Authentication auth, int page, String searchTerm) {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
-        return memberService.getMemberById(pageable, searchTerm).map(this::convertMemberResponse);
+        if (isNumeric(searchTerm)) {
+            Long memberId = Long.parseLong(searchTerm);
+            return memberService.getMemberByMemberId(pageable, memberId).map(this::convertMemberResponse);
+        }
+        return memberService.getMemberByLoginId(pageable, searchTerm).map(this::convertMemberResponse);
     }
 
     // 결제내역
@@ -149,6 +153,15 @@ public class AdminService {
                 record.getCreatedAt(),
                 record.getModifiedAt()
         );
+    }
+
+    private boolean isNumeric(String str) {
+        try {
+            Long.parseLong(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public void validateAdmin(Authentication auth) {
