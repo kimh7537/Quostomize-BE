@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.domain.auth.repository;
 
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,4 +35,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying
     @Query("select m from Member m where m.role in :roles")
     List<Member> findAllByRoleInQuery(@Param("roles") List<MemberRole> roles);
+
+    @Query("select m.secondaryAuthCode from Member m where m.memberId = :memberId")
+    Optional<String> findSecondaryAuthCodeById(Long memberId);
 }
