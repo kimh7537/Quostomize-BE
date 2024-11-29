@@ -1,11 +1,15 @@
 package com.quostomize.quostomize_be.domain.customizer.card.service;
 
+import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
+import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,5 +60,17 @@ public class CardService {
                 .build();
 
         return cardDetailRepository.save(cardDetail);
+    }
+
+    public Page<CardDetail> getPagedCards(Pageable pageable) {
+        return cardDetailRepository.findAll(pageable);
+    }
+
+    public Page<CardDetail> getStatusCards(Pageable pageable, CardStatus status) {
+        return cardDetailRepository.findByStatus(pageable, status);
+    }
+
+    public Page<CardDetail> getCardBySearchTerm(Pageable pageable, String searchTerm) {
+        return cardDetailRepository.findBySearchTerm(pageable, searchTerm);
     }
 }
