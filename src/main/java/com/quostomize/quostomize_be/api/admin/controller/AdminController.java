@@ -97,6 +97,18 @@ public class AdminController {
         PageAdminResponse response = new PageAdminResponse(applicants);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
+    
+    @GetMapping("/creation-pending-search")
+    @Operation(summary = "카드 신청 내역 검색", description = "ADMIN은 memberId로 카드 신청 내역을 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getCreationPendingSearch(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam Long memberId
+    ) {
+        Page<CardApplicantDetailsDTO> applicants = adminService.getMemberIdCardApplicants(auth, page, memberId);
+        PageAdminResponse response = new PageAdminResponse(applicants);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
 
     @PatchMapping("/status-change")
     @Operation(summary = "카드 상태 변경", description = "ADMIN은 카드 상태를 변경할 수 있습니다.")
