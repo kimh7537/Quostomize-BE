@@ -13,6 +13,13 @@ import java.util.Optional;
 public interface CardApplicantInfoRepository extends JpaRepository<CardApplicantInfo, Long> {
     Optional<CardApplicantInfo> findByCardApplicantInfoId(Long cardApplicationInfoId);
     Optional<CardApplicantInfo> findByResidenceNumber(String residenceNumber);
-    @Query("select c from CardApplicantInfo  c join c.cardDetail d where d.status = :status")
+    @Query("select c from CardApplicantInfo c join c.cardDetail d where d.status = :status")
     Page<CardApplicantInfo> findByCardStatus(@Param("status") CardStatus status, Pageable pageable);
+    @Query("""
+        select ca from CardApplicantInfo ca
+        join fetch ca.cardDetail cd
+        join fetch Customer c on c.cardDetail.cardSequenceId = cd.cardSequenceId
+        where c.member.memberId = :memberId
+""")
+    Page<CardApplicantInfo> findCardApplicantByMemberId(Pageable pageable, @Param("memberId") Long memberId);
 }
