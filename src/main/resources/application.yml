@@ -21,8 +21,8 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
-      elasticsearch:
-        uris: http://localhost:9200
+#      elasticsearch:
+#        uris: http://localhost:9200
 
       jmx:
         enabled: false
@@ -74,3 +74,9 @@ logging:
 
 appkey: ${OPENAPI_APPKEY}
 appsecret: ${OPENAPI_APPSECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
