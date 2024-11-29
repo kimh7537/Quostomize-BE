@@ -8,6 +8,7 @@ import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import com.quostomize.quostomize_be.domain.auth.service.EncryptService;
 import com.quostomize.quostomize_be.domain.customizer.benefit.repository.BenefitCommonCodeRepository;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
+import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
@@ -19,6 +20,8 @@ import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service.P
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +76,11 @@ public class CardApplicantInfoService {
         mapMemberToCard(cardApplicantDTO.residenceNumber(), newCard);
 
         return CardApplicantDetailsDTO.fromEntity(newCardApplicantInfo);
+    }
+
+    public Page<CardApplicantDetailsDTO> getApplicantsByStatus(CardStatus status, Pageable pageable) {
+        return cardApplicantInfoRepository.findByCardStatus(status, pageable)
+                .map(CardApplicantDetailsDTO::fromEntity);
     }
 
     private CardDetail createCardDetail(CardApplicantDTO cardApplicantDTO) {
