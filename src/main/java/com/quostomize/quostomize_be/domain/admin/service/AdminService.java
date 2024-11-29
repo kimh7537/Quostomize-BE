@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.admin.service;
 
 import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
+import com.quostomize.quostomize_be.api.auth.dto.MemberRoleRequest;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
 import com.quostomize.quostomize_be.api.payment.dto.PaymentRecordResponse;
@@ -65,8 +66,8 @@ public class AdminService {
     }
 
     @Transactional
-    public void updateCardStatus(@AuthenticationPrincipal Long memberId, CardStatusRequest request) {
-        cardService.verifySecondaryAuthCode(memberId, request.secondaryAuthCode());
+    public void updateCardStatus(@AuthenticationPrincipal Long adminId, CardStatusRequest request) {
+        cardService.verifySecondaryAuthCode(adminId, request.secondaryAuthCode());
         cardService.updateCardStatus(request);
     }
 
@@ -89,6 +90,12 @@ public class AdminService {
             return memberService.getMemberByMemberId(pageable, memberId).map(this::convertMemberResponse);
         }
         return memberService.getMemberByLoginId(pageable, searchTerm).map(this::convertMemberResponse);
+    }
+
+    @Transactional
+    public void updateMemberRole(@AuthenticationPrincipal Long adminId, MemberRoleRequest request) {
+        memberService.verifySecondaryAuthCode(adminId, request.secondaryAuthCode());
+        memberService.updateMemberRole(request);
     }
 
     // 결제내역

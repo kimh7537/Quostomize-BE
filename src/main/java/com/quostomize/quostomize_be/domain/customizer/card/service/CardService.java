@@ -92,8 +92,8 @@ public class CardService {
     }
 
     @Transactional
-    public void verifySecondaryAuthCode(Long memberId, String secondaryAuthCode) {
-        String storedEncryptedCode = memberRepository.findSecondaryAuthCodeById(memberId)
+    public void verifySecondaryAuthCode(Long adminId, String secondaryAuthCode) {
+        String storedEncryptedCode = memberRepository.findSecondaryAuthCodeById(adminId)
                 .orElseThrow(() -> new AppException(ErrorCode.MEMBER_INFO_NOT_FOUND));
         String encryptedInputCode = encryptService.encryptSecondaryAuthCode(secondaryAuthCode);
         if (!encryptedInputCode.equals(storedEncryptedCode)) {
