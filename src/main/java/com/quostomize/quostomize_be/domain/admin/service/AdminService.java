@@ -4,6 +4,7 @@ import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
 import com.quostomize.quostomize_be.api.auth.dto.MemberRoleRequest;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
+import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
 import com.quostomize.quostomize_be.api.payment.dto.PaymentRecordResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
@@ -13,6 +14,7 @@ import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
+import com.quostomize.quostomize_be.domain.customizer.cardapplication.service.CardApplicantInfoService;
 import com.quostomize.quostomize_be.domain.customizer.payment.entity.PaymentRecord;
 import com.quostomize.quostomize_be.domain.customizer.payment.enums.RecordSearchType;
 import com.quostomize.quostomize_be.domain.customizer.payment.service.PaymentRecordService;
@@ -35,11 +37,13 @@ public class AdminService {
     private final CardService cardService;
     private final MemberService memberService;
     private final PaymentRecordService paymentRecordService;
+    private final CardApplicantInfoService cardApplicantInfoService;
 
-    public AdminService(CardService cardService, MemberService memberService, PaymentRecordService paymentRecordService) {
+    public AdminService(CardService cardService, MemberService memberService, PaymentRecordService paymentRecordService, CardApplicantInfoService cardApplicantInfoService) {
         this.cardService = cardService;
         this.memberService = memberService;
         this.paymentRecordService = paymentRecordService;
+        this.cardApplicantInfoService = cardApplicantInfoService;
     }
     
     // 카드
@@ -63,6 +67,13 @@ public class AdminService {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
         return cardService.getCardByMemberId(pageable, memberId).map(this::convertCardResponse);
+    }
+
+    public Page<CardApplicantDetailsDTO> getFilteredApplicants(Authentication auth, int page, String sortDirection, CardStatus status) {
+        validateAdmin(auth);
+        Sort sort = Sort.by(sortDirection.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, 20, sort);
+        return cardApplicantInfoService.getApplicantsByStatus(status, pageable);
     }
 
     @Transactional
