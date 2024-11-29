@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
 import com.quostomize.quostomize_be.api.auth.dto.MemberRoleRequest;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
+import com.quostomize.quostomize_be.api.cardapplicant.dto.CardApplicantDetailsDTO;
 import com.quostomize.quostomize_be.api.payment.dto.PaymentRecordResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.admin.service.AdminService;
@@ -67,8 +68,8 @@ public class AdminController {
             Authentication auth,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "DESC") String sortDirection) {
-        CardStatus catdStatus = CardStatus.CANCELLATION_PENDING;
-        Page<CardDetailResponse> cards = adminService.getFilteredCards(auth, page, sortDirection, catdStatus);
+        CardStatus cardStatus = CardStatus.CANCELLATION_PENDING;
+        Page<CardDetailResponse> cards = adminService.getFilteredCards(auth, page, sortDirection, cardStatus);
         PageAdminResponse response = new PageAdminResponse(cards);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
@@ -82,6 +83,18 @@ public class AdminController {
     ) {
         Page<CardDetailResponse> cards = adminService.getMemberIdCards(auth, page, memberId);
         PageAdminResponse response = new PageAdminResponse(cards);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
+    @GetMapping("/creation-pending-info")
+    @Operation(summary = "카드 신청 내역 조회", description = "ADMIN은 정렬 옵션을 사용하여 카드 신청 내역을 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getCreationPendingInfo(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "DESC") String sortDirection) {
+        CardStatus cardStatus = CardStatus.CREATION_PENDING;
+        Page<CardApplicantDetailsDTO> applicants = adminService.getFilteredApplicants(auth, page, sortDirection, cardStatus);
+        PageAdminResponse response = new PageAdminResponse(applicants);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
 
