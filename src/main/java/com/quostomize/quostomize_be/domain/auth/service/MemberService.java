@@ -7,10 +7,13 @@ import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.auth.component.MemberReader;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +57,12 @@ public class MemberService {
     public List<MemberResponseDTO> findAll() {
         return memberRepository.findAll().stream().map(MemberResponseDTO::fromEntity).toList();
     }
+
+    public Page<Member> getPagedMembers(Pageable pageable) {return memberRepository.findAll(pageable);}
+
+    public Page<Member> getRoleMembers(Pageable pageable, MemberRole role) {return memberRepository.findByRole(pageable, role);}
+
+    public Page<Member> getMemberById(Pageable pageable, String searchTerm) {return memberRepository.findByMemberLoginId(pageable, searchTerm);}
 
     @Transactional
     public void updateMemberAddress(Long memberId, UpdateAddressDTO updateAddressDTO) {

@@ -1,9 +1,13 @@
 package com.quostomize.quostomize_be.domain.admin.service;
 
+import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
+import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
+import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.service.CardService;
@@ -22,31 +26,34 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminService {
 
     private final CardService cardService;
+    private final MemberService memberService;
 
-    public AdminService(CardService cardService) {
+    public AdminService(CardService cardService, MemberService memberService) {
         this.cardService = cardService;
+        this.memberService = memberService;
     }
-
+    
+    // 카드
     public Page<CardDetailResponse> getFilteredCards(Authentication auth, int page, String sortDirection, CardStatus status) {
         validateAdmin(auth);
         Sort sort = Sort.by(sortDirection.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, 20, sort);
         if (status == null) {
-            return cardService.getPagedCards(pageable).map(this::convertResponse);
+            return cardService.getPagedCards(pageable).map(this::convertCardResponse);
         }
-        return cardService.getStatusCards(pageable, status).map(this::convertResponse);
+        return cardService.getStatusCards(pageable, status).map(this::convertCardResponse);
     }
 
     public Page<CardDetailResponse> getSearchCards(Authentication auth, int page, String searchTerm) {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
-        return cardService.getCardBySearchTerm(pageable, searchTerm).map(this::convertResponse);
+        return cardService.getCardBySearchTerm(pageable, searchTerm).map(this::convertCardResponse);
     }
 
     public Page<CardDetailResponse> getMemberIdCards(Authentication auth, int page, Long memberId) {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
-        return cardService.getCardByMemberId(pageable, memberId).map(this::convertResponse);
+        return cardService.getCardByMemberId(pageable, memberId).map(this::convertCardResponse);
     }
 
     @Transactional
@@ -55,7 +62,25 @@ public class AdminService {
         cardService.updateCardStatus(request);
     }
 
-    public CardDetailResponse convertResponse(CardDetail card) {
+    // 멤버
+    public Page<MemberResponse> getFilteredMembers(Authentication auth, int page, String sortDirection, MemberRole role) {
+        validateAdmin(auth);
+        Sort sort = Sort.by(sortDirection.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, 20, sort);
+        if (role == null) {
+            return memberService.getPagedMembers(pageable).map(this::convertMemberResponse);
+        }
+        return memberService.getRoleMembers(pageable, role).map(this::convertMemberResponse);
+    }
+
+    public Page<MemberResponse> getSearchMembers(Authentication auth, int page, String searchTerm) {
+        validateAdmin(auth);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
+        return memberService.getMemberById(pageable, searchTerm).map(this::convertMemberResponse);
+    }
+    
+    // 공통
+    public CardDetailResponse convertCardResponse(CardDetail card) {
         return new CardDetailResponse(
                 card.getCardSequenceId(),
                 card.getCardNumber(),
@@ -69,6 +94,21 @@ public class AdminService {
                 card.getStatus(),
                 card.getCreatedAt(),
                 card.getModifiedAt()
+        );
+    }
+
+    public MemberResponse convertMemberResponse(Member member) {
+        return new MemberResponse(
+                member.getMemberId(),
+                member.getMemberName(),
+                member.getMemberEmail(),
+                member.getMemberLoginId(),
+                member.getZipCode(),
+                member.getMemberAddress(),
+                member.getMemberDetailAddress(),
+                member.getRole(),
+                member.getCreatedAt(),
+                member.getModifiedAt()
         );
     }
 

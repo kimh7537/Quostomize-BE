@@ -1,16 +1,15 @@
 package com.quostomize.quostomize_be.api.admin.dto;
 
-import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public record PageAdminResponse(
-        List<CardDetailResponse> content,
+public record PageAdminResponse<T>(
+        List<T> content,
         int currentPage,
         int totalPage
 ) {
-    public PageAdminResponse(Page<CardDetailResponse> page) {
+    public PageAdminResponse(Page<T> page) {
         this(
                 page.getContent(),
                 page.getNumber(),
