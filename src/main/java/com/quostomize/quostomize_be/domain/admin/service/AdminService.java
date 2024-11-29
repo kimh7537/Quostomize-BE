@@ -76,6 +76,12 @@ public class AdminService {
         return cardApplicantInfoService.getApplicantsByStatus(status, pageable);
     }
 
+    public Page<CardApplicantDetailsDTO> getMemberIdCardApplicants(Authentication auth, int page, Long memberId) {
+        validateAdmin(auth);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
+        return cardApplicantInfoService.getCardApplicantByMemberId(pageable, memberId);
+    }
+
     @Transactional
     public void updateCardStatus(@AuthenticationPrincipal Long adminId, CardStatusRequest request) {
         cardService.verifySecondaryAuthCode(adminId, request.secondaryAuthCode());
