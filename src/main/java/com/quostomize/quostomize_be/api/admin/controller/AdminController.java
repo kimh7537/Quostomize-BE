@@ -4,10 +4,12 @@ import com.quostomize.quostomize_be.api.admin.dto.PageAdminResponse;
 import com.quostomize.quostomize_be.api.auth.dto.MemberResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardDetailResponse;
 import com.quostomize.quostomize_be.api.card.dto.CardStatusRequest;
+import com.quostomize.quostomize_be.api.payment.dto.PaymentRecordResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.admin.service.AdminService;
 import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
+import com.quostomize.quostomize_be.domain.customizer.payment.enums.RecordSearchType;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -115,6 +117,39 @@ public class AdminController {
     ) {
         Page<MemberResponse> members = adminService.getSearchMembers(auth, page, searchTerm);
         PageAdminResponse response = new PageAdminResponse(members);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
+    // 결제내역
+    @GetMapping("/payment-record-info")
+    @Operation(summary = "모든 결제내역 조회", description = "ADMIN은 정렬 옵션을 사용하여 모든 결제내역을 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getPaymentRecordInfo(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "DESC") String sortDirection
+    ) {
+        Page<PaymentRecordResponse> records = adminService.getFilteredRecords(auth, page, sortDirection);
+        PageAdminResponse response = new PageAdminResponse(records);
+        return ResponseEntity.ok(new ResponseDTO(response));
+    }
+
+    @GetMapping("/payment-record-search")
+    @Operation(summary = "모든 결제내역 검색", description = "ADMIN은 입력 금액을 기준으로 이상/이하/동일 totalPaymentAmount를 가진 결제내역을 조회할 수 있습니다.")
+    public ResponseEntity<ResponseDTO> getPaymentRecordSearch(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam Long searchAmount,
+            @RequestParam(required = false) String searchType
+    ) {
+        RecordSearchType type = null;
+        if (searchType != null && !searchType.isEmpty()) {
+            type = RecordSearchType.fromKey(searchType);
+        }
+        if (type == null) {
+            type = RecordSearchType.EQUAL;
+        }
+        Page<PaymentRecordResponse> records = adminService.getSearchRecords(auth, page, searchAmount, type);
+        PageAdminResponse response = new PageAdminResponse(records);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
 
