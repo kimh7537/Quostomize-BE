@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.domain.customizer.benefit.entity;
 
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,9 @@ public class BenefitCommonCode extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "benefit_parents_code_id")
     private BenefitCommonCode parentsCode;
+
+    @Builder
+    public BenefitCommonCode(Long benefitCommonId) {
+        this.benefitCommonId = benefitCommonId;
+    }
 }
