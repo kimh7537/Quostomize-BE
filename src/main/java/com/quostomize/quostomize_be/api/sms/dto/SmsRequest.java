@@ -10,7 +10,6 @@ public record SmsRequest(
         String phone,
 
         @NotNull(message = "인증번호는 필수 입력 값입니다.")
-        @Pattern(regexp = "^\\d{6}$", message = "인증번호는 6자리 숫자여야 합니다.")
         String certificationNumber
 ) {
 }
