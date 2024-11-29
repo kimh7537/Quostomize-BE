@@ -41,7 +41,8 @@ public class MemberQuestionService {
                 question.getIsPrivate(),
                 question.getIsAnswered(),
                 question.getCategoryCode(),
-                question.getQuestionTitle()
+                question.getQuestionTitle(),
+                question.getCreatedAt()
         ));
     }
 
@@ -56,11 +57,13 @@ public class MemberQuestionService {
 
         return new MemberQuestionResponse(
                 question.getQuestionsSequenceId(),
+                question.getIsPrivate(),
                 question.getIsAnswered(),
                 question.getCategoryCode(),
                 question.getQuestionTitle(),
                 question.getQuestionContent(),
-                question.getMember().getMemberId()
+                question.getMember().getMemberId(),
+                question.getCreatedAt()
         );
     }
 
