@@ -1,19 +1,19 @@
 package com.quostomize.quostomize_be.domain.customizer.stock.elasticSearch;
 
-import co.elastic.clients.elasticsearch._types.query_dsl.Query;
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
-import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
-import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInformationRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+//import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+//import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+//import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
+//import com.quostomize.quostomize_be.domain.customizer.stock.repository.StockInformationRepository;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+//import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+//import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+//import org.springframework.data.elasticsearch.core.SearchHit;
+//import org.springframework.data.elasticsearch.core.SearchHits;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.List;
+//import java.util.stream.Collectors;
 
 //@Service
 //@RequiredArgsConstructor
