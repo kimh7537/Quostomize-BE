@@ -83,6 +83,11 @@ public class CardApplicantInfoService {
                 .map(CardApplicantDetailsDTO::fromEntity);
     }
 
+    public Page<CardApplicantDetailsDTO> getCardApplicantByMemberId(Pageable pageable, Long memberId) {
+        return cardApplicantInfoRepository.findCardApplicantByMemberId(pageable, memberId)
+                .map(CardApplicantDetailsDTO::fromEntity);
+    }
+
     private CardDetail createCardDetail(CardApplicantDTO cardApplicantDTO) {
         CreateCardDTO createCardDTO = CreateCardDTO.fromApplicant(cardApplicantDTO);
         return cardService.createCard(createCardDTO);
