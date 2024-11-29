@@ -60,9 +60,11 @@ public class MemberService {
 
     public Page<Member> getPagedMembers(Pageable pageable) {return memberRepository.findAll(pageable);}
 
-    public Page<Member> getRoleMembers(Pageable pageable, MemberRole role) {return memberRepository.findByRole(pageable, role);}
+    public Page<Member> getRoleMembers(Pageable pageable, List<MemberRole> roles) {return memberRepository.findByRoleIn(pageable, roles);}
 
-    public Page<Member> getMemberById(Pageable pageable, String searchTerm) {return memberRepository.findByMemberLoginId(pageable, searchTerm);}
+    public Page<Member> getMemberByLoginId(Pageable pageable, String searchTerm) {return memberRepository.findByMemberLoginId(pageable, searchTerm);}
+
+    public Page<Member> getMemberByMemberId(Pageable pageable, Long memberId) {return memberRepository.findByMemberId(pageable, memberId);}
 
     @Transactional
     public void updateMemberAddress(Long memberId, UpdateAddressDTO updateAddressDTO) {

@@ -17,6 +17,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/v1/api/admin")
 public class AdminController {
@@ -93,23 +97,26 @@ public class AdminController {
 
     // 멤버
     @GetMapping("/member-info")
-    @Operation(summary = "모든 고객 조회", description = "ADMIN은 필터 및 정렬 옵션을 사용하여 모든 고객을 조회할 수 있습니다.")
+    @Operation(summary = "모든 고객 조회", description = "ADMIN은 필터 및 정렬 옵션을 사용하여 모든 고객을 조회할 수 있습니다. (옵션 다중 선택 가능)")
     public ResponseEntity<ResponseDTO> getMemberInfo(
             Authentication auth,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "DESC") String sortDirection,
             @RequestParam(required = false) String memberRole) {
-        MemberRole role = null;
+        List<MemberRole> roles = null;
         if (memberRole != null && !memberRole.isEmpty()) {
-            role = MemberRole.fromKey(memberRole);
+            roles = Arrays.stream(memberRole.split(","))
+                    .map(String::trim)
+                    .map(MemberRole::fromKey)
+                    .collect(Collectors.toList());
         }
-        Page<MemberResponse> members = adminService.getFilteredMembers(auth, page, sortDirection, role);
+        Page<MemberResponse> members = adminService.getFilteredMembers(auth, page, sortDirection, roles);
         PageAdminResponse response = new PageAdminResponse(members);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
 
     @GetMapping("/member-search")
-    @Operation(summary = "모든 고객 검색", description = "ADMIN은 memberLoginId로 검색하여 모든 고객을 조회할 수 있습니다.")
+    @Operation(summary = "모든 고객 검색", description = "ADMIN은 memberLoginId/memberId로 검색하여 모든 고객을 조회할 수 있습니다.")
     public ResponseEntity<ResponseDTO> getMemberSearch(
             Authentication auth,
             @RequestParam(defaultValue = "0") int page,

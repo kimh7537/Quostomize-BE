@@ -42,6 +42,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<String> findSecondaryAuthCodeById(Long memberId);
 
     Page<Member> findAll(Pageable pageable);
-    Page<Member> findByRole(Pageable pageable, MemberRole memberRole);
+    Page<Member> findByRoleIn(Pageable pageable, List<MemberRole> memberRole);
     Page<Member> findByMemberLoginId(Pageable pageable, String loginId);
+    Page<Member> findByMemberId(Pageable pageable, Long memberId);
 }

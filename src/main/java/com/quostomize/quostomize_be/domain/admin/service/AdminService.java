@@ -25,6 +25,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly=true)
 public class AdminService {
@@ -69,20 +71,24 @@ public class AdminService {
     }
 
     // 멤버
-    public Page<MemberResponse> getFilteredMembers(Authentication auth, int page, String sortDirection, MemberRole role) {
+    public Page<MemberResponse> getFilteredMembers(Authentication auth, int page, String sortDirection, List<MemberRole> roles) {
         validateAdmin(auth);
         Sort sort = Sort.by(sortDirection.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, 20, sort);
-        if (role == null) {
+        if (roles == null || roles.isEmpty()) {
             return memberService.getPagedMembers(pageable).map(this::convertMemberResponse);
         }
-        return memberService.getRoleMembers(pageable, role).map(this::convertMemberResponse);
+        return memberService.getRoleMembers(pageable, roles).map(this::convertMemberResponse);
     }
 
     public Page<MemberResponse> getSearchMembers(Authentication auth, int page, String searchTerm) {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
-        return memberService.getMemberById(pageable, searchTerm).map(this::convertMemberResponse);
+        if (isNumeric(searchTerm)) {
+            Long memberId = Long.parseLong(searchTerm);
+            return memberService.getMemberByMemberId(pageable, memberId).map(this::convertMemberResponse);
+        }
+        return memberService.getMemberByLoginId(pageable, searchTerm).map(this::convertMemberResponse);
     }
 
     // 결제내역
@@ -147,6 +153,15 @@ public class AdminService {
                 record.getCreatedAt(),
                 record.getModifiedAt()
         );
+    }
+
+    private boolean isNumeric(String str) {
+        try {
+            Long.parseLong(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public void validateAdmin(Authentication auth) {
