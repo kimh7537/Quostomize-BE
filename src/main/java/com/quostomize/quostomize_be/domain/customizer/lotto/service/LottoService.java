@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantResponseDto;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodRequest;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
+import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
 import com.quostomize.quostomize_be.domain.customizer.lotto.entity.DailyLottoParticipant;
@@ -164,5 +165,10 @@ public class LottoService {
         if (currentCount > 0) {
             redisTemplate.opsForValue().set(LOTTO_PARTICIPANTS_COUNT_KEY, String.valueOf(currentCount - 1));
         }
+    }
+
+    public boolean findParticipantById(Long memberId) {
+        Customer customer = customerRepository.findByMember_MemberId(memberId).orElse(null);
+        return customer != null;
     }
 }
