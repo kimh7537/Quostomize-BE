@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -45,6 +47,12 @@ public class AuthService {
 
     @Value("${jwt.refresh.expiration}")
     private int refreshTokenAge;
+
+    @Transactional
+    public Boolean checkMemberId(String memberId){
+        Optional<Member> member = memberRepository.findByMemberLoginId(memberId);
+        return member.isEmpty();
+    }
 
     @Transactional
     public JoinResponse saveMember(MemberRequestDto request) {
