@@ -1,5 +1,6 @@
 package com.quostomize.quostomize_be.api.card.dto;
 
+import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 
 import java.time.LocalDate;
@@ -19,4 +20,20 @@ public record CardDetailResponse(
         LocalDateTime createdAt,
         LocalDateTime modifiedAt
 ) {
+    public static CardDetailResponse fromEntity(CardDetail cardDetail) {
+        return new CardDetailResponse(
+                cardDetail.getCardSequenceId(),
+                cardDetail.getCardNumber(),
+                cardDetail.getCardBrand(),
+                cardDetail.getIsAppCard(),
+                cardDetail.getIsForeignBlocked(),
+                cardDetail.getIsPostpaidTransport(),
+                cardDetail.getExpirationDate(),
+                cardDetail.getOptionalTerms(),
+                cardDetail.getPaymentReceiptMethods(),
+                cardDetail.getStatus(),
+                cardDetail.getCreatedAt(),
+                cardDetail.getModifiedAt()
+        );
+    }
 }

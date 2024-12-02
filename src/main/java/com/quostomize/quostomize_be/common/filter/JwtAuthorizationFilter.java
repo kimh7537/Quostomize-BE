@@ -30,7 +30,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private static final String SWAGGER_PATH_3 = "/v3/api-docs";
     private static final String SWAGGER_FAVICON = "/favicon.ico";
     private static final String INTEGER_REGEX = "/{id:\\d+}";
+<<<<<<< HEAD
     private static final String EMAIL_PATH = "/v1/api/email";
+=======
+    private static final String ACTUATOR = "/actuator";
+    private static final String SMS_PATH = "/v1/api/sms";
+>>>>>>> dev
 //    private static final String HELLO = "/";
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -66,7 +71,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         return path.startsWith(AUTH_PATH) || path.equals(LOGIN_PATH)
                 || path.startsWith(SWAGGER_PATH) || path.equals(SWAGGER_FAVICON)
                 || path.startsWith(SWAGGER_PATH_3)
+<<<<<<< HEAD
                 || path.startsWith(EMAIL_PATH)
+=======
+                || path.startsWith(ACTUATOR)
+                || path.startsWith(SMS_PATH)
+>>>>>>> dev
 //                || path.startsWith(HELLO)
 //                || (new AntPathMatcher().match(SESSION_PATH + INTEGER_REGEX, path) && request.getMethod().equals(HttpMethod.GET.name()))
                 ;

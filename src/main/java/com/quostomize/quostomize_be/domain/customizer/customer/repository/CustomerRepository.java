@@ -1,5 +1,6 @@
 package com.quostomize.quostomize_be.domain.customizer.customer.repository;
 
+import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import jakarta.persistence.LockModeType;
@@ -26,4 +27,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("select cd from CardDetail cd join Customer c on c.cardDetail.cardSequenceId = cd.cardSequenceId where c.member.memberId = :memberId")
     Page<CardDetail> findCardByMemberId(Pageable pageable, @Param("memberId") Long memberId);
+    @Query("SELECT c FROM Customer c JOIN FETCH c.cardDetail WHERE c.member = :member")
+    Optional<Customer> findWithCardDetailByMember(@Param("member") Member member);
 }

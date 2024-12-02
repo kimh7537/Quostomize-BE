@@ -10,7 +10,6 @@ import com.quostomize.quostomize_be.common.jwt.*;
 import com.quostomize.quostomize_be.common.sms.service.SmsService;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
-import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.CardApplicantInfo;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.repository.CardApplicantInfoRepository;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
@@ -23,6 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -45,6 +46,12 @@ public class AuthService {
 
     @Value("${jwt.refresh.expiration}")
     private int refreshTokenAge;
+
+    @Transactional
+    public Boolean checkMemberId(String memberId){
+        Optional<Member> member = memberRepository.findByMemberLoginId(memberId);
+        return member.isEmpty();
+    }
 
     @Transactional
     public JoinResponse saveMember(MemberRequestDto request) {
@@ -144,14 +151,16 @@ public class AuthService {
     }
 
     public void sendFindPasswordPhoneNumber(SmsRequest request) {
-        validateService.phoneNumberExist(request.phone());
+        String encryptedPhoneNumber = encryptService.encryptPhoneNumber(request.phone());
+        validateService.phoneNumberExist(encryptedPhoneNumber);
         smsService.sendSms(request);
     }
 
     public FindPasswordResponse verifyPasswordCode(SmsRequest request) {
         smsService.verifySms(request);
+        String encryptedPhoneNumber = encryptService.encryptPhoneNumber(request.phone());
 
-        Member findMember = memberRepository.findByMemberPhoneNumber(request.phone())
+        Member findMember = memberRepository.findByMemberPhoneNumber(encryptedPhoneNumber)
                 .orElseThrow(() -> new AppException(ErrorCode.PHONE_NOT_FOUND));
         String role = findMember.getRole().getKey();
         
