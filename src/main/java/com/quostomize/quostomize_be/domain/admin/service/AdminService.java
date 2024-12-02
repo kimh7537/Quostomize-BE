@@ -16,8 +16,6 @@ import com.quostomize.quostomize_be.domain.customizer.cardapplication.service.Ca
 import com.quostomize.quostomize_be.domain.customizer.payment.entity.PaymentRecord;
 import com.quostomize.quostomize_be.domain.customizer.payment.enums.RecordSearchType;
 import com.quostomize.quostomize_be.domain.customizer.payment.service.PaymentRecordService;
-import com.quostomize.quostomize_be.domain.customizer.payment.strategy.PaymentSearchFactory;
-import com.quostomize.quostomize_be.domain.customizer.payment.strategy.PaymentSearchStrategy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,14 +36,12 @@ public class AdminService {
     private final MemberService memberService;
     private final PaymentRecordService paymentRecordService;
     private final CardApplicantInfoService cardApplicantInfoService;
-    private final PaymentSearchFactory paymentSearchFactory;
 
-    public AdminService(CardService cardService, MemberService memberService, PaymentRecordService paymentRecordService, CardApplicantInfoService cardApplicantInfoService, PaymentSearchFactory paymentSearchFactory) {
+    public AdminService(CardService cardService, MemberService memberService, PaymentRecordService paymentRecordService, CardApplicantInfoService cardApplicantInfoService) {
         this.cardService = cardService;
         this.memberService = memberService;
         this.paymentRecordService = paymentRecordService;
         this.cardApplicantInfoService = cardApplicantInfoService;
-        this.paymentSearchFactory = paymentSearchFactory;
     }
 
     // 카드
@@ -128,8 +124,7 @@ public class AdminService {
     public Page<PaymentRecordResponse> getSearchRecords(Authentication auth, int page, Long searchAmount, RecordSearchType recordSearchType) {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
-        PaymentSearchStrategy strategy = paymentSearchFactory.getStrategy(recordSearchType);
-        Page<PaymentRecord> records = strategy.search(paymentRecordService, pageable, searchAmount);
+        Page<PaymentRecord> records = recordSearchType.search(paymentRecordService, pageable, searchAmount);
         return records.map(PaymentRecordResponse::fromEntity);
     }
 
