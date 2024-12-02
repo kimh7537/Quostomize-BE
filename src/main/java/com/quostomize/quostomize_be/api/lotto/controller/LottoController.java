@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.api.lotto.controller;
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantResponseDto;
 import com.quostomize.quostomize_be.api.lotto.dto.LottoWinnerResponseDto;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
+import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.DailyLottoWinnerService;
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.LottoService;
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.LottoWinnerRecordService;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,6 +32,15 @@ public class LottoController {
         List<LottoParticipantResponseDto> participantResponseDtos = lottoService.registerLottoParticipants();
         return ResponseEntity.ok(new ResponseDTO<>(participantResponseDtos));
     }
+
+    @GetMapping("is-participant")
+    @Operation(summary = "회원의 오늘 복권 참여 여부 반환", description = "현재 로그인한 사람이 오늘 복권 참여자 테이블에 존재하는지 여부를 반환")
+    public ResponseEntity<ResponseDTO<Boolean>> findParticipantByMemberId(
+            @AuthenticationPrincipal Long memberId
+    ) {
+        return ResponseEntity.ok(new ResponseDTO<>(lottoService.findParticipantById(memberId)));
+    }
+
 
     @GetMapping("")
     @Operation(summary = "총 로또 참여자 수 조회", description = "현재 로또에 참여한 총 참여자 수를 반환합니다.")
