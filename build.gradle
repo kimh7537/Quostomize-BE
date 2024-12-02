@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.3'
     implementation 'commons-io:commons-io:2.17.0'
     implementation 'net.nurigo:sdk:4.3.0'  // CoolSMS
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
