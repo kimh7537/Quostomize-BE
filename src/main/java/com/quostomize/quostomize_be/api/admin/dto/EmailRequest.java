@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.api.email.dto;
+package com.quostomize.quostomize_be.api.admin.dto;
 
 import jakarta.validation.constraints.Email;
 

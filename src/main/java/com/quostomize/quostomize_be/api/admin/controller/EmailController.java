@@ -1,8 +1,8 @@
-package com.quostomize.quostomize_be.api.email.controller;
+package com.quostomize.quostomize_be.api.admin.controller;
 
-import com.quostomize.quostomize_be.api.email.dto.AdminEmailRequest;
-import com.quostomize.quostomize_be.api.email.dto.EmailRequest;
-import com.quostomize.quostomize_be.api.email.dto.EmailResponse;
+import com.quostomize.quostomize_be.api.admin.dto.AdminEmailRequest;
+import com.quostomize.quostomize_be.api.admin.dto.EmailRequest;
+import com.quostomize.quostomize_be.api.admin.dto.EmailResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.common.email.service.EmailSendService;
 import io.swagger.v3.oas.annotations.Operation;

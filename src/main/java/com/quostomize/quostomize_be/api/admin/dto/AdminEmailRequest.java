@@ -1,11 +1,11 @@
-package com.quostomize.quostomize_be.api.email.dto;
+package com.quostomize.quostomize_be.api.admin.dto;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 public record AdminEmailRequest(
         @NotNull String title,
-        @NotNull int optionalTerms,
+        Integer optionalTerms,
         @NotNull MultipartFile htmlFile
 ) {
 }
