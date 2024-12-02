@@ -110,11 +110,6 @@ public class CardService {
     }
 
     private boolean isValidStatus(CardStatus currentStatus, CardStatus newStatus) {
-        return switch (currentStatus) {
-            case CREATION_PENDING -> newStatus == CardStatus.ACTIVE || newStatus == CardStatus.CANCELLED;
-            case ACTIVE -> newStatus == CardStatus.CANCELLED || newStatus == CardStatus.CANCELLATION_PENDING;
-            case CANCELLATION_PENDING -> newStatus == CardStatus.CANCELLED;
-            default -> false;
-        };
+        return currentStatus.transitionTo(newStatus);
     }
 }
