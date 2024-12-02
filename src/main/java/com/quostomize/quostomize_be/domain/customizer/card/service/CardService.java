@@ -21,8 +21,6 @@ public class CardService {
     private final CardDetailRepository cardDetailRepository;
     private final Random random = new Random();
 
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
     @Transactional
     public CardDetail createCard(CreateCardDTO createCardDTO) {
         String cardNumber = String.valueOf(random.nextLong(1_000_0000_0000_0000L,10_000_0000_0000_0000L));
