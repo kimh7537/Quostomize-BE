@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CardApplicantInfoRepository extends JpaRepository<CardApplicantInfo, Long> {
@@ -22,4 +23,10 @@ public interface CardApplicantInfoRepository extends JpaRepository<CardApplicant
         where c.member.memberId = :memberId
 """)
     Page<CardApplicantInfo> findCardApplicantByMemberId(Pageable pageable, @Param("memberId") Long memberId);
+
+    @Query("SELECT c.applicantEmail FROM CardApplicantInfo c WHERE c.cardDetail.optionalTerms = :optionalTerms")
+    List<String> findEmailsByOptionalTerms(int optionalTerms);
+
+    @Query("SELECT c.applicantEmail FROM CardApplicantInfo c")
+    List<String> findAllEmails();
 }
