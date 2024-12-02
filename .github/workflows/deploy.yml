@@ -33,6 +33,18 @@ jobs:
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
           spring.data.redis.host: ${{ secrets.REDIS_URL }}
+          spring.coolsms.apiKey: ${{ secrets.SMS_API_KEY }}
+          spring.coolsms.apiSecret: ${{ secrets.SMS_API_SECRET_KEY }}
+          spring.coolsms.senderNumber: ${{ secrets.SMS_SENDER_NUMBER }}
+          aws.accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+          aws.secretAccessKey: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws.region: ${{ secrets.AWS_REGION }}
+          aws.bucketName: ${{ secrets.S3_BUCKET_NAME }}
+          jwt.secretKey: ${{ secrets.JWT_SECRET_KEY }}
+          aes.secret.key: ${{ secrets.AES_SECRET_KEY }}
+          aes.secret.salt: ${{ secrets.AES_SECRET_SALT }}
+          appkey: ${{ secrets.OPENAPI_APPKEY }}
+          appsecret: ${{ secrets.OPENAPI_APPSECRET }}
           #        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
 
       - name: gradlew에 실행 권한 부여하기

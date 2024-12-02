@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.domain.customizer.stock.entity;
 import com.quostomize.quostomize_be.common.entity.BaseTimeEntity;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,15 @@ public class StockInterest extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Builder
+    public StockInterest(Integer priority, StockInformation stockInformation, Customer customer) {
+        this.priority = priority;
+        this.stockInformation = stockInformation;
+        this.customer = customer;
+    }
+
+    public void updateCustomer(Customer customer){
+        this.customer = customer;
+    }
 }

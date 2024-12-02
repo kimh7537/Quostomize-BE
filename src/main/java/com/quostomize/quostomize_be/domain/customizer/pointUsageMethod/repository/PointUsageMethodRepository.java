@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PointUsageMethodRepository extends JpaRepository <PointUsageMethod, Long> {
+public interface PointUsageMethodRepository extends JpaRepository <PointUsageMethod, Long>, PointUsageMethodRepositoryCustom {
     Optional<PointUsageMethod> findByCardDetail_CardSequenceId(Long cardSequenceId);
 
     List<PointUsageMethod> findAllByIsLottoTrue();
