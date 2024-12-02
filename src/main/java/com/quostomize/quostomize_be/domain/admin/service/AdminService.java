@@ -21,7 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -140,10 +139,9 @@ public class AdminService {
 
     public void validateAdmin(Authentication auth) {
         String memberRole = auth.getAuthorities()
-                .stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElse("UNKNOWN");
+                .iterator()
+                .next()
+                .getAuthority();
         if (!"ROLE_ADMIN".equals(memberRole)) {
             throw new AppException(ErrorCode.ENTITY_NOT_FOUND);
         }
