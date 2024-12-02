@@ -66,6 +66,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = token.getAccessToken();
         response.addHeader("accessToken", accessToken);
 
+        long memberId = principal.getMember().getMemberId();
+        String memberName = principal.getMember().getMemberName();
+
         RefreshToken refreshToken = new RefreshToken(principal.getMember().getMemberId(), token.getRefreshToken());
         refreshToken.updateRefreshToken(token.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
@@ -80,7 +83,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addCookie(cookie);
 
         //응답 데이터 작성
-        LoginResponse loginResponse = new LoginResponse("로그인 성공", grantedAuthority, findCardStatus(principal));
+        LoginResponse loginResponse = new LoginResponse("로그인 성공", grantedAuthority, findCardStatus(principal), memberId, memberName);
         writeJsonResponse(response, loginResponse);
 
         log.info("로그인 성공, JWT 토큰 생성");

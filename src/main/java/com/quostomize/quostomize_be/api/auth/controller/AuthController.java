@@ -26,6 +26,12 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @GetMapping("/checkId")
+    @Operation(summary = "아이디 중복 여부 조회", description = "회원가입 시, 아이디 중복 여부를 확인 합니다.")
+    public ResponseEntity<Boolean> checkMemberId(@RequestParam String memberId) {
+        return ResponseEntity.ok(authService.checkMemberId(memberId));
+    }
+
     @PostMapping("/join")
     @Operation(summary = "회원 등록", description = "새로운 회원을 등록합니다.")
     public ResponseEntity<JoinResponse> joinAuth(@RequestBody @Valid MemberRequestDto request) {
