@@ -93,7 +93,11 @@ public enum ErrorCode {
     INVALID_PHONE_FORMAT(HttpStatus.BAD_REQUEST, "M-003", "유효하지 않은 전화번호 형식입니다."),
 
     // QnA
-    DUPLICATE_REQUEST(HttpStatus.ALREADY_REPORTED, "Q-101", "이미 답변이 등록된 문의글입니다.");
+    DUPLICATE_REQUEST(HttpStatus.ALREADY_REPORTED, "Q-101", "이미 답변이 등록된 문의글입니다."),
+
+    //Email
+    EMAIL_CERTIFICATION_ERROR(HttpStatus.BAD_REQUEST, "E-001", "이메일 인증 번호가 일치하지 않습니다."),
+    EMAIL_SEND_FAIL(HttpStatus.BAD_REQUEST, "E-002", "이메일 발송에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
