@@ -2,13 +2,11 @@ package com.quostomize.quostomize_be.domain.auth.service;
 
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 import com.quostomize.quostomize_be.api.member.dto.UpdateAddressDTO;
-import com.quostomize.quostomize_be.api.member.dto.UpdateEmailDTO;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.domain.auth.component.MemberReader;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,7 +55,7 @@ public class MemberService {
 
     @Transactional
     public void updateMemberAddress(Long memberId, UpdateAddressDTO updateAddressDTO) {
-        Member member =  memberReader.findById(memberId);
+        Member member =  memberReader.findByMemberIdWithLock(memberId);
 
         member.updateZipCode(updateAddressDTO.zipCode());
         member.updateAddress(updateAddressDTO.newAddress());
@@ -66,16 +64,16 @@ public class MemberService {
 
     @Transactional
     public void updateMemberEmail(Long memberId, String newEmail) {
-        Member member = memberReader.findById(memberId);
+        Member member =  memberReader.findByMemberIdWithLock(memberId);
         member.updateEmail(newEmail);
     }
 
 
     @Transactional
     public void updatePhoneNumber(Long memberId, String phoneNumber) {
-        Member findMember = memberReader.findById(memberId);
+        Member member =  memberReader.findByMemberIdWithLock(memberId);
         String encryptedPhoneNumber = encryptService.encryptPhoneNumber(phoneNumber);
-        findMember.updatePhoneNumber(encryptedPhoneNumber);
+        member.updatePhoneNumber(encryptedPhoneNumber);
     }
 
 }
