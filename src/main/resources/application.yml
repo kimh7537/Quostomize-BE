@@ -82,6 +82,7 @@ logging:
 
 appkey: ${OPENAPI_APPKEY}
 appsecret: ${OPENAPI_APPSECRET}
+adminEmail: ${ADMIN_EMAIL}
 
 management:
   endpoints:
