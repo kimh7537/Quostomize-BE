@@ -18,12 +18,12 @@ import java.util.Map;
 
 @Tag(name = "이메일 인증", description = "이메일 인증 관련 API")
 @RestController
-@RequestMapping("/v1/api/email")
+@RequestMapping("/v1/api/admin/email")
 @RequiredArgsConstructor
 public class EmailController {
     private final EmailSendService emailSendService;
 
-    @PostMapping(value = "/send/admin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "회원 메일 발송", description = "관리자가 회원들에게 메일을 발송 합니다. (-1:모두 발송)(1~3: 선택지에 따라 발송)")
     public ResponseEntity<Void> sendEmailWIthHtmlFile(@ModelAttribute AdminEmailRequest adminEmailRequest){
         emailSendService.adminMailSend(adminEmailRequest.title(), adminEmailRequest.htmlFile(), adminEmailRequest.optionalTerms());
