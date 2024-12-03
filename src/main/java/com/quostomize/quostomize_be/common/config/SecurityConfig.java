@@ -32,8 +32,7 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/actuator/**",
-            "/v1/api/sms/**",
-            "/v1/api/email/**"
+            "/v1/api/sms/**"
 //            "/**"
     };
 
