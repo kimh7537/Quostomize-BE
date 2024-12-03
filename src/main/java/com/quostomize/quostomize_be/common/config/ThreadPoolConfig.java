@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 @Configuration
 public class ThreadPoolConfig {
 
@@ -18,6 +20,7 @@ public class ThreadPoolConfig {
         executor.setMaxPoolSize(maxPoolSize); // 최대 스레드 수
         executor.setQueueCapacity(100); // 대기열 크기
         executor.setThreadNamePrefix("EmailSender-");
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
         return executor;
     }
