@@ -30,18 +30,18 @@ import java.util.concurrent.TimeUnit;
 public class EmailSendService {
 
     private static final int MAX_RETRIES = 3; //최대 재시도 횟수
-    private static final String ADMIN_EMAIL = "seonmin5555@gmail.com";
+
+    @Value("${adminEmail}")
+    private String ADMIN_EMAIL;
+
+    @Value("${spring.mail.username}")
+    private String serviceName;
 
     private final JavaMailSender javaMailSender;
     private final RedisConfig redisConfig;
     private final CardApplicantInfoRepository cardApplicantInfoRepository;
     @Qualifier("taskExecutor")
     private final ThreadPoolTaskExecutor taskExecutor;
-    private int authNumber;
-
-    /* 이메일 인증에 필요한 정보 */
-    @Value("${spring.mail.username}")
-    private String serviceName;
 
     public void adminMailSend(String title, MultipartFile htmlFile, Integer optionalTerms) {
         try{
@@ -49,35 +49,47 @@ public class EmailSendService {
             List<String> emails = (optionalTerms == null || optionalTerms == -1)
                     ? cardApplicantInfoRepository.findAllEmails()
                     : cardApplicantInfoRepository.findEmailsByOptionalTerms(optionalTerms);
-            emails.forEach(email ->
-                    CompletableFuture.runAsync(() -> sendEmailWithRetry(title, email, htmlContent), taskExecutor)
-                            .exceptionally(throwable -> {
-                                log.error(throwable.getMessage(), throwable);
-                                notifyAdminForFailure(email, throwable.getMessage());
-                                return null;
-                            })
+            emails.forEach(email -> CompletableFuture.runAsync(() ->
+                            sendEmailWithRetry(title, email, htmlContent), taskExecutor)
+                            .exceptionally(throwable ->  handleEmailFailure(email, throwable))
             );
         }catch (Exception e){
-            notifyAdminForFailure("Bulk Email Processing", e.getMessage());
-            throw new AppException(ErrorCode.EMAIL_SEND_FAIL);
+            handleGeneralFailure("Bulk Email Processing", e);
         }
     }
 
-    private void sendEmailWithRetry(String title, String recipientEmail, String htmlContent){
-        int attempt = 0;
-        while (attempt < MAX_RETRIES) {
+    /**
+     * 개별 이메일 실패 처리
+     */
+    private Void handleEmailFailure(String email, Throwable throwable) {
+        String errorMessage = throwable.getMessage();
+        log.error("Email sending failed for {}: {}", email, errorMessage, throwable);
+        notifyAdminForFailure(email, errorMessage);
+        return null;
+    }
+
+    /**
+     * 일반적인 실패 처리
+     */
+    private void handleGeneralFailure(String context, Exception e) {
+        String errorMessage = e.getMessage();
+        log.error("Error during {}: {}", context, errorMessage, e);
+        notifyAdminForFailure(context, errorMessage);
+        throw new AppException(ErrorCode.EMAIL_SEND_FAIL);
+    }
+
+    private boolean sendEmailWithRetry(String title, String recipientEmail, String htmlContent) {
+        for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
             try {
                 sendEmail(title, recipientEmail, htmlContent);
                 log.info("Email sent successfully to {}", recipientEmail);
-                return; // 성공 시 즉시 종료
+                return true; // 성공
             } catch (Exception e) {
-                attempt++;
                 log.warn("Attempt {} to send email to {} failed: {}", attempt, recipientEmail, e.getMessage());
-                if (attempt >= MAX_RETRIES) {
-                    notifyAdminForFailure(recipientEmail, e.getMessage());
-                }
             }
         }
+        // 재시도 끝난 후에도 실패한 경우 false 반환
+        return false;
     }
 
     // 개별 이메일 전송 메서드
@@ -104,18 +116,17 @@ public class EmailSendService {
 
 
     /* 랜덤 인증번호 생성 */
-    public void makeRandomNum() {
+    public int  makeRandomNum() {
         Random r = new Random();
-        String randomNumber = "";
+        StringBuilder randomNumber = new StringBuilder();
         for(int i = 0; i < 6; i++) {
-            randomNumber += Integer.toString(r.nextInt(10));
+            randomNumber.append(r.nextInt(10));
         }
-
-        authNumber = Integer.parseInt(randomNumber);
+        return Integer.parseInt(randomNumber.toString());
     }
 
     /* 이메일 전송 */
-    public void mailSend(String setFrom, String toMail, String title, String content) {
+    public void mailSend(String setFrom, String toMail, String title, String content, int authNumber) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
@@ -134,7 +145,7 @@ public class EmailSendService {
 
     /* 이메일 작성 */
     public String joinEmail(String email) {
-        makeRandomNum();
+        int authNumber = makeRandomNum();
         String customerMail = email;
         String title = "인증을 위한 이메일입니다";
         String content =
@@ -151,7 +162,7 @@ public class EmailSendService {
                         "인증 절차가 완료되면, 추가적인 안내를 드리겠습니다." +
                         "<br><br>" +
                         "감사합니다! \uD83D\uDE0A";
-        mailSend(serviceName, customerMail, title, content);
+        mailSend(serviceName, customerMail, title, content, authNumber);
         return Integer.toString(authNumber);
     }
 
