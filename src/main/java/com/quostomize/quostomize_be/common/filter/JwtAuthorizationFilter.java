@@ -32,6 +32,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private static final String INTEGER_REGEX = "/{id:\\d+}";
     private static final String ACTUATOR = "/actuator";
     private static final String SMS_PATH = "/v1/api/sms";
+    private static final String CARD_APPLICANT = "/v1/api/card-applicants";
+    private static final String HEALTH_CHECK = "/health";
 //    private static final String HELLO = "/";
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -69,6 +71,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 || path.startsWith(SWAGGER_PATH_3)
                 || path.startsWith(ACTUATOR)
                 || path.startsWith(SMS_PATH)
+                || path.equals(CARD_APPLICANT)
+                || path.equals(HEALTH_CHECK)
 //                || path.startsWith(HELLO)
 //                || (new AntPathMatcher().match(SESSION_PATH + INTEGER_REGEX, path) && request.getMethod().equals(HttpMethod.GET.name()))
                 ;
