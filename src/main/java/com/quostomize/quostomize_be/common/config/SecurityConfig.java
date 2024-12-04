@@ -33,6 +33,8 @@ public class SecurityConfig {
             "/swagger-resources/**",
             "/actuator/**",
             "/v1/api/sms/**",
+            "/v1/api/card-applicants",
+            "/health"
 //            "/**"
     };
 
