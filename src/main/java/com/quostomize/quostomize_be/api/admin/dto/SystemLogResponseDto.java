@@ -16,10 +16,9 @@ public class SystemLogResponseDto {
     private String message;
     private Long memberId;
     private LogStatus status;
-    private LocalDateTime createdAt;
     private String requestUri;
+    private LocalDateTime createdAt;
 
-    // 엔티티를 DTO로 변환하는 메서드
     public static SystemLogResponseDto fromEntity(SystemLog systemLog) {
         return new SystemLogResponseDto(
                 systemLog.getLogId(),
@@ -28,19 +27,19 @@ public class SystemLogResponseDto {
                 systemLog.getMessage(),
                 systemLog.getMemberId(),
                 systemLog.getStatus(),
-                systemLog.getCreatedAt(),
-                systemLog.getRequestUri()
+                systemLog.getRequestUri(),
+                systemLog.getCreatedAt()
         );
     }
 
-    public SystemLogResponseDto(Long logId, String traceId, LogType logType, String message, Long memberId, LogStatus status, LocalDateTime createdAt, String requestUri) {
+    public SystemLogResponseDto(Long logId, String traceId, LogType logType, String message, Long memberId, LogStatus status, String requestUri, LocalDateTime createdAt) {
         this.logId = logId;
         this.traceId = traceId;
         this.logType = logType;
         this.message = message;
         this.memberId = memberId;
         this.status = status;
-        this.createdAt = createdAt;
         this.requestUri = requestUri;
+        this.createdAt = createdAt;
     }
 }
