@@ -101,3 +101,7 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos
 
 docker-compose.yml
+
+# 로그 파일 무시하기
+logs/
+*.log
