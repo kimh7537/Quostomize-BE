@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/v1/api/qnas")
 public class AdminResponseController {
@@ -34,14 +36,20 @@ public class AdminResponseController {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("UNKNOWN");
 
-        AdminResponse response = adminResponseService.getAnswer(memberId, memberRole, questionsSequenceId);
+        Optional<AdminResponse> optionalResponse = adminResponseService.getAnswer(memberId, memberRole, questionsSequenceId);
 
+        // 답변이 존재하지 않는 경우
+        if (optionalResponse.isEmpty()) {
+            return ResponseEntity.ok(new ResponseDTO<>("답변이 아직 작성되지 않았습니다."));
+        }
+
+        AdminResponse response = optionalResponse.get();
         AdminResponseResponse adminResponse = new AdminResponseResponse(
                 response.getResponseSequenceId(),
                 response.getResponseContent(),
                 response.getMemberLoginId()
         );
-        return ResponseEntity.ok(new ResponseDTO(adminResponse));
+        return ResponseEntity.ok(new ResponseDTO<>(adminResponse));
     }
 
     // 문의에 대한 답변 등록

@@ -40,6 +40,14 @@ spring:
     cron: 0 0 0 * * ?
     use: true
 
+  mail:
+    host: smtp.gmail.com
+    username: ${MAIL_ADDRESS}
+    password: ${APP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
 aws:
   accessKeyId: ${ACCESS_KEY_ID}
   secretAccessKey: ${SECRET_ACCESS_KEY}
@@ -74,6 +82,7 @@ logging:
 
 appkey: ${OPENAPI_APPKEY}
 appsecret: ${OPENAPI_APPSECRET}
+adminEmail: ${ADMIN_EMAIL}
 
 management:
   endpoints:

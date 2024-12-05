@@ -13,9 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Slf4j
 @Tag(name = "인증 관련 API", description = "회원 인증 관련 API 모음")
@@ -25,6 +28,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+
+    @GetMapping("/checkId")
+    @Operation(summary = "아이디 중복 여부 조회", description = "회원가입 시, 아이디 중복 여부를 확인 합니다.")
+    public ResponseEntity<Boolean> checkMemberId(@RequestParam String memberId) {
+        return ResponseEntity.ok(authService.checkMemberId(memberId));
+    }
 
     @PostMapping("/join")
     @Operation(summary = "회원 등록", description = "새로운 회원을 등록합니다.")
