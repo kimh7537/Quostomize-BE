@@ -327,7 +327,11 @@ public class StockInformationService {
             throw new AppException(ErrorCode.ENTITY_NOT_FOUND);
         }
         return stockInformationRepository.findByKeyword(keyword).stream()
-                .map(StockSearchResponse::from)
+                .map(stockInformation -> new StockSearchResponse(stockInformation.getStockInformationId()
+                        ,stockInformation.getStockCode()
+                        ,stockInformation.getStockName()
+                        ,stockInformation.getStockPresentPrice()
+                        ,s3Service.getPreSignedUrl(stockInformation.getStockImage())))
                 .collect(Collectors.toList());
     }
 

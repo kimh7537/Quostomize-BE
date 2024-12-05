@@ -33,8 +33,6 @@ public class CardService {
     private final EncryptService encryptService;
     private final Random random = new Random();
 
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
     @Transactional
     public CardDetail createCard(CreateCardDTO createCardDTO) {
         String cardNumber = String.valueOf(random.nextLong(1_000_0000_0000_0000L,10_000_0000_0000_0000L));
@@ -110,11 +108,6 @@ public class CardService {
     }
 
     private boolean isValidStatus(CardStatus currentStatus, CardStatus newStatus) {
-        return switch (currentStatus) {
-            case CREATION_PENDING -> newStatus == CardStatus.ACTIVE || newStatus == CardStatus.CANCELLED;
-            case ACTIVE -> newStatus == CardStatus.CANCELLED || newStatus == CardStatus.CANCELLATION_PENDING;
-            case CANCELLATION_PENDING -> newStatus == CardStatus.CANCELLED;
-            default -> false;
-        };
+        return currentStatus.transitionTo(newStatus);
     }
 }
