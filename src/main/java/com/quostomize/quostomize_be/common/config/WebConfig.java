@@ -25,14 +25,13 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(1);
     }
 
-    @Bean
-    public FilterRegistrationBean<Filter> logFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new MDCLoggingFilter());
-        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        filterRegistrationBean.addUrlPatterns("/v1/api/auth/*");
-//        filterRegistrationBean.addUrlPatterns("/v1/api/auth/*", "/v1/api/user/*");
-        return filterRegistrationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean<MDCLoggingFilter> logFilter() {
+//        FilterRegistrationBean<MDCLoggingFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+//        filterRegistrationBean.setFilter(new MDCLoggingFilter());
+//        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//        filterRegistrationBean.addUrlPatterns("/v1/api/auth/*");
+//        return filterRegistrationBean;
+//    }
 }
 
