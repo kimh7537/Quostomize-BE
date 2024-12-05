@@ -63,6 +63,7 @@ public class CardService {
                 .expirationDate(expiredAt)
                 .optionalTerms(createCardDTO.optionalTerms())
                 .paymentReceiptMethods(createCardDTO.paymentReceiptMethods())
+                .status(CardStatus.CREATION_PENDING)
                 .build();
 
         return cardDetailRepository.save(cardDetail);
