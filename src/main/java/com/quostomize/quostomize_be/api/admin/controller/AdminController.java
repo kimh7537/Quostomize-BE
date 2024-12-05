@@ -105,7 +105,8 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam Long memberId
     ) {
-        Page<CardApplicantDetailsDTO> applicants = adminService.getMemberIdCardApplicants(auth, page, memberId);
+        CardStatus cardStatus = CardStatus.CREATION_PENDING;
+        Page<CardApplicantDetailsDTO> applicants = adminService.getMemberIdCardApplicants(auth, page, memberId, cardStatus);
         PageAdminResponse response = new PageAdminResponse(applicants);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
