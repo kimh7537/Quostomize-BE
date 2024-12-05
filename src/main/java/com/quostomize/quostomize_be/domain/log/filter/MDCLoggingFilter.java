@@ -26,7 +26,8 @@ public class MDCLoggingFilter implements Filter {
         if (requestUri.startsWith("/v1/api/auth") ||
                 requestUri.startsWith("/v1/api/member") ||
                 requestUri.startsWith("/v1/api/benefit-change") ||
-                requestUri.startsWith("/v1/api/card-applicants")
+                requestUri.startsWith("/v1/api/card-applicants") ||
+                requestUri.startsWith("/v1/api/admin/email")
         ) {
             String traceId = httpRequest.getHeader(TRACE_ID);
             if (traceId == null || traceId.isEmpty()) {
