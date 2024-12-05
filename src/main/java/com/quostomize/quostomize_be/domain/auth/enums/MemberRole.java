@@ -14,7 +14,8 @@ public enum MemberRole {
 
     MEMBER("ROLE_MEMBER", "일반 회원"),
     OLD_MEMBER("ROLE_OM", "탈퇴한 회원"),
-    ADMIN("ROLE_ADMIN", "관리자");
+    ADMIN("ROLE_ADMIN", "관리자"),
+    SUSPENDED_MEMBER("ROLE_SM", "정지한 회원");
 
     private static final Map<String, MemberRole> ROLE_KEY_MAP = Stream.of(values())
             .collect(Collectors.toUnmodifiableMap(MemberRole::getKey, Function.identity()));

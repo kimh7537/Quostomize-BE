@@ -1,6 +1,7 @@
 package com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service;
 
 import com.quostomize.quostomize_be.api.lotto.dto.LottoParticipantRequestDto;
+import com.quostomize.quostomize_be.api.pointUsageMethod.dto.*;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
 import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
@@ -56,6 +57,44 @@ public class PointUsageMethodService {
                     return customer.getCardDetail().getCardSequenceId();
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Member with ID " + memberId + " does not exist."));
+    }
+
+    @Transactional
+    public void updateLotto(Long cardSequenceId, LottoRequestDto request) {
+        PointUsageMethod method = getPointUsageMethodV2(cardSequenceId);
+        boolean lotto = Boolean.TRUE.equals(request.isLotto());
+        method.toggleLotto(lotto);
+        validateActiveOptions(method);
+        pointUsageMethodRepository.save(method);
+    }
+
+    @Transactional
+    public void updatePayback(Long cardSequenceId, PaybackRequestDto request) {
+        PointUsageMethod method = getPointUsageMethodV2(cardSequenceId);
+        boolean payback = Boolean.TRUE.equals(request.isPayback());
+        method.togglePayback(payback);
+        if (method.getIsPayback() && method.getIsPieceStock()) {
+            throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
+        }
+        validateActiveOptions(method);
+        pointUsageMethodRepository.save(method);
+    }
+
+    @Transactional
+    public void updatePieceStock(Long cardSequenceId, PieceStockRequestDto request) {
+        PointUsageMethod method = getPointUsageMethodV2(cardSequenceId);
+        boolean pieceStock = Boolean.TRUE.equals(request.isPieceStock());
+        method.togglePieceStock(pieceStock);
+        if (method.getIsPayback() && method.getIsPieceStock()) {
+            throw new AppException(ErrorCode.PAYBACK_AND_PIECESTOCK_CONFLICT);
+        }
+        validateActiveOptions(method);
+        pointUsageMethodRepository.save(method);
+    }
+
+    private PointUsageMethod getPointUsageMethodV2(Long cardSequenceId) {
+        return pointUsageMethodRepository.findByCardDetail_CardSequenceId(cardSequenceId)
+                .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
     }
 
     @Transactional

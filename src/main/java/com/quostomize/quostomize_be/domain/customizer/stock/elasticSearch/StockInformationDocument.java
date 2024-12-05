@@ -1,12 +1,12 @@
 package com.quostomize.quostomize_be.domain.customizer.stock.elasticSearch;
 
-import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
-import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.*;
-
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+//import com.quostomize.quostomize_be.domain.customizer.stock.entity.StockInformation;
+//import lombok.*;
+//import org.springframework.data.annotation.Id;
+//import org.springframework.data.elasticsearch.annotations.*;
+//
+//import java.time.LocalDateTime;
+//import java.time.OffsetDateTime;
 
 //@AllArgsConstructor
 //@NoArgsConstructor

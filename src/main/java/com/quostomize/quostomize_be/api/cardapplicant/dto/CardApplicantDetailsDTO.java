@@ -59,8 +59,9 @@ public record CardApplicantDetailsDTO(
 
 ) {
         public static CardApplicantDetailsDTO fromEntity(CardApplicantInfo cardApplicantInfo) {
+                String maskData = maskData(cardApplicantInfo.getResidenceNumber());
                 return new CardApplicantDetailsDTO(
-                        cardApplicantInfo.getResidenceNumber(),
+                        maskData,
                         cardApplicantInfo.getApplicantName(),
                         cardApplicantInfo.getEnglishName(),
                         cardApplicantInfo.getZipCode(),
@@ -71,5 +72,12 @@ public record CardApplicantDetailsDTO(
                         cardApplicantInfo.getHomeAddress(),
                         cardApplicantInfo.getHomeDetailAddress()
                 );
+        }
+
+        private static String maskData(String residenceNumber) {
+                if (residenceNumber.length() >= 7) {
+                        return residenceNumber.substring(0, residenceNumber.length() - 6) + "******";
+                }
+                return residenceNumber;
         }
 }

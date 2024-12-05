@@ -29,7 +29,6 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
         if (idempotencyKey == null) {
             return true;
         }
-//        log.info("BREAK POINT1");
         ObjectMapper objectMapper = new ObjectMapper();
 
         if (idempotencyRedisRepository.hasSucceedResult(idempotencyKey)) {

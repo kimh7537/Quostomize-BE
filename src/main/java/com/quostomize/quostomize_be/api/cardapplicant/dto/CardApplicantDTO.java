@@ -8,19 +8,14 @@ public record CardApplicantDTO(
 
         // 카드 기본 정보
         @NotNull
-        @NotBlank
         int cardColor,
         @NotNull
-        @NotBlank
         int cardBrand,
         @NotNull
-        @NotBlank
         boolean isAppCard,
         @NotNull
-        @NotBlank
         boolean isForeignBlocked,
         @NotNull
-        @NotBlank
         boolean isPostpaidTransport,
         @NotNull
         @NotBlank
@@ -29,10 +24,8 @@ public record CardApplicantDTO(
         @NotBlank
         String cardPasswordConfirm,
         @NotNull
-        @NotBlank
         int optionalTerms,
         @NotNull
-        @NotBlank
         int paymentReceiptMethods,
 
         // 카드 혜택 정보

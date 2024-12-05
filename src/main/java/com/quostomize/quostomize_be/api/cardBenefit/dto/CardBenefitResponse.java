@@ -13,17 +13,14 @@ public record CardBenefitResponse(
         LocalDateTime modifiedAt
 ) {
     public static CardBenefitResponse from(CardBenefit cardBenefit) {
-        Long lowerCategory = (cardBenefit.getLowerCategory() == null)
-                ? 0L
-                : cardBenefit.getLowerCategory().getBenefitCommonId();
-
+       Long cardBenefitLowerId =  (cardBenefit.getLowerCategory() == null) ? 0L : cardBenefit.getLowerCategory().getBenefitCommonId();
         return new CardBenefitResponse(
                 cardBenefit.getBenefitId(),
                 cardBenefit.getBenefitRate(),
                 cardBenefit.getIsActive(),
                 cardBenefit.getCardDetail().getCardSequenceId(),
                 cardBenefit.getUpperCategory().getBenefitCommonId(),
-                lowerCategory,
+                cardBenefitLowerId,
                 cardBenefit.getCreatedAt(),
                 cardBenefit.getModifiedAt()
         );
