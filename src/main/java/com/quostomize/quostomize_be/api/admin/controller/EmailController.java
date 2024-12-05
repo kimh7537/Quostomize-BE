@@ -26,7 +26,8 @@ public class EmailController {
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "회원 메일 발송", description = "관리자가 회원들에게 메일을 발송 합니다. (-1:모두 발송)(1~3: 선택지에 따라 발송)")
     public ResponseEntity<Void> sendEmailWIthHtmlFile(@ModelAttribute AdminEmailRequest adminEmailRequest){
-        emailSendService.adminMailSend(adminEmailRequest.title(), adminEmailRequest.htmlFile(), adminEmailRequest.optionalTerms());
+        String adminId = emailSendService.getCurrentAdminId();
+        emailSendService.adminMailSend(adminEmailRequest.title(), adminEmailRequest.htmlFile(), adminEmailRequest.optionalTerms(), adminId);
         return ResponseEntity.ok().build();
     }
 
