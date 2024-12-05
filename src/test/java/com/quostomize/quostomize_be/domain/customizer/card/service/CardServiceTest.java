@@ -36,7 +36,7 @@ class CardServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        cardService = new CardService(cardDetailRepository);
+//        cardService = new CardService(cardDetailRepository);
     }
 
     @Test
