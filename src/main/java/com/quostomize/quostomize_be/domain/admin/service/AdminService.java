@@ -73,10 +73,10 @@ public class AdminService {
         return cardApplicantInfoService.getApplicantsByStatus(status, pageable);
     }
 
-    public Page<CardApplicantDetailsDTO> getMemberIdCardApplicants(Authentication auth, int page, Long memberId) {
+    public Page<CardApplicantDetailsDTO> getMemberIdCardApplicants(Authentication auth, int page, Long memberId, CardStatus status) {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
-        return cardApplicantInfoService.getCardApplicantByMemberId(pageable, memberId);
+        return cardApplicantInfoService.getCardApplicantByMemberId(pageable, memberId, status);
     }
 
     @Transactional
