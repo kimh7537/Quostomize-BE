@@ -13,9 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Slf4j
 @Tag(name = "인증 관련 API", description = "회원 인증 관련 API 모음")
@@ -49,8 +52,16 @@ public class AuthController {
     @PostMapping("/logout")
     @Operation(summary = "로그아웃", description = "로그아웃을 진행합니다.")
     public ResponseEntity<Void> logout(@CookieValue(name = "refreshToken") String refreshToken,
+                                       @CookieValue(name = "traceId", required = false) String traceId,
                                        @RequestBody @Valid LogoutRequest request, HttpServletResponse response) {
+        // traceId가 없는 경우 로그에 경고 남기고 새로운 traceId 생성
+        if (traceId == null || traceId.isEmpty()) {
+            log.warn("로그아웃 요청 시 traceId가 존재하지 않음, 새로운 traceId 생성");
+            traceId = UUID.randomUUID().toString();
+        }
+        MDC.put("traceId", traceId);
         authService.logout(request, refreshToken, response);
+        MDC.clear();
         return ResponseEntity.noContent().build();
     }
     

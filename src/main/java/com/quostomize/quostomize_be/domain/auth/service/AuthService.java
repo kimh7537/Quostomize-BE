@@ -13,17 +13,22 @@ import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.repository.CardApplicantInfoRepository;
 import com.quostomize.quostomize_be.domain.customizer.customer.entity.Customer;
 import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
+import com.quostomize.quostomize_be.domain.log.enums.LogStatus;
+import com.quostomize.quostomize_be.domain.log.enums.LogType;
+import com.quostomize.quostomize_be.domain.log.service.LogService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -43,6 +48,7 @@ public class AuthService {
     private final BlackListRepository blackListRepository;
     private final EncryptService encryptService;
     private final SmsService smsService;
+    private final LogService logService;
 
     @Value("${jwt.refresh.expiration}")
     private int refreshTokenAge;
@@ -137,17 +143,36 @@ public class AuthService {
         Long memberId = jwtTokenProvider.getMemberId(refreshToken);
         RefreshToken existRefreshToken = refreshTokenRepository.findById(memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_NOT_EXIST));
-        jwtTokenProvider.setBlackList(refreshToken);
-        log.info("[로그아웃 된 리프레시 토큰 블랙리스트 처리]");
-        refreshTokenRepository.delete(existRefreshToken);
-        Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
-        deleteCookie.setMaxAge(0);
-        deleteCookie.setPath("/");
-        deleteCookie.setSecure(true);
-        deleteCookie.setHttpOnly(true);
-        response.addCookie(deleteCookie);
-        jwtTokenProvider.setBlackList(request.accessToken());
-        log.info("[로그아웃 된 액세스 토큰 블랙리스트 처리]");
+
+        String traceId = MDC.get("traceId");
+        if (traceId == null) {
+            traceId = UUID.randomUUID().toString();
+            MDC.put("traceId", traceId);
+        }
+
+        try {
+            jwtTokenProvider.setBlackList(refreshToken);
+            log.info("[로그아웃 된 리프레시 토큰 블랙리스트 처리]");
+            refreshTokenRepository.delete(existRefreshToken);
+            Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
+            deleteCookie.setMaxAge(0);
+            deleteCookie.setPath("/");
+            deleteCookie.setSecure(true);
+            deleteCookie.setHttpOnly(true);
+            response.addCookie(deleteCookie);
+            jwtTokenProvider.setBlackList(request.accessToken());
+            log.info("[로그아웃 된 액세스 토큰 블랙리스트 처리]");
+
+            // 로그아웃 성공 로그 저장
+            logService.saveLog(LogType.LOGOUT, "회원 ID: " + memberId + " 로그아웃 성공", memberId, LogStatus.SUCCESS, "/v1/api/auth/logout");
+
+        } catch (Exception e) {
+            log.error("로그아웃 처리 중 오류 발생: {}", e.getMessage());
+            logService.saveLog(LogType.LOGOUT, "회원 ID: " + memberId + " 로그아웃 실패: " + e.getMessage(), memberId, LogStatus.ERROR, "/v1/api/auth/logout");
+            throw e;
+        } finally {
+            MDC.clear();
+        }
     }
 
     public void sendFindPasswordPhoneNumber(SmsRequest request) {

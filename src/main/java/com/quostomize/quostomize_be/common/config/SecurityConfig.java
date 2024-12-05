@@ -7,6 +7,7 @@ import com.quostomize.quostomize_be.common.filter.JwtExceptionFilter;
 import com.quostomize.quostomize_be.common.jwt.JwtTokenProvider;
 import com.quostomize.quostomize_be.common.jwt.RefreshTokenRepository;
 import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
+import com.quostomize.quostomize_be.domain.log.service.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +45,7 @@ public class SecurityConfig {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomerRepository customerRepository;
+    private final LogService logService;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
@@ -69,7 +71,7 @@ public class SecurityConfig {
                 );
 
         // Custom Filter 추가
-        http.addFilter(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository, customerRepository))
+        http.addFilter(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository, customerRepository, logService))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtExceptionFilter(), JwtAuthorizationFilter.class)
                 .addFilterBefore(corsFilter, JwtExceptionFilter.class);

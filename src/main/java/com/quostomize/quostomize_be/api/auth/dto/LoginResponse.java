@@ -5,6 +5,7 @@ public record LoginResponse(
         String memberRole,
         String cardStatus,
         Long memberId,
-        String memberName
+        String memberName,
+        String traceId
 ) {
 }
