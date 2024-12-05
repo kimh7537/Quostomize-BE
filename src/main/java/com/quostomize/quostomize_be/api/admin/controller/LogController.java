@@ -45,4 +45,23 @@ public class LogController {
 
         return ResponseEntity.ok(responseDtoPage);
     }
+
+    @GetMapping("/mail")
+    public ResponseEntity<Page<SystemLogResponseDto>> getMailLogs(
+            Authentication auth,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "DESC") Sort.Direction direction
+    ) {
+        adminService.validateAdmin(auth);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        Page<SystemLog> logPage = systemLogRepository.findByLogTypeIn(
+                List.of(LogType.MAIL_SEND, LogType.MAIL_FAILURE), pageable
+        );
+
+        Page<SystemLogResponseDto> responseDtoPage = logPage.map(SystemLogResponseDto::fromEntity);
+
+        return ResponseEntity.ok(responseDtoPage);
+    }
 }
