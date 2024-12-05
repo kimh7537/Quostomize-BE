@@ -81,7 +81,8 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam Long memberId
     ) {
-        Page<CardDetailResponse> cards = adminService.getMemberIdCards(auth, page, memberId);
+        CardStatus cardStatus = CardStatus.CANCELLATION_PENDING;
+        Page<CardDetailResponse> cards = adminService.getMemberIdCards(auth, page, memberId, cardStatus);
         PageAdminResponse response = new PageAdminResponse(cards);
         return ResponseEntity.ok(new ResponseDTO(response));
     }
