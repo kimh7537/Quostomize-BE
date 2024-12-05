@@ -105,3 +105,5 @@ docker-compose.yml
 # 로그 파일 무시하기
 logs/
 *.log
+
+applicaton-test.yml
