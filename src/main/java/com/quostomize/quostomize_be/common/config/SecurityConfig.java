@@ -6,6 +6,8 @@ import com.quostomize.quostomize_be.common.filter.JwtAuthorizationFilter;
 import com.quostomize.quostomize_be.common.filter.JwtExceptionFilter;
 import com.quostomize.quostomize_be.common.jwt.JwtTokenProvider;
 import com.quostomize.quostomize_be.common.jwt.RefreshTokenRepository;
+import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
+import com.quostomize.quostomize_be.domain.log.service.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +31,11 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",
-            "/swagger-resources/**"
+            "/swagger-resources/**",
+            "/actuator/**",
+            "/v1/api/sms/**",
+            "/v1/api/card-applicants",
+            "/health"
 //            "/**"
     };
 
@@ -38,6 +44,8 @@ public class SecurityConfig {
     private final CorsFilter corsFilter;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomerRepository customerRepository;
+    private final LogService logService;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
@@ -63,7 +71,7 @@ public class SecurityConfig {
                 );
 
         // Custom Filter 추가
-        http.addFilter(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository))
+        http.addFilter(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository, customerRepository, logService))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtExceptionFilter(), JwtAuthorizationFilter.class)
                 .addFilterBefore(corsFilter, JwtExceptionFilter.class);

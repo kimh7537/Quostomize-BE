@@ -45,6 +45,7 @@ public enum ErrorCode {
     ROLE_IS_NOT_OLD_MEMBER(HttpStatus.BAD_REQUEST, "M-103", "해당 회원의 ROLE은 OLD_MEMBER가 아닙니다."),
     SAME_PASSWORD(HttpStatus.CONFLICT, "M-301", "이전과 같은 비밀번호로 변경할 수 없습니다."),
     USER_ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "M-401", "권한이 없어서 접근할 수 없습니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-404", "해당 MEMBER를 찾을 수 없습니다."),
 
     // 고객 관련
     CUSTOMER_CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "U-001", "고객의 카드를 찾을 수 없습니다."),
@@ -58,6 +59,7 @@ public enum ErrorCode {
 
     // 카드
     CARD_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "C-201", "해당 카드 정보를 찾을 수 없습니다."),
+    CARD_STATUS_CHANGE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "C-202", "카드 상태를 변경할 수 없습니다."),
 
     // 카드 혜택
     CARD_DETAIL_BENEFIT_NOT_FOUND(HttpStatus.NOT_FOUND, "B-201", "해당 카드에 적용된 혜택이 없습니다."),
@@ -91,7 +93,11 @@ public enum ErrorCode {
     INVALID_PHONE_FORMAT(HttpStatus.BAD_REQUEST, "M-003", "유효하지 않은 전화번호 형식입니다."),
 
     // QnA
-    DUPLICATE_REQUEST(HttpStatus.ALREADY_REPORTED, "Q-101", "이미 답변이 등록된 문의글입니다.");
+    DUPLICATE_REQUEST(HttpStatus.ALREADY_REPORTED, "Q-101", "이미 답변이 등록된 문의글입니다."),
+
+    //Email
+    EMAIL_CERTIFICATION_ERROR(HttpStatus.BAD_REQUEST, "E-001", "이메일 인증 번호가 일치하지 않습니다."),
+    EMAIL_SEND_FAIL(HttpStatus.BAD_REQUEST, "E-002", "이메일 발송에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

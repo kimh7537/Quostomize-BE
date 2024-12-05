@@ -47,7 +47,7 @@ public class MemberQuestionController {
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
                 .orElse("UNKNOWN");
-        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Order.desc("questionsSequenceId"))); // 최신순으로 10개씩 페이지네이션
+        PageRequest pageRequest = PageRequest.of(page, 7, Sort.by(Sort.Order.desc("questionsSequenceId"))); // 최신순으로 10개씩 페이지네이션
         Page<PageMemberQuestionResponse> questions = memberQuestionService.getAllMemberQuestions(memberId, memberRole, pageRequest);
         PageResponse pageResponse = new PageResponse(
                 questions.getContent(), // 현재 페이지에 해당하는 데이터 리스트

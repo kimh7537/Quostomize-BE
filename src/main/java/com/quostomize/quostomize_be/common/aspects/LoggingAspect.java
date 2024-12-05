@@ -1,16 +1,23 @@
 package com.quostomize.quostomize_be.common.aspects;
 
+import com.quostomize.quostomize_be.domain.log.service.LogService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
+import static com.quostomize.quostomize_be.domain.log.enums.LogStatus.SUCCESS;
+import static com.quostomize.quostomize_be.domain.log.enums.LogType.MAIL_SEND_SUCCESS;
 
 @Aspect
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class LoggingAspect {
+
+    private final LogService logService;
 
     /**
      * Before: 대상 메서드가 실행되기 전에 Advice를 실행
@@ -71,4 +78,9 @@ public class LoggingAspect {
         return result;
     }
 
+    @AfterReturning("execution(* com.quostomize.quostomize_be.api.mail.service.MailService.sendMail(..)) && args(email,..)")
+    public void logMailSend(String email) {
+        // 메일 발송 성공 로그 저장
+        logService.saveLog(MAIL_SEND_SUCCESS, "Mail sent to " + email, null, SUCCESS, "/v1/api/mail/send");
+    }
 }

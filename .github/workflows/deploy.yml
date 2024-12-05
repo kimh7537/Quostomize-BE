@@ -45,6 +45,10 @@ jobs:
           aes.secret.salt: ${{ secrets.AES_SECRET_SALT }}
           appkey: ${{ secrets.OPENAPI_APPKEY }}
           appsecret: ${{ secrets.OPENAPI_APPSECRET }}
+          spring.mail.username: ${{ secrets.MAIL_ADDRESS }}
+          spring.mail.password: ${{ secrets.APP_PASSWORD }}
+          adminEmail: ${{ secrets.ADMIN_EMAIL }}
+
           #        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
 
       - name: gradlew에 실행 권한 부여하기

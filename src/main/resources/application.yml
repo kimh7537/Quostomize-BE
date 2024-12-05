@@ -21,8 +21,8 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
-      elasticsearch:
-        uris: http://localhost:9200
+#      elasticsearch:
+#        uris: http://localhost:9200
 
       jmx:
         enabled: false
@@ -39,6 +39,14 @@ spring:
   schedule:
     cron: 0 0 0 * * ?
     use: true
+
+  mail:
+    host: smtp.gmail.com
+    username: ${MAIL_ADDRESS}
+    password: ${APP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
 aws:
   accessKeyId: ${ACCESS_KEY_ID}
@@ -74,3 +82,10 @@ logging:
 
 appkey: ${OPENAPI_APPKEY}
 appsecret: ${OPENAPI_APPSECRET}
+adminEmail: ${ADMIN_EMAIL}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
