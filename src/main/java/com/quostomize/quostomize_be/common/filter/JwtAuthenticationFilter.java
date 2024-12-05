@@ -65,7 +65,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             return authenticationManager.authenticate(authenticationToken);
         } catch (Exception e) {
             logService.saveLog(LogType.LOGIN_FAILURE, "로그인 실패: " + e.getMessage(), null, LogStatus.FAILURE, request.getRequestURI());
-            MDC.clear();
             throw new FilterAuthenticationException("로그인 시도에 실패했습니다.");
         }
     }
@@ -111,7 +110,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         log.info("로그인 성공, JWT 토큰 생성");
         logService.saveLog(LogType.LOGIN_SUCCESS, memberName + "(ID:" + memberId + ")" + " 사용자가 로그인 했습니다.", memberId, LogStatus.SUCCESS, request.getRequestURI());
-//        MDC.clear();
     }
 
     private String findCardStatus(PrincipalDetails principal) {
