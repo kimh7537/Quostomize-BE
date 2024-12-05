@@ -60,10 +60,10 @@ public class AdminService {
         return cardService.getCardBySearchTerm(pageable, searchTerm).map(CardDetailResponse::fromEntity);
     }
 
-    public Page<CardDetailResponse> getMemberIdCards(Authentication auth, int page, Long memberId) {
+    public Page<CardDetailResponse> getMemberIdCards(Authentication auth, int page, Long memberId, CardStatus status) {
         validateAdmin(auth);
         Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
-        return cardService.getCardByMemberId(pageable, memberId).map(CardDetailResponse::fromEntity);
+        return cardService.getCardByMemberId(pageable, memberId, status).map(CardDetailResponse::fromEntity);
     }
 
     public Page<CardApplicantDetailsDTO> getFilteredApplicants(Authentication auth, int page, String sortDirection, CardStatus status) {
