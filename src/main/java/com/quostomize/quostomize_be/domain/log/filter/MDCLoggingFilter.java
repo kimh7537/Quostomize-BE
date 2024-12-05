@@ -19,16 +19,26 @@ public class MDCLoggingFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String traceId = httpServletRequest.getHeader(TRACE_ID);
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String requestUri = httpRequest.getRequestURI();
 
-        if (traceId == null || traceId.isEmpty()) {
-            traceId = UUID.randomUUID().toString();
+        // auth 경로일 때만 MDC 처리
+        if (requestUri.startsWith("/v1/api/auth") ||
+                requestUri.startsWith("/v1/api/member") ||
+                requestUri.startsWith("/v1/api/benefit-change") ||
+                requestUri.startsWith("/v1/api/card-applicants")
+        ) {
+            String traceId = httpRequest.getHeader(TRACE_ID);
+            if (traceId == null || traceId.isEmpty()) {
+                traceId = UUID.randomUUID().toString();
+            }
+
+            MDC.put(TRACE_ID, traceId);
+            MDC.put("requestUri", requestUri);
+            MDC.put("clientIp", request.getRemoteAddr());
+            log.info("[사용자 traceId: {}]", traceId);
+            log.info("[사용자 clientIp: {}]", MDC.get("clientIp"));
         }
-
-        MDC.put(TRACE_ID, traceId);
-        MDC.put("requestUri", httpServletRequest.getRequestURI());
-        MDC.put("clientIp", request.getRemoteAddr());
 
         try {
             filterChain.doFilter(request, response);
