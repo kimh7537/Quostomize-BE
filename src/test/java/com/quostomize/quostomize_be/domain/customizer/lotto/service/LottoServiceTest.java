@@ -53,12 +53,7 @@ class LottoServiceTest {
 
     @Mock
     private ValueOperations<String, String> valueOperations;
-
-//    @BeforeEach
-//    void setUp() {
-//        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-//    }
-
+    
     @Test
     @DisplayName("로또 참여자 등록 - 성공")
     void registerLottoParticipants_Success() {
