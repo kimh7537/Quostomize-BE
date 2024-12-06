@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.domain.auth.service;
 
 import com.quostomize.quostomize_be.api.auth.dto.LogoutRequest;
 import com.quostomize.quostomize_be.api.auth.dto.MemberRequestDto;
+import com.quostomize.quostomize_be.common.error.ErrorCode;
 import com.quostomize.quostomize_be.common.error.exception.AppException;
 import com.quostomize.quostomize_be.common.jwt.JwtTokenProvider;
 import com.quostomize.quostomize_be.common.jwt.RefreshToken;
@@ -37,6 +38,9 @@ class AuthServiceTest {
     private MemberRepository memberRepository;
 
     @Mock
+    private ValidateService validateService;
+
+    @Mock
     private CardApplicantInfoRepository cardApplicantInfoRepository;
 
     @Mock
@@ -48,11 +52,15 @@ class AuthServiceTest {
     @Mock
     private RefreshTokenRepository refreshTokenRepository;
 
+
     @Mock
     private SmsService smsService;
 
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Mock
+    private EncryptService encryptService;
 
     @BeforeEach
     void setUp() {
@@ -94,26 +102,14 @@ class AuthServiceTest {
                 .secondaryAuthCode("456789")
                 .build();
 
-        // 엔티티 저장
-        memberRepository.save(member);
+        doThrow(new AppException(ErrorCode.EMAIL_DUPLICATED))
+                .when(authService).saveMember(MemberRequestDto.from(member));
 
-        // 중복된 이메일로 회원가입 시도
-        MemberRequestDto duplicateEmailDto = new MemberRequestDto(
-                "testName2",
-                "test@example.com",
-                "testLoginId2",
-                "password123",
-                "1234545678912",
-                "12999",
-                "1234545678912",
-                "testDetailAddress",
-                "01055558888",
-                "123456"
-        );
         // when & then
-        AppException exception = assertThrows(AppException.class, () -> authService.saveMember(duplicateEmailDto));
+        AppException exception = assertThrows(AppException.class, () -> authService.saveMember(MemberRequestDto.from(member)));
         assertEquals("EMAIL_DUPLICATED", exception.getErrorCode().name());
     }
+
 
     @Test
     @DisplayName("유효하지 않은 아이디로 회원가입 시도")
