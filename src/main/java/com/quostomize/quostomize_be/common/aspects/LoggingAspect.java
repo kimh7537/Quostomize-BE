@@ -1,5 +1,6 @@
 package com.quostomize.quostomize_be.common.aspects;
 
+import com.quostomize.quostomize_be.domain.customizer.cardapplication.repository.CardApplicantInfoRepository;
 import com.quostomize.quostomize_be.domain.log.service.LogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,9 +8,14 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
+import static com.quostomize.quostomize_be.domain.log.enums.LogStatus.FAILURE;
 import static com.quostomize.quostomize_be.domain.log.enums.LogStatus.SUCCESS;
-import static com.quostomize.quostomize_be.domain.log.enums.LogType.MAIL_SEND_SUCCESS;
+import static com.quostomize.quostomize_be.domain.log.enums.LogType.MAIL_FAILURE;
+import static com.quostomize.quostomize_be.domain.log.enums.LogType.MAIL_SEND;
 
 @Aspect
 @Component
@@ -18,6 +24,7 @@ import static com.quostomize.quostomize_be.domain.log.enums.LogType.MAIL_SEND_SU
 public class LoggingAspect {
 
     private final LogService logService;
+    private final CardApplicantInfoRepository cardApplicantInfoRepository;
 
     /**
      * Before: 대상 메서드가 실행되기 전에 Advice를 실행
@@ -78,9 +85,31 @@ public class LoggingAspect {
         return result;
     }
 
-    @AfterReturning("execution(* com.quostomize.quostomize_be.api.mail.service.MailService.sendMail(..)) && args(email,..)")
-    public void logMailSend(String email) {
-        // 메일 발송 성공 로그 저장
-        logService.saveLog(MAIL_SEND_SUCCESS, "Mail sent to " + email, null, SUCCESS, "/v1/api/mail/send");
+    // 관리자 이메일 발송에 대한 로깅
+    @After("execution(* com.quostomize.quostomize_be.common.email.service.EmailSendService.adminMailSend(..)) && args(title, htmlFile, optionalTerms, adminId)")
+    public void logAdminMailSend(String title, MultipartFile htmlFile, Integer optionalTerms, String adminId) {
+        List<String> emails = (optionalTerms == null || optionalTerms == -1)
+                ? cardApplicantInfoRepository.findAllEmails()
+                : cardApplicantInfoRepository.findEmailsByOptionalTerms(optionalTerms);
+
+        for (String email : emails) {
+            logService.saveLog(MAIL_SEND, "회원 이메일: " + email + "에게 메일 발송 완료", Long.parseLong(adminId), SUCCESS, "/v1/api/admin/email");
+        }
+    }
+
+    /**
+     * 메일 발송 실패 시 Advice
+     * 이메일 전송 실패 시에 예외 정보를 로깅하고 LogService를 통해 저장합니다.
+     *
+     * @param joinPoint
+     * @param e
+     */
+    @AfterThrowing(pointcut = "execution(* com.quostomize.quostomize_be.common.email.service.EmailSendService.sendEmailWithRetry(..))", throwing = "e")
+    public void logEmailSendFailure(JoinPoint joinPoint, Throwable e) {
+        Object[] args = joinPoint.getArgs();
+        String recipientEmail = (String) args[1]; // 두 번째 파라미터가 수신자 이메일
+        String errorMessage = e.getMessage();
+
+        logService.saveLog(MAIL_FAILURE, "메일 발송 실패 - 수신자: " + recipientEmail + ", 에러 메시지: " + errorMessage, null, FAILURE, "/v1/api/admin/email");
     }
 }

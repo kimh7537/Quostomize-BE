@@ -144,35 +144,20 @@ public class AuthService {
         RefreshToken existRefreshToken = refreshTokenRepository.findById(memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_NOT_EXIST));
 
-        String traceId = MDC.get("traceId");
-        if (traceId == null) {
-            traceId = UUID.randomUUID().toString();
-            MDC.put("traceId", traceId);
-        }
+        jwtTokenProvider.setBlackList(refreshToken);
+        log.info("[로그아웃 된 리프레시 토큰 블랙리스트 처리]");
+        refreshTokenRepository.delete(existRefreshToken);
+        Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
+        deleteCookie.setMaxAge(0);
+        deleteCookie.setPath("/");
+        deleteCookie.setSecure(true);
+        deleteCookie.setHttpOnly(true);
+        response.addCookie(deleteCookie);
+        jwtTokenProvider.setBlackList(request.accessToken());
+        log.info("[로그아웃 된 액세스 토큰 블랙리스트 처리]");
 
-        try {
-            jwtTokenProvider.setBlackList(refreshToken);
-            log.info("[로그아웃 된 리프레시 토큰 블랙리스트 처리]");
-            refreshTokenRepository.delete(existRefreshToken);
-            Cookie deleteCookie = new Cookie(REFRESH_TOKEN, null);
-            deleteCookie.setMaxAge(0);
-            deleteCookie.setPath("/");
-            deleteCookie.setSecure(true);
-            deleteCookie.setHttpOnly(true);
-            response.addCookie(deleteCookie);
-            jwtTokenProvider.setBlackList(request.accessToken());
-            log.info("[로그아웃 된 액세스 토큰 블랙리스트 처리]");
-
-            // 로그아웃 성공 로그 저장
-            logService.saveLog(LogType.LOGOUT, "회원 ID: " + memberId + " 로그아웃 성공", memberId, LogStatus.SUCCESS, "/v1/api/auth/logout");
-
-        } catch (Exception e) {
-            log.error("로그아웃 처리 중 오류 발생: {}", e.getMessage());
-            logService.saveLog(LogType.LOGOUT, "회원 ID: " + memberId + " 로그아웃 실패: " + e.getMessage(), memberId, LogStatus.ERROR, "/v1/api/auth/logout");
-            throw e;
-        } finally {
-            MDC.clear();
-        }
+        // 로그아웃 성공 로그 저장
+        logService.saveLog(LogType.LOGOUT, "회원 ID: " + memberId + " 로그아웃 성공", memberId, LogStatus.SUCCESS, "/v1/api/auth/logout");
     }
 
     public void sendFindPasswordPhoneNumber(SmsRequest request) {

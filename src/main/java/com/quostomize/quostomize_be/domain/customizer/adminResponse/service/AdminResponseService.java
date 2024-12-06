@@ -9,6 +9,8 @@ import com.quostomize.quostomize_be.domain.customizer.memberQuestion.repository.
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 public class AdminResponseService {
@@ -23,18 +25,16 @@ public class AdminResponseService {
 
     // TODO: Repository 직접 참조하지 않고, 연관된 Service를 통해서 참조하는 방식으로 변경 필요
     // 답변 조회
-    public AdminResponse getAnswer(Long memberId, String memberRole, Long questionsSequenceId) {
-        // 관리자: 모든 답변 조회 가능
+    public Optional<AdminResponse> getAnswer(Long memberId, String memberRole, Long questionsSequenceId) {
         if ("ROLE_ADMIN".equals(memberRole)) {
-            return adminResponseRepository.findByMemberQuestion_QuestionsSequenceId(questionsSequenceId)
-                    .orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
+            return adminResponseRepository.findByMemberQuestion_QuestionsSequenceId(questionsSequenceId);
         }
-        
+
         // 일반 사용자: 자신이 작성한 질문에 대해서만 답변 조회 가능
         MemberQuestion memberQuestion = memberQuestionRepository.findByMember_MemberIdAndQuestionsSequenceId(memberId, questionsSequenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
-        return adminResponseRepository.findByMemberQuestion(memberQuestion)
-                .orElseThrow(() -> new AppException(ErrorCode.ENTITY_NOT_FOUND));
+
+        return adminResponseRepository.findByMemberQuestion(memberQuestion);
     }
 
 
