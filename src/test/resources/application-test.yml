@@ -27,6 +27,18 @@ spring:
     apiKey: test-api-key
     apiSecret: test-api-secret
     senderNumber: test-number
+
+  schedule:
+    cron: 0 0 0 * * ?
+    use: true
+  mail:
+    host: smtp.gmail.com
+    username: kimh7537@gmail.com
+    password: uivz jril bsbi wnfp
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
 aws:
   accessKeyId: test-access-key
   secretAccessKey: test-secret-key
@@ -47,14 +59,17 @@ aes:
   secret:
     key: b2UgbnVtbXkgd2UgdW5vIG5vbm9uIGd5bTIgdG5yciBlbGllIHNtIHR1bnMgdW5vZw==
     salt: F1A2B3C4D5E6F7890ABCDEF123456789
-appkey: test-appkey
-appsecret: test-appsecret
 
 logging:
   level:
     root: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+appkey: test-appkey
+appsecret: test-appsecret
+adminEmail: seonmin5555@gmail.com
+
 management:
   endpoints:
     web:
