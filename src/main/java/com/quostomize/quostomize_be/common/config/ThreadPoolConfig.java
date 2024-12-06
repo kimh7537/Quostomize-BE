@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Configuration
 public class ThreadPoolConfig {
 
-    @Bean
+    @Bean("customTaskExecutor")
     public ThreadPoolTaskExecutor taskExecutor() {
         int processors = Runtime.getRuntime().availableProcessors(); // CPU 코어 수
         int corePoolSize = Math.max(2, processors); // 최소 스레드: 2 또는 CPU 코어 수
