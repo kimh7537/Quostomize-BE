@@ -1,7 +1,6 @@
-package com.quostomize.quostomize_be.config;
+package com.quostomize.quostomize_be.common.config;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
-import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
