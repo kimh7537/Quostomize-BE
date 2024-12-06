@@ -78,7 +78,6 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원 전체 조회")
     void getAllMemberInfosTest() {
-
         // given
         List<Member> memberList = new ArrayList<>();
         memberList.add(new Member("김철수", "cheolsu0708@testmail.com","cheolsu0708", "00000000", "1201041234567", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.MEMBER));
@@ -87,7 +86,6 @@ class MemberServiceTest {
 
         List<Member> savedMemberList = new ArrayList<>(memberList);
 
-        // stub
         given(memberRepository.findAll()).willReturn(savedMemberList);
 
         // when
@@ -95,7 +93,6 @@ class MemberServiceTest {
 
         // then
         assertThat(resultList.size()).isEqualTo(3);
-
     }
 
 
@@ -104,17 +101,14 @@ class MemberServiceTest {
     void updateMemberAddressTest() {
         // given
         long memberId = 1L;
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow();
-
-//        Member member = new Member(memberId, "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
+        Member member = new Member("박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
 
         String zipCode = "12977";
         String newAddress = "서울시 강남구 테헤란로 123";
         String newDetailAddress = "극비빌딩 B609호";
         UpdateAddressDTO updateAddressDTO = new UpdateAddressDTO(zipCode, newAddress, newDetailAddress);
 
-        given(memberRepository.findByMemberId(memberId))
-                .willReturn(Optional.of(member));
+        given(memberReader.findByMemberIdWithLock(memberId)).willReturn(member);
 
         // when
         memberService.updateMemberAddress(memberId, updateAddressDTO);
@@ -123,7 +117,7 @@ class MemberServiceTest {
         assertThat(member.getMemberAddress()).isEqualTo(newAddress);
         assertThat(member.getMemberDetailAddress()).isEqualTo(newDetailAddress);
 
-        verify(memberRepository).findByMemberId(memberId);
+        verify(memberReader).findByMemberIdWithLock(memberId);
     }
 
     @Test
@@ -131,15 +125,12 @@ class MemberServiceTest {
     void updateMemberEmailTest() {
         // given
         long memberId = 1L;
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow();
-//        Member member = new Member(memberId, "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
+        Member member = new Member("박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
 
         String newEmail = "updateTest03333@testmail.com";
         UpdateEmailDTO updateEmailDTO = new UpdateEmailDTO(newEmail);
 
-
-        given(memberRepository.findByMemberId(memberId))
-                .willReturn(Optional.of(member));
+        given(memberReader.findByMemberIdWithLock(memberId)).willReturn(member);
 
         // when
         memberService.updateMemberEmail(memberId, updateEmailDTO.newEmail());
@@ -147,7 +138,7 @@ class MemberServiceTest {
         // then
         assertThat(member.getMemberEmail()).isEqualTo(newEmail);
 
-        verify(memberRepository).findByMemberId(memberId);
+        verify(memberReader).findByMemberIdWithLock(memberId);
     }
 
     @Test
@@ -155,15 +146,13 @@ class MemberServiceTest {
     void updateMemberPhoneNumberTest() {
         // given
         long memberId = 1L;
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow();
-//        Member member = new Member(memberId, "박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
+        Member member = new Member("박춘삼", "springthree0605@testmail.com","springthree0605", "00000000", "1009071234568", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.ADMIN);
 
         String newPhoneNumber = "01087659876";
         UpdatePhoneNumberRequest updatePhoneNumberDTO = new UpdatePhoneNumberRequest(newPhoneNumber);
 
-
-        given(memberRepository.findByMemberId(memberId))
-                .willReturn(Optional.of(member));
+        given(memberReader.findByMemberIdWithLock(memberId)).willReturn(member);
+        given(encryptService.encryptPhoneNumber(newPhoneNumber)).willReturn(newPhoneNumber); // Encryption Mock
 
         // when
         memberService.updatePhoneNumber(memberId, updatePhoneNumberDTO.phoneNumber());
@@ -171,7 +160,7 @@ class MemberServiceTest {
         // then
         assertThat(member.getMemberPhoneNumber()).isEqualTo(newPhoneNumber);
 
-        verify(memberRepository).findByMemberId(memberId);
+        verify(memberReader).findByMemberIdWithLock(memberId);
     }
 
 
