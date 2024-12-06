@@ -21,7 +21,6 @@ import java.util.List;
 @Tag(name = "위시리스트 API", description = "위시리스트를 조회, 변경, 수정할 수 있는 api 입니다.")
 public class StockInterestController {
 
-
     private final StockInterestService stockInterestService;
 
     // 조회 기능
