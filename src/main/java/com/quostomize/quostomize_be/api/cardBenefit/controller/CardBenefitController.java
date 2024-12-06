@@ -3,7 +3,6 @@ package com.quostomize.quostomize_be.api.cardBenefit.controller;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitRequest;
 import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
-import com.quostomize.quostomize_be.domain.customizer.cardBenefit.repository.CardBenefitRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -21,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CardBenefitController {
     private final CardBenefitService cardBenefitService;
-    private final CardBenefitRepository cardBenefitRepository;
 
     @GetMapping()
     @Operation(summary = "카드 혜택 내역 조회", description = "로그인한 고객의 현재 적용된 카드 혜택을 조회합니다.")

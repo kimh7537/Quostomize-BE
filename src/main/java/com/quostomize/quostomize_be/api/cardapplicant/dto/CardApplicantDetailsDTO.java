@@ -4,7 +4,6 @@ import com.quostomize.quostomize_be.domain.customizer.cardapplication.entity.Car
 import jakarta.validation.constraints.*;
 
 public record CardApplicantDetailsDTO(
-
         // 응답을 줄 때에는 주민등록번호 마스킹 필요
         @NotNull
         @NotBlank
@@ -55,7 +54,9 @@ public record CardApplicantDetailsDTO(
         @NotNull
         @NotBlank
         @Size(max = 100)
-        String homeDetailAddress
+        String homeDetailAddress,
+
+        Long cardSequenceId
 
 ) {
         public static CardApplicantDetailsDTO fromEntity(CardApplicantInfo cardApplicantInfo) {
@@ -70,7 +71,8 @@ public record CardApplicantDetailsDTO(
                         cardApplicantInfo.getApplicantEmail(),
                         cardApplicantInfo.getPhoneNumber(),
                         cardApplicantInfo.getHomeAddress(),
-                        cardApplicantInfo.getHomeDetailAddress()
+                        cardApplicantInfo.getHomeDetailAddress(),
+                        cardApplicantInfo.getCardDetail().getCardSequenceId()
                 );
         }
 
