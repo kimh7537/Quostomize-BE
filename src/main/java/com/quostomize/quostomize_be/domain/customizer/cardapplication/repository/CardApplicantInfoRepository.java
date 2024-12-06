@@ -20,9 +20,9 @@ public interface CardApplicantInfoRepository extends JpaRepository<CardApplicant
         select ca from CardApplicantInfo ca
         join fetch ca.cardDetail cd
         join fetch Customer c on c.cardDetail.cardSequenceId = cd.cardSequenceId
-        where c.member.memberId = :memberId
+        where c.member.memberId = :memberId and cd.status = :status
 """)
-    Page<CardApplicantInfo> findCardApplicantByMemberId(Pageable pageable, @Param("memberId") Long memberId);
+    Page<CardApplicantInfo> findCardApplicantByMemberId(Pageable pageable, @Param("memberId") Long memberId, @Param("status") CardStatus status);
 
     @Query("SELECT c.applicantEmail FROM CardApplicantInfo c WHERE c.cardDetail.optionalTerms = :optionalTerms")
     List<String> findEmailsByOptionalTerms(int optionalTerms);

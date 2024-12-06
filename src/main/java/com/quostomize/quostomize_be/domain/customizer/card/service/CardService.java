@@ -81,8 +81,8 @@ public class CardService {
         return cardDetailRepository.findBySearchTerm(pageable, searchTerm);
     }
 
-    public Page<CardDetail> getCardByMemberId(Pageable pageable, Long memberId) {
-        return customerRepository.findCardByMemberId(pageable, memberId);
+    public Page<CardDetail> getCardByMemberId(Pageable pageable, Long memberId, CardStatus status) {
+        return customerRepository.findCardByMemberId(pageable, memberId, status);
     }
 
     @Transactional
