@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.config;
 
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
+import com.quostomize.quostomize_be.domain.auth.service.EncryptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +19,7 @@ public class CustomSecurityContextFactory implements WithSecurityContextFactory<
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final TestEncryptConfig testEncryptConfig;
+    private final EncryptService testEncryptConfig;
 
     @Override
     public SecurityContext createSecurityContext(MockUser annotation) {
@@ -32,7 +33,7 @@ public class CustomSecurityContextFactory implements WithSecurityContextFactory<
                 .memberAddress(annotation.memberAddress())
                 .memberDetailAddress(annotation.memberDetailAddress())
                 .memberPhoneNumber(testEncryptConfig.encryptPhoneNumber(annotation.memberPhoneNumber()))
-                .secondaryAuthCode(testEncryptConfig.decryptSecondaryAuthCode(annotation.secodaryAuthCode()))
+                .secondaryAuthCode(testEncryptConfig.encryptSecondaryAuthCode(annotation.secodaryAuthCode()))
                 .build();
 
         Member saved = memberRepository.save(member);
