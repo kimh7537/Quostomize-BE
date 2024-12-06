@@ -106,4 +106,4 @@ docker-compose.yml
 logs/
 *.log
 
-applicaton-test.yml
+test/resources/applicaton-test.yml
