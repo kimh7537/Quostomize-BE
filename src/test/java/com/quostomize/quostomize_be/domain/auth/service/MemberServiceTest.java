@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.api.member.dto.UpdateEmailDTO;
 import com.quostomize.quostomize_be.api.member.dto.MemberResponseDTO;
 
 import com.quostomize.quostomize_be.api.member.dto.UpdatePhoneNumberRequest;
+import com.quostomize.quostomize_be.domain.auth.component.MemberReader;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional(readOnly = true)
-public class MemberServiceTest {
+class MemberServiceTest {
 
     @InjectMocks
     private MemberService memberService;
@@ -35,17 +36,35 @@ public class MemberServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
-    @Test
-    @DisplayName("회원 단일 조회")
-    void getMemberInfoByIdTest() {
+    @Mock
+    private EncryptService encryptService;
 
+    @Mock
+    private MemberReader memberReader;
+
+    @Test
+    @DisplayName("회원 단일 조회 - 성공")
+    void getMemberInfoByIdTest() {
         // given
         long memberId = 2L;
-        Member savedMember = new Member("김철수", "cheolsu0708@testmail.com","cheolsu0708", "00000000", "1234561234567", "22220", "개발특별시 자바구 스프링로17길", "부트빌딩 8층 테스트호", "01012345678", "72782279", MemberRole.MEMBER);
+        String decryptedPhoneNumber = "01012345678"; // 복호화된 전화번호
+        Member savedMember = new Member(
+                "김철수",
+                "cheolsu0708@testmail.com",
+                "cheolsu0708",
+                "00000000",
+                "1234561234567",
+                "22220",
+                "개발특별시 자바구 스프링로17길",
+                "부트빌딩 8층 테스트호",
+                "01012345678",
+                "72782279",
+                MemberRole.MEMBER
+        );
 
-
-        // stub
-        given(memberRepository.findByMemberId(memberId)).willReturn(Optional.of(savedMember));
+        // Mock 설정
+        given(memberReader.findById(memberId)).willReturn(savedMember); // 멤버 조회 Mock
+        given(encryptService.decryptPhoneNumber(savedMember.getMemberPhoneNumber())).willReturn(decryptedPhoneNumber); // 복호화 Mock
 
         // when
         MemberResponseDTO findMember = memberService.findByMemberId(memberId);
@@ -53,8 +72,7 @@ public class MemberServiceTest {
         // then
         assertThat(findMember.memberName()).isEqualTo(savedMember.getMemberName());
         assertThat(findMember.memberEmail()).isEqualTo(savedMember.getMemberEmail());
-        assertThat(findMember.memberPhoneNumber()).isEqualTo(savedMember.getMemberPhoneNumber());
-
+        assertThat(findMember.memberPhoneNumber()).isEqualTo(decryptedPhoneNumber); // 복호화된 전화번호 비교
     }
 
     @Test
