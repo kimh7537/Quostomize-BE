@@ -8,19 +8,19 @@ import com.quostomize.quostomize_be.common.jwt.JwtTokenProvider;
 import com.quostomize.quostomize_be.common.jwt.RefreshToken;
 import com.quostomize.quostomize_be.common.jwt.RefreshTokenRepository;
 import com.quostomize.quostomize_be.common.sms.service.SmsService;
-import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.auth.repository.MemberRepository;
 import com.quostomize.quostomize_be.domain.customizer.cardapplication.repository.CardApplicantInfoRepository;
 import com.quostomize.quostomize_be.domain.customizer.customer.repository.CustomerRepository;
+import com.quostomize.quostomize_be.domain.log.enums.LogStatus;
+import com.quostomize.quostomize_be.domain.log.enums.LogType;
+import com.quostomize.quostomize_be.domain.log.service.LogService;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -52,7 +52,6 @@ class AuthServiceTest {
     @Mock
     private RefreshTokenRepository refreshTokenRepository;
 
-
     @Mock
     private SmsService smsService;
 
@@ -62,60 +61,39 @@ class AuthServiceTest {
     @Mock
     private EncryptService encryptService;
 
-    @BeforeEach
-    void setUp() {
-//        reset(memberRepository, cardApplicantInfoRepository, customerRepository, jwtTokenProvider, refreshTokenRepository, smsService);
-        memberRepository.deleteAll();
-    }
-
     @Mock
-    private JdbcTemplate jdbcTemplate; //Customer_id 에 test가 영향을 받아 잠시 Fk 비활성화 하기 위해 사용
-
-    @Mock
-    private MemberService memberService;
-
-//    @BeforeEach
-//    void setUp(){
-//        jdbcTemplate.execute("SET foreign_key_checks = 0;"); // 외래 키 제약 조건 비활성화
-//    }
-//
-//    @AfterEach
-//    void tearDown() {
-//        jdbcTemplate.execute("SET foreign_key_checks = 1;"); // 외래 키 제약 조건 활성화
-//    }
+    private LogService logService;
 
 
     @Test
     @DisplayName("중복된 이메일로 인한 예외 발생 테스트")
     void saveMember_DuplicateEmail_Exception() {
         // given
-        Member member = Member.builder()
-                .memberName("testName")
-                .memberEmail("test@example.com")
-                .memberLoginId("testLoginId")
-                .memberPassword("password123")
-                .residenceNumber("1234567891011")
-                .zipCode("12345")
-                .memberAddress("testAddress")
-                .memberDetailAddress("testAddress111")
-                .memberPhoneNumber("01012345645")
-                .secondaryAuthCode("456789")
-                .build();
+        MemberRequestDto request = new MemberRequestDto(
+                "testName",
+                "test@example.com",
+                "testLoginId",
+                "password123",
+                "1234567891011",
+                "12345",
+                "testAddress",
+                "testAddress111",
+                "01012345645",
+                "456789"
+        );
 
-        doThrow(new AppException(ErrorCode.EMAIL_DUPLICATED))
-                .when(authService).saveMember(MemberRequestDto.from(member));
+        doThrow(new AppException(ErrorCode.EMAIL_DUPLICATED)).when(validateService).checkDuplicateEmail(request.memberEmail());
 
         // when & then
-        AppException exception = assertThrows(AppException.class, () -> authService.saveMember(MemberRequestDto.from(member)));
-        assertEquals("EMAIL_DUPLICATED", exception.getErrorCode().name());
+        AppException exception = assertThrows(AppException.class, () -> authService.saveMember(request));
+        assertEquals(ErrorCode.EMAIL_DUPLICATED, exception.getErrorCode());
     }
 
 
     @Test
     @DisplayName("유효하지 않은 아이디로 회원가입 시도")
-    void notValid_LoginId_Exception(){
+    void notValid_LoginId_Exception() {
         // given
-        // 중복된 이메일로 회원가입 시도
         MemberRequestDto notValidLoginId = new MemberRequestDto(
                 "testName2",
                 "test@example.com",
@@ -123,14 +101,17 @@ class AuthServiceTest {
                 "password123",
                 "1234545678912",
                 "12999",
-                "1234545678912",
+                "testAddress",
                 "testDetailAddress",
                 "01055558888",
                 "123456"
         );
+
+        doThrow(new AppException(ErrorCode.INVALID_LOGIN_ID)).when(validateService).checkLoginIdPattern(notValidLoginId.memberLoginId());
+
         // when & then
         AppException exception = assertThrows(AppException.class, () -> authService.saveMember(notValidLoginId));
-        assertEquals("INVALID_LOGIN_ID", exception.getErrorCode().name());
+        assertEquals(ErrorCode.INVALID_LOGIN_ID, exception.getErrorCode());
     }
 
 
@@ -154,6 +135,7 @@ class AuthServiceTest {
         verify(refreshTokenRepository, times(1)).delete(refreshTokenEntity);
         verify(jwtTokenProvider, times(1)).setBlackList("accessToken");
         verify(jwtTokenProvider, times(1)).setBlackList(refreshToken);
+        verify(logService, times(1)).saveLog(LogType.LOGOUT, "회원 ID: " + memberId + " 로그아웃 성공", memberId, LogStatus.SUCCESS, "/v1/api/auth/logout");
     }
 
 }
