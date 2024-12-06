@@ -42,7 +42,7 @@ public class EmailSendService {
     private final JavaMailSender javaMailSender;
     private final RedisConfig redisConfig;
     private final CardApplicantInfoRepository cardApplicantInfoRepository;
-    @Qualifier("taskExecutor")
+    @Qualifier("customTaskExecutor")
     private final ThreadPoolTaskExecutor taskExecutor;
 
     // 현재 인증된 관리자의 이메일을 가져오는 메서드
