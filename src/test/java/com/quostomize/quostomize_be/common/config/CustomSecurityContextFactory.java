@@ -1,4 +1,4 @@
-package com.quostomize.quostomize_be.config;
+package com.quostomize.quostomize_be.common.config;
 
 
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
