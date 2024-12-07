@@ -13,8 +13,8 @@ public enum LogType {
     LOGOUT("로그아웃"),
 
     // 메일 발송 관련
-    MAIL_SEND_SUCCESS("메일 발송 성공"),
-    MAIL_SEND_FAILURE("메일 발송 실패"),
+    MAIL_SEND("메일 발송 성공"),
+    MAIL_FAILURE("메일 발송 실패"),
 
     // 결제 관련
     PAYMENT_REQUEST("결제 요청"),

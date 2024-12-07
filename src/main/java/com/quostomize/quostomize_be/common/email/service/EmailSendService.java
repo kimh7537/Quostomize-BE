@@ -14,6 +14,8 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +45,17 @@ public class EmailSendService {
     @Qualifier("taskExecutor")
     private final ThreadPoolTaskExecutor taskExecutor;
 
-    public void adminMailSend(String title, MultipartFile htmlFile, Integer optionalTerms) {
+    // 현재 인증된 관리자의 이메일을 가져오는 메서드
+    public String getCurrentAdminId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName();
+        } else {
+            throw new RuntimeException("현재 인증된 관리자가 없습니다.");
+        }
+    }
+
+    public void adminMailSend(String title, MultipartFile htmlFile, Integer optionalTerms, String adminId) {
         try{
             String htmlContent = new String(htmlFile.getBytes(), StandardCharsets.UTF_8);
             List<String> emails = (optionalTerms == null || optionalTerms == -1)
