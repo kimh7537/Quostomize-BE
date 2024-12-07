@@ -46,7 +46,7 @@ public class PointUsageMethodService {
                 .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_FOUND));
     }
 
-    private long getCardSequenceIdForMember(Long memberId) {
+    public long getCardSequenceIdForMember(Long memberId) {
         return customerRepository.findByMember_MemberId(memberId)
                 .map(customer -> {
                     log.info("customer: {}", customer);
