@@ -3,7 +3,7 @@ package com.quostomize.quostomize_be.api.pointUsageMethod.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quostomize.quostomize_be.api.pointUsageMethod.dto.PointUsageMethodResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
-import com.quostomize.quostomize_be.config.MockUser;
+import com.quostomize.quostomize_be.common.config.MockUser;
 import com.quostomize.quostomize_be.domain.customizer.pointUsageMethod.service.PointUsageMethodService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
