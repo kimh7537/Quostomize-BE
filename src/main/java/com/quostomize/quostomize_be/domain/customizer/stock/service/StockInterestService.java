@@ -103,7 +103,7 @@ public class StockInterestService {
     @Transactional
     public List<StockRecommendResponse> getCardBenefit(Long cardId, Boolean isRecommendByCardBenefit) {
 
-        String preSignedUrl = s3Service.getPreSignedUrl("image/quokka.png");  // default 이미지 링크
+//        String preSignedUrl = s3Service.getPreSignedUrl("image/quokka.png");  // default 이미지 링크
         List<StockRecommendResponse> recommendResponses = new ArrayList<>(); // 추천 종목을 보관할 배열
         AcquiredCardBenefits cardBenefitDto = new AcquiredCardBenefits(); // 카드 혜택을 DTo 형식으로 저장할 수 있게 하는 메서드를 가진 객체
         ComputeEntry computeEntry = new ComputeEntry(); // 조회한 배열에서 적립률이 높은 순서대로 정렬 시키는 메서드를 가진 객체
@@ -136,14 +136,14 @@ public class StockInterestService {
 
             if (categorizingBenefits.getUpperNumber() == 5) { // 상위 분류만 5개가 있을 떄,
                 // 상위분류만 정렬한 배열을 적립률이 높은 순서대로 재정렬 , 이때 적립률이 동일한 경우 동일 적립률 객체간의 랜덤 위치 정렬을 진행
-                upperClassfication.addRecommendList(computeWithLowerAndUpper,categorizingBenefits.getUpperName(), stockInformationRepository, preSignedUrl, recommendResponses); // 해당 상위분류에 맞는 종목을 추천 - recommendResponses에 저장
+                upperClassfication.addRecommendList(computeWithLowerAndUpper,categorizingBenefits.getUpperName(), stockInformationRepository, recommendResponses,s3Service); // 해당 상위분류에 맞는 종목을 추천 - recommendResponses에 저장
 
             } else if (categorizingBenefits.getLowerNumber() == 5) { // 하위 분류만 5개가 있을 떄,
                 // 하위분류만 정렬한 배열을 적립률이 높은 순서대로 재정렬, 이떄 적립률이 동일한 경우 동일 적립률 객체간의 랜덤 위치 정렬을 진행
-                    lowerClassfication.addRecommendList(computeEntry,categorizingBenefits.getLowerName(), stockInformationRepository, preSignedUrl, recommendResponses); // 해당 상위분류에 맞는 종목을 추천 - recommendResponses에 저장
+                    lowerClassfication.addRecommendList(computeEntry,categorizingBenefits.getLowerName(), stockInformationRepository, recommendResponses, s3Service); // 해당 상위분류에 맞는 종목을 추천 - recommendResponses에 저장
             } else { // 상위 하위 분류가 동시에 존재할 떄,
                 // 상위 정렬과 하위 정렬의 항목간 적립률 비교 후, 가장 높은 쪽의 테마주식을 추천 진행
-                upperAndLowerClassification.computeByAll(stockInformationRepository,preSignedUrl,recommendResponses,computeWithLowerAndUpper);
+                upperAndLowerClassification.computeByAll(stockInformationRepository, s3Service, recommendResponses, computeWithLowerAndUpper);
                 }
             }
          else { // 결제 내역 기반 주식 추천
