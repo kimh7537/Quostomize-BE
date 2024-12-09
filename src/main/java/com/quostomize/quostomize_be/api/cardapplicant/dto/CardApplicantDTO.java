@@ -46,7 +46,7 @@ public record CardApplicantDTO(
         String applicantName,
         @NotNull
         @Size(max = 40)
-        @Pattern(regexp = "^[a-zA-Z]+$")
+        @Pattern(regexp = "^[a-zA-Z ]+$")
         String englishName,
         @NotNull
         @Size(max = 10)
@@ -58,7 +58,6 @@ public record CardApplicantDTO(
         @Size(max = 100)
         String shippingDetailAddress,
         @NotNull
-        @NotBlank
         @Email
         @Size(max = 50)
         String applicantEmail,
