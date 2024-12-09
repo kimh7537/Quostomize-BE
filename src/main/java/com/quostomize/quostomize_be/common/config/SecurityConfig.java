@@ -68,10 +68,13 @@ public class SecurityConfig {
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(WHITE_LIST).permitAll()
                         .requestMatchers("/v1/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/v1/api/member/**", "/v1/api/auth/**").hasRole("SUSPENDED")
                         .requestMatchers("/v1/api/**")
                         .access((authentication, object) -> new AuthorizationDecision(
-                                authentication.get().getAuthorities().stream()
-                                        .anyMatch(a -> a.getAuthority().equals("ROLE_MEMBER")) &&
+                                (authentication.get().getAuthorities().stream()
+                                        .anyMatch(a -> a.getAuthority().equals("ROLE_MEMBER")) ||
+                                        authentication.get().getAuthorities().stream()
+                                                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) &&
                                         !authentication.get().getAuthorities().stream()
                                                 .anyMatch(a -> a.getAuthority().equals("ROLE_SUSPENDED"))
                         ))
