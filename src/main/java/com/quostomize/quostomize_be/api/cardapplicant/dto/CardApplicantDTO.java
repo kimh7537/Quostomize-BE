@@ -18,10 +18,8 @@ public record CardApplicantDTO(
         @NotNull
         boolean isPostpaidTransport,
         @NotNull
-        @NotBlank
         String cardPassword,
         @NotNull
-        @NotBlank
         String cardPasswordConfirm,
         @NotNull
         int optionalTerms,
@@ -42,27 +40,21 @@ public record CardApplicantDTO(
 
         // 신청자 정보
         @NotNull
-        @NotBlank
         String residenceNumber,
         @NotNull
-        @NotBlank
         @Size(max = 40)
         String applicantName,
         @NotNull
-        @NotBlank
         @Size(max = 40)
         @Pattern(regexp = "^[a-zA-Z]+$")
         String englishName,
         @NotNull
-        @NotBlank
         @Size(max = 10)
         String zipCode,
         @NotNull
-        @NotBlank
         @Size(max = 100)
         String shippingAddress,
         @NotNull
-        @NotBlank
         @Size(max = 100)
         String shippingDetailAddress,
         @NotNull
@@ -71,15 +63,12 @@ public record CardApplicantDTO(
         @Size(max = 50)
         String applicantEmail,
         @NotNull
-        @NotBlank
         @Size(max = 20)
         String phoneNumber,
         @NotNull
-        @NotBlank
         @Size(max = 100)
         String homeAddress,
         @NotNull
-        @NotBlank
         @Size(max = 100)
         String homeDetailAddress
 ) {
@@ -88,7 +77,6 @@ public record CardApplicantDTO(
             @NotNull
             Long upperCategoryId,
             Long lowerCategoryId,
-            @NotNull
             @Min(0)
             @Max(4)
             Integer benefitRate
