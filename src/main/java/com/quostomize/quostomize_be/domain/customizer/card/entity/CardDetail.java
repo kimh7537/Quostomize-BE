@@ -64,7 +64,7 @@ public class CardDetail extends BaseTimeEntity {
     private CardStatus status;
 
     @Builder
-    public CardDetail(int paymentReceiptMethods, int optionalTerms, LocalDate expirationDate, String cvcNumber, String cardPassword, Boolean isPostpaidTransport, Boolean isForeignBlocked, Boolean isAppCard, int cardBrand, int cardColor, String cardNumber, long cardSequenceId) {
+    public CardDetail(int paymentReceiptMethods, int optionalTerms, LocalDate expirationDate, String cvcNumber, String cardPassword, Boolean isPostpaidTransport, Boolean isForeignBlocked, Boolean isAppCard, int cardBrand, int cardColor, String cardNumber, long cardSequenceId, CardStatus status) {
         this.paymentReceiptMethods = paymentReceiptMethods;
         this.optionalTerms = optionalTerms;
         this.expirationDate = expirationDate;
@@ -77,6 +77,7 @@ public class CardDetail extends BaseTimeEntity {
         this.cardColor = cardColor;
         this.cardNumber = cardNumber;
         this.cardSequenceId = cardSequenceId;
+        this.status = status;
     }
 
 }

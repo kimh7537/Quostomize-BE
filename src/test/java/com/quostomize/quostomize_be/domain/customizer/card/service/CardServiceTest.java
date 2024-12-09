@@ -2,6 +2,7 @@ package com.quostomize.quostomize_be.domain.customizer.card.service;
 
 import com.quostomize.quostomize_be.api.card.dto.CreateCardDTO;
 import com.quostomize.quostomize_be.domain.customizer.card.entity.CardDetail;
+import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.card.repository.CardDetailRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +36,7 @@ class CardServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        cardService = new CardService(cardDetailRepository);
+//        cardService = new CardService(cardDetailRepository);
     }
 
     @Test
@@ -69,6 +70,7 @@ class CardServiceTest {
                 .expirationDate(LocalDate.of(now.getYear() + 5, now.getMonthValue(), 1))
                 .optionalTerms(2)
                 .paymentReceiptMethods(0)
+                .status(CardStatus.CREATION_PENDING)
                 .build();
 
         when(cardDetailRepository.save(any(CardDetail.class))).thenReturn(expectedCardDetail);
