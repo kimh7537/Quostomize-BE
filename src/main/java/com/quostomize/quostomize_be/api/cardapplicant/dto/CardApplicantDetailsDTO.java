@@ -17,7 +17,7 @@ public record CardApplicantDetailsDTO(
         @NotNull
         @NotBlank
         @Size(max = 40)
-        @Pattern(regexp = "^[a-zA-Z]+$")
+        @Pattern(regexp = "^[a-zA-Z ]+$")
         String englishName,
 
         @NotNull
