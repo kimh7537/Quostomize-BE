@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -65,8 +66,15 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers("/v1/api/admin/**").hasRole("ADMIN")
                         .requestMatchers(WHITE_LIST).permitAll()
+                        .requestMatchers("/v1/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/v1/api/**")
+                        .access((authentication, object) -> new AuthorizationDecision(
+                                authentication.get().getAuthorities().stream()
+                                        .anyMatch(a -> a.getAuthority().equals("ROLE_MEMBER")) &&
+                                        !authentication.get().getAuthorities().stream()
+                                                .anyMatch(a -> a.getAuthority().equals("ROLE_SUSPENDED"))
+                        ))
                         .anyRequest().authenticated()
                 );
 
