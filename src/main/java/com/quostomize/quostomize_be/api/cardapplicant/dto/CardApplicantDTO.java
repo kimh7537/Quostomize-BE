@@ -77,6 +77,7 @@ public record CardApplicantDTO(
             @NotNull
             Long upperCategoryId,
             Long lowerCategoryId,
+            @NotNull
             @Min(0)
             @Max(4)
             Integer benefitRate
