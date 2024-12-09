@@ -89,3 +89,4 @@ jobs:
             docker rm quostomize-ecr || true
             docker pull ${{ steps.login-ecr.outputs.registry }}/quostomize-ecr:latest
             docker run -d --name quostomize-ecr -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/quostomize-ecr:latest
+            docker network connect monitoring quostomize-ecr || true
