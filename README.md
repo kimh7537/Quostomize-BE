@@ -11,6 +11,7 @@
 ### 👉🏻 [사이트 바로가기](https://quostomizecard.site/home)
 <br>
 
+
 ## 🚀 주요 설계 방향 
 본 프로젝트는 **서비스 보안**과 **안정성 강화**를 주요 설계 방향으로 두고 개발되었습니다.
 
@@ -54,6 +55,10 @@
    - 조각투자: 원하는 주식을 설정하고 포인트로 주식 매수
    - 일일복권: 매일 자정 추첨으로 최대 1만 포인트 지급
 
+**3. 카드 생성 - 실제 카드 생성 프로세스와 멱등성을 적용한 생성 기능**
+![커스터 마이징 서비스 (2)](https://github.com/user-attachments/assets/21f776ea-d0e6-4ff1-86a2-b4ab0807902b)
+
+
 <br>
 
 ## ⚙️ 기술 스택
@@ -82,9 +87,11 @@
 <br>  
 위 과정을 통해 코드 푸시부터 배포까지의 작업이 자동화되어 빠르고 효율적으로 운영되고 있습니다.  
 
-## 🌟 인프라 구조도
+## 🖥️ 인프라 구조도
 ![image](https://github.com/user-attachments/assets/aeb76baa-ece2-40fd-8ed6-18205d223d69)
 
+## 🖥️ ERD
+![커스터 마이징 서비스 (1)](https://github.com/user-attachments/assets/a312fc9f-7c6f-47cd-b9e7-c6fff3264214)
 
 
 
@@ -144,10 +151,6 @@
 ## 📅 진행 일정 (20Days)
 - 프로젝트 시작일: 2024.11.19.
 - 프로젝트 종료일: 2024.12.08.
-<br>
-
-## 🖥️ 개발 환경
-- 
 <br>
 
 ## ✍️ 컨벤션
@@ -221,17 +224,6 @@ Feat/input : 비밀번호 숨김 처리
 </table>
 <br>
 
-**초기 협업 시 주의사항**
-- 패키지 매니저는 pnpm을 사용합니다.
-  - `npm install -g pnpm`
-  - `pnpm install`
-- navbar가 존재하는 페이지 구현 시 `app/(nav)` 폴더 하위에 작성합니다.
-- navbar가 없는 페이지 구현 시 `app/(fullscreen)` 폴더 하위에 작성합니다.
-- 중복 가능성이 있거나 페이지가 너무 길어져서 분리가 필요한 컴포넌트의 경우 분리한 파일은 `components` 폴더의 같은 이름을 가지는 하위 폴더에 생성합니다.
-- 만약 화면에 표시하는 것 외의 로직이 길어지면 필요하면 `utils` 폴더에 js파일 작성합니다.
-- 아이콘 사용 시 `https://marella.me/material-icons/demo/` 페이지에서 탐색 후 없으면 파일로 대체합니다.
-<br>
-
 ## 🧑‍🤝‍🧑 팀원 소개
 <table>
   <tr>
@@ -299,10 +291,28 @@ Feat/input : 비밀번호 숨김 처리
     </td>
   </tr>
   <tr>
+   <td align="center">총괄 팀장<br/>Frontend 팀장<br/>FullStack 개발</td>
+   <td align="center">FullStack 개발 팀원</td>
+   <td align="center">Backend 팀장<br/>FullStack 개발</td>
+   <td align="center">FullStack 개발 팀원</td>
+   <td align="center">PM 팀장<br/>FullStack 개발 팀원</td>
+   <td align="center">FullStack 개발 팀원</td>
+ </tr>
+  <tr>
+    <td align="center">
+      스프링 배치 복권 기능 구현 <br>
+      내용 입력 <br>
+      내용 입력
+    </td>
     <td align="center">
       내용 입력 <br>
       내용 입력 <br>
       내용 입력
+    </td>
+    <td align="center">
+      인증, 인가 구현 <br>
+      CICD & 인프라 구축 <br>
+      백엔드 프로젝트 세팅
     </td>
     <td align="center">
       내용 입력 <br>
@@ -315,22 +325,34 @@ Feat/input : 비밀번호 숨김 처리
       내용 입력
     </td>
     <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
-    </td>
-    <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
-    </td>
-    <td align="center">
-      내용 입력 <br>
+      MDC 로깅 구현 <br>
       내용 입력 <br>
       내용 입력
     </td>
   </tr>
 </table>
+
+<br>
+
+## 👥 팀원 개인별 회고
+
+### 기남석
+- ~
+  
+### 김영성
+- ~
+
+### 김현우
+- ~
+
+### 방성경
+- ~
+
+### 오선민
+- ~
+
+### 홍찬의
+- ~
 
 <br>
 
