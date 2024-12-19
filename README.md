@@ -1,4 +1,4 @@
-![readme_프론트엔드_v3](https://github.com/user-attachments/assets/8e48b5ce-a9b6-49dd-8a27-6e3afe2b69d7)
+![커스터 마이징 서비스](https://github.com/user-attachments/assets/b5ff2e1b-fb52-4fd8-86a4-54e5325c0b38)![readme_프론트엔드_v3](https://github.com/user-attachments/assets/8e48b5ce-a9b6-49dd-8a27-6e3afe2b69d7)
 
 # 📌 Quostomize-BE: 우리 커스터마이징
 ## 📝 프로젝트 소개
@@ -57,7 +57,7 @@
 <br>
 
 ## ⚙️ 기술 스택
-[커스터 마이징 서비스.pdf](https://github.com/user-attachments/files/18196994/default.pdf)
+![커스터 마이징 서비스](https://github.com/user-attachments/assets/e39930b0-e8e0-450d-a3cb-465df691d9ef)
 <br>
 
 ## 🌐 배포 파이프라인
@@ -322,6 +322,6 @@ Feat/input : 비밀번호 숨김 처리
 <br>
 
 ## 🔗 관련 문서 링크
-- [Quostomize-BE](https://github.com/woorifisa-projects-3rd/Quostomize-BE)
+- [Quostomize-FE](https://github.com/woorifisa-projects-3rd/Quostomize-FE)
 - [Quostomize-admin](https://github.com/woorifisa-projects-3rd/Quostomize-admin)
 - [HeadlessUI](https://headlessui.com/)
