@@ -82,61 +82,62 @@
 <br>  
 위 과정을 통해 코드 푸시부터 배포까지의 작업이 자동화되어 빠르고 효율적으로 운영되고 있습니다.  
 
+## 🌟 인프라 구조도
+![image](https://github.com/user-attachments/assets/aeb76baa-ece2-40fd-8ed6-18205d223d69)
+
+
+
+
 ## 🗂️ 주요 폴더 구조
 **백엔드**
 ```
-root/
-├── app/
-│   ├── (fullscreen)/
-│   │   ├── card-benefit-details/
-│   │   ├── create-card/
-│   │   ├── my-page/
-│   │   ├── sign-up/
-│   │   └── layout.jsx
-│   ├── (nav)/
-│   │   ├── benefit-change/
-│   │   ├── find-id/
-│   │   ├── find-password/
-│   │   ├── home/
-│   │   ├── login/
-│   │   ├── lotto/
-│   │   ├── my-card/
-│   │   ├── piece-stock/
-│   │   ├── qna/
-│   │   └── layout.jsx
-│   └── api/
-│       ├── auth/
-│       └── API 연결이 필요한 서비스
-│           ├── (fullscreen 관련 API)
-│           ├── (nav 관련 API)
-│           └── 기타 공통 API
-├── components/
-│   ├── box/
-│   ├── bubble/
-│   ├── button/
-│   ├── calendar/
-│   ├── card/
-│   ├── graph/
-│   ├── header/
-│   ├── navigationbar/
-│   └── overlay/
-├── public/
-│   ├── cards-images/
-│   ├── icons/
-│   ├── images/
-│   └── lotties/
-├── utils/
-│   ├── loginValid.js
-│   └── getYYYYMMDDDate.js
-├── auth.js
-├── middleware.js
-├── jsconfig.json
-├── next.config.mjs
-├── tailwind.config.js
-├── .env.local
-├── package.json
-├── pnpm-lock.yaml
-└── postcss.config.js
+└── quostomizebe/
+    ├── api/
+    │   ├── admin/
+    │   ├── adminResponse/
+    │   ├── auth/
+    │   ├── card/
+    │   ├── cardBenefit/
+    │   ├── cardApplicant/
+    │   ├── health/
+    │   ├── lotto/
+    │   ├── member/
+    │   ├── memberQuestion/
+    │   ├── payment/
+    │   ├── pointUsageMethod/
+    │   ├── sms/
+    │   └── stock/
+    ├── common/
+    │   ├── aspects/
+    │   ├── auth/
+    │   ├── config/
+    │   ├── dto/
+    │   ├── email/
+    │   ├── entity/
+    │   ├── error/
+    │   ├── filter/
+    │   ├── idempotency/
+    │   ├── jwt/
+    │   ├── s3/
+    │   └── sms/
+    ├── domain/
+    │   ├── admin/
+    │   ├── auth/
+    │   ├── customizer/
+    │   │   ├── adminResponse/
+    │   │   ├── benefit/
+    │   │   ├── card/
+    │   │   ├── cardBenefit/
+    │   │   ├── cardApplication/
+    │   │   ├── customer/
+    │   │   ├── lotto/
+    │   │   ├── memberQuestion/
+    │   │   ├── payment/
+    │   │   ├── point/
+    │   │   ├── pointUsageMethod/
+    │   │   └── stock/
+    │   └── log/
+    └── QuostomizeBeApplication.java
 ```
 <br>
 
