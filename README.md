@@ -73,10 +73,55 @@
 ![커스터 마이징 서비스 (4)](https://github.com/user-attachments/assets/5640c409-79a2-42f8-84c9-dc1ab16c1a29)
 
    - Spring Batch를 활용해 복권 기능을 활성화한 사용자 집계
-   - 자정(00:00)에 1/1000 확률로 포인트 획
+   - 자정(00:00)에 1/1000 확률로 포인트 획득
 
 
 <br>
+
+---
+
+![readme_관리자_v3](https://github.com/user-attachments/assets/288e1653-9493-4a24-ba00-1ce1fd54897b)
+# 📌 Quostomize-admin: 관리자 페이지
+## 📝 프로젝트 소개
+우리 커스터마이징 서비스(QUOSTOMIZE)를 위한 관리자 페이지입니다.
+<br>
+정보 조회, 알림 메일 발송, 서비스 및 로그 관리, 실시간 모니터링 기능을 통해 서비스를 효율적으로 관리합니다.
+### 👉🏻 [관리자 페이지 바로가기](https://quostomize-admin.vercel.app/)
+<br>
+
+## 🚀 주요 설계 방향 
+본 프로젝트는 **서비스 안정성**과 **효율성 증대**를 주요 설계 방향으로 두고 개발되었습니다.
+- **Authentication + Role 기반 Admin 여부 확인**: 로그인 시 사용자 인증 후, 관리자인지 확인하는 절차를 구현하여 권한을 제어합니다.
+- **MiddleWare + API 내부 Role 체크**: 중간 미들웨어에서 API 접근 시 역할을 확인하여 이중 인증을 제공합니다.
+- **만료 토큰 갱신 및 예외 처리**: 토큰 기반 인증을 적용하여 토큰 만료 시 갱신하고 예외 처리를 통해 안정적인 인증 프로세스를 유지합니다.
+- **역할 기반 접근 제어**: **Admin**만 민감한 데이터에 접근할 수 있도록 하여 보안을 강화했습니다.
+<br>
+
+## 🔧 주요 기능
+- **정보 조회**: 관리자가 다양한 정보(이용자, 카드, 가맹점 등)를 조회할 수 있습니다.
+- **알림 메일 발송**: 관리자가 이메일을 통해 알림을 발송할 수 있는 기능입니다.
+![커스터 마이징 서비스 (5)](https://github.com/user-attachments/assets/f9334aa2-84f1-4ad4-81fd-7540a9389de2)
+
+
+- **서비스 관리**: 이용자, 카드, 가맹점 관리 기능을 제공합니다.
+![커스터 마이징 서비스 (6)](https://github.com/user-attachments/assets/1d3c9ccf-d4eb-473a-8656-a91c3b1b8ced)
+
+
+- **로그 관리**: MDC(Mapped Diagnostic Context) 필터를 적용하여 로그를 순차적으로 관리하고 분석할 수 있습니다.
+![53](https://github.com/user-attachments/assets/95f2690a-ea8e-4560-8123-2c48c2ab60f8)
+
+![54](https://github.com/user-attachments/assets/3473ca5d-82a8-46d9-971e-89c27271a158)
+
+
+<br>
+
+## 🌟 추가 구현사항 
+- **모니터링**: Grafana를 통해 시스템 상태를 실시간으로 모니터링하고 문제를 즉시 대응할 수 있도록 합니다.
+![커스터 마이징 서비스 (7)](https://github.com/user-attachments/assets/649bf739-7335-4c6d-a5a0-f8a64315e1d0)
+
+
+<br>
+
 
 ## ⚙️ 기술 스택
 ![커스터 마이징 서비스](https://github.com/user-attachments/assets/e39930b0-e8e0-450d-a3cb-465df691d9ef)
