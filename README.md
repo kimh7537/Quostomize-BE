@@ -580,8 +580,8 @@ Feat/input : 비밀번호 숨김 처리
   <tr>
     <td align="center">
       스프링 배치 복권 기능 구현 <br>
-      내용 입력 <br>
-      내용 입력
+      JPA dirty checking을 고려한 API 통합 <br>
+      JUnit을 통한 단위테스트 코드 작성
     </td>
     <td align="center">
       내용 입력 <br>
