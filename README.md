@@ -521,23 +521,8 @@ Feat/input : 비밀번호 숨김 처리
         <img src="https://github.com/kimh7537.png" alt="김현우" width="150" height="150"/>
       </a>
     </td>
-    <td align="center">
-      <a href="https://github.com/bangsk2">
-        <img src="https://github.com/bangsk2.png" alt="방성경" width="150" height="150"/>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/seonmin5">
-        <img src="https://github.com/seonmin5.png" alt="오선민" width="150" height="150"/>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/hcu55">
-        <img src="https://github.com/hcu55.png" alt="홍찬의" width="150" height="150"/>
-      </a>
-    </td>
   </tr>
-   <tr>
+  <tr>
     <td align="center">
       <a href="https://github.com/Kee0304">
         <b>기남석</b>
@@ -553,30 +538,12 @@ Feat/input : 비밀번호 숨김 처리
         <b>김현우</b>
       </a>
     </td>
-    <td align="center">
-      <a href="https://github.com/bangsk2">
-        <b>방성경</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/seonmin5">
-        <b>오선민</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/hcu55">
-        <b>홍찬의</b>
-      </a>
-    </td>
   </tr>
   <tr>
-   <td align="center">총괄 팀장<br/>Frontend 팀장<br/>FullStack 개발</td>
-   <td align="center">FullStack 개발 팀원</td>
-   <td align="center">Backend 팀장<br/>FullStack 개발</td>
-   <td align="center">FullStack 개발 팀원</td>
-   <td align="center">PM 팀장<br/>FullStack 개발 팀원</td>
-   <td align="center">FullStack 개발 팀원</td>
- </tr>
+    <td align="center">총괄 팀장<br/>Frontend 팀장<br/>FullStack 개발</td>
+    <td align="center">FullStack 개발 팀원</td>
+    <td align="center">Backend 팀장<br/>FullStack 개발</td>
+  </tr>
   <tr>
     <td align="center">
       스프링 배치 복권 기능 구현 <br>
@@ -595,6 +562,49 @@ Feat/input : 비밀번호 숨김 처리
       외부 API 연결(한국투자증권OPENAPI, SMTP) <br>
       멱등성 적용
     </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/bangsk2">
+        <img src="https://github.com/bangsk2.png" alt="방성경" width="150" height="150"/>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/seonmin5">
+        <img src="https://github.com/seonmin5.png" alt="오선민" width="150" height="150"/>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/hcu55">
+        <img src="https://github.com/hcu55.png" alt="홍찬의" width="150" height="150"/>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/bangsk2">
+        <b>방성경</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/seonmin5">
+        <b>오선민</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/hcu55">
+        <b>홍찬의</b>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">FullStack 개발 팀원</td>
+    <td align="center">PM 팀장<br/>FullStack 개발 팀원</td>
+    <td align="center">FullStack 개발 팀원</td>
+  </tr>
+  <tr>
     <td align="center">
       내용 입력 <br>
       내용 입력 <br>
@@ -606,9 +616,10 @@ Feat/input : 비밀번호 숨김 처리
       내용 입력
     </td>
     <td align="center">
-      MDC 로깅 구현 <br>
-      내용 입력 <br>
-      내용 입력
+      복권 참여자, 카드 생성 API <br>
+      SMS 사용자 2차 인증 구현 <br>
+      MDC 활용한 로그 추적 구현 <br>
+      Spring AOP 사용자 활동 로깅
     </td>
   </tr>
 </table>
