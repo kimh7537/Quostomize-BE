@@ -222,6 +222,114 @@
 <br>
 
 
+## 💻 개발 환경
+<table>
+  <thead>
+    <tr>
+      <th>카테고리</th>
+      <th>라이브러리</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="5">프레임워크 & 코어</td>
+      <td><strong>Spring Boot (v3.3.5)</strong></td>
+      <td>Spring 기반의 애플리케이션 프레임워크로 RESTful API 및 다양한 Starter 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Security</strong></td>
+      <td>보안 관련 인증 및 권한 관리를 위한 프레임워크</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Data JPA</strong></td>
+      <td>JPA를 활용한 데이터베이스 연동과 ORM 기능 제공</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Data Redis</strong></td>
+      <td>Redis를 활용한 데이터 캐싱 및 세션 관리</td>
+    </tr>
+    <tr>
+      <td><strong>Spring AOP</strong></td>
+      <td>관점 지향 프로그래밍(AOP)을 통한 로깅 및 트랜잭션 관리</td>
+    </tr>
+    <tr>
+      <td rowspan="4">데이터베이스 & ORM</td>
+      <td><strong>MySQL Connector</strong></td>
+      <td>MySQL 데이터베이스 연결을 위한 JDBC 드라이버</td>
+    </tr>
+    <tr>
+      <td><strong>QueryDSL (v5.0.0)</strong></td>
+      <td>타입 세이프한 방식으로 동적 SQL 생성 지원</td>
+    </tr>
+    <tr>
+      <td><strong>p6spy</strong></td>
+      <td>SQL 로깅 및 성능 모니터링 도구</td>
+    </tr>
+    <tr>
+      <td><strong>HikariCP</strong></td>
+      <td>고성능 데이터베이스 커넥션 풀 라이브러리</td>
+    </tr>
+    <tr>
+      <td>문서화</td>
+      <td><strong>SpringDoc OpenAPI (v2.2.0)</strong></td>
+      <td>Swagger UI를 활용한 API 문서화 지원</td>
+    </tr>
+    <tr>
+      <td rowspan="3">보안 & 인증</td>
+      <td><strong>JWT (jjwt v0.9.1)</strong></td>
+      <td>JSON Web Token 기반 인증 및 토큰 생성/검증</td>
+    </tr>
+    <tr>
+      <td><strong>JAXB</strong></td>
+      <td>XML 데이터 처리와 직렬화/역직렬화 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Security Test</strong></td>
+      <td>보안 관련 테스트 지원</td>
+    </tr>
+    <tr>
+      <td rowspan="3">유틸리티</td>
+      <td><strong>Jackson Databind</strong></td>
+      <td>JSON 직렬화 및 역직렬화 유틸리티</td>
+    </tr>
+    <tr>
+      <td><strong>Commons IO</strong></td>
+      <td>입출력 스트림 처리 및 파일 관리</td>
+    </tr>
+    <tr>
+      <td><strong>CoolSMS SDK</strong></td>
+      <td>SMS 발송 기능 지원</td>
+    </tr>
+    <tr>
+      <td rowspan="2">모니터링</td>
+      <td><strong>Micrometer Prometheus</strong></td>
+      <td>Prometheus 기반 메트릭 수집 및 모니터링</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Actuator</strong></td>
+      <td>애플리케이션 상태 모니터링 및 관리</td>
+    </tr>
+    <tr>
+      <td rowspan="2">테스트</td>
+      <td><strong>Mockito</strong></td>
+      <td>Mock 객체를 활용한 유닛 테스트 지원</td>
+    </tr>
+    <tr>
+      <td><strong>WireMock</strong></td>
+      <td>HTTP API mocking 및 테스트용 스텁 제공</td>
+    </tr>
+    <tr>
+      <td>클라우드</td>
+      <td><strong>Spring Cloud AWS (v2.2.6)</strong></td>
+      <td>AWS 서비스와의 통합 지원</td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+
 ## ✍️ 컨벤션
 **커밋 컨벤션**
 - {Tag}/{작업 내용}
