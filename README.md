@@ -228,104 +228,206 @@
     <tr>
       <th>카테고리</th>
       <th>라이브러리</th>
+      <th>버전</th>
       <th>설명</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td rowspan="5">프레임워크 & 코어</td>
-      <td><strong>Spring Boot (v3.3.5)</strong></td>
+      <td rowspan="7">프레임워크 & 코어</td>
+      <td><strong>Spring Boot</strong></td>
+      <td>3.3.5</td>
       <td>Spring 기반의 애플리케이션 프레임워크로 RESTful API 및 다양한 Starter 지원</td>
     </tr>
     <tr>
       <td><strong>Spring Security</strong></td>
+      <td>6.3.4</td>
       <td>보안 관련 인증 및 권한 관리를 위한 프레임워크</td>
     </tr>
     <tr>
       <td><strong>Spring Data JPA</strong></td>
+      <td>3.3.5</td>
       <td>JPA를 활용한 데이터베이스 연동과 ORM 기능 제공</td>
     </tr>
     <tr>
       <td><strong>Spring Data Redis</strong></td>
+      <td>3.3.5</td>
       <td>Redis를 활용한 데이터 캐싱 및 세션 관리</td>
     </tr>
     <tr>
       <td><strong>Spring AOP</strong></td>
+      <td>6.1.14</td>
       <td>관점 지향 프로그래밍(AOP)을 통한 로깅 및 트랜잭션 관리</td>
     </tr>
     <tr>
-      <td rowspan="4">데이터베이스 & ORM</td>
+      <td><strong>Spring Cloud AWS</strong></td>
+      <td>2.2.6</td>
+      <td>AWS 서비스와의 통합 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Actuator</strong></td>
+      <td>3.3.5</td>
+      <td>애플리케이션 상태 모니터링 및 관리</td>
+    </tr>
+    <tr>
+      <td rowspan="6">데이터베이스 & ORM</td>
       <td><strong>MySQL Connector</strong></td>
+      <td>8.3.0</td>
       <td>MySQL 데이터베이스 연결을 위한 JDBC 드라이버</td>
     </tr>
     <tr>
-      <td><strong>QueryDSL (v5.0.0)</strong></td>
+      <td><strong>QueryDSL</strong></td>
+      <td>5.0.0</td>
       <td>타입 세이프한 방식으로 동적 SQL 생성 지원</td>
     </tr>
     <tr>
+      <td><strong>Hibernate Core</strong></td>
+      <td>6.5.3.Final</td>
+      <td>JPA 구현체로 ORM 매핑 지원</td>
+    </tr>
+    <tr>
       <td><strong>p6spy</strong></td>
+      <td>3.9.0</td>
       <td>SQL 로깅 및 성능 모니터링 도구</td>
     </tr>
     <tr>
       <td><strong>HikariCP</strong></td>
+      <td>5.1.0</td>
       <td>고성능 데이터베이스 커넥션 풀 라이브러리</td>
     </tr>
     <tr>
+      <td><strong>Spring Data Commons</strong></td>
+      <td>3.3.5</td>
+      <td>공통 데이터베이스 작업을 지원하는 스프링 모듈</td>
+    </tr>
+    <tr>
       <td>문서화</td>
-      <td><strong>SpringDoc OpenAPI (v2.2.0)</strong></td>
+      <td><strong>SpringDoc OpenAPI</strong></td>
+      <td>2.2.0</td>
       <td>Swagger UI를 활용한 API 문서화 지원</td>
     </tr>
     <tr>
-      <td rowspan="3">보안 & 인증</td>
-      <td><strong>JWT (jjwt v0.9.1)</strong></td>
+      <td rowspan="4">보안 & 인증</td>
+      <td><strong>JWT (jjwt)</strong></td>
+      <td>0.9.1</td>
       <td>JSON Web Token 기반 인증 및 토큰 생성/검증</td>
     </tr>
     <tr>
       <td><strong>JAXB</strong></td>
+      <td>2.3.0</td>
       <td>XML 데이터 처리와 직렬화/역직렬화 지원</td>
     </tr>
     <tr>
+      <td><strong>Spring Security Core</strong></td>
+      <td>6.3.4</td>
+      <td>Spring Security의 핵심 기능 제공</td>
+    </tr>
+    <tr>
       <td><strong>Spring Security Test</strong></td>
+      <td>6.3.4</td>
       <td>보안 관련 테스트 지원</td>
     </tr>
     <tr>
-      <td rowspan="3">유틸리티</td>
+      <td rowspan="5">유틸리티</td>
+      <td><strong>Jackson Core</strong></td>
+      <td>2.17.2</td>
+      <td>JSON 직렬화 및 역직렬화의 핵심 라이브러리</td>
+    </tr>
+    <tr>
       <td><strong>Jackson Databind</strong></td>
-      <td>JSON 직렬화 및 역직렬화 유틸리티</td>
+      <td>2.14.3</td>
+      <td>JSON 데이터 매핑 및 변환 기능 제공</td>
+    </tr>
+    <tr>
+      <td><strong>Jackson JSR310</strong></td>
+      <td>2.17.2</td>
+      <td>Java 8 날짜 및 시간 API 지원</td>
     </tr>
     <tr>
       <td><strong>Commons IO</strong></td>
+      <td>2.17.0</td>
       <td>입출력 스트림 처리 및 파일 관리</td>
     </tr>
     <tr>
       <td><strong>CoolSMS SDK</strong></td>
+      <td>4.3.0</td>
       <td>SMS 발송 기능 지원</td>
     </tr>
     <tr>
       <td rowspan="2">모니터링</td>
       <td><strong>Micrometer Prometheus</strong></td>
+      <td>1.13.6</td>
       <td>Prometheus 기반 메트릭 수집 및 모니터링</td>
     </tr>
     <tr>
       <td><strong>Spring Actuator</strong></td>
+      <td>3.3.5</td>
       <td>애플리케이션 상태 모니터링 및 관리</td>
     </tr>
     <tr>
       <td rowspan="2">테스트</td>
       <td><strong>Mockito</strong></td>
+      <td>4.11.0</td>
       <td>Mock 객체를 활용한 유닛 테스트 지원</td>
     </tr>
     <tr>
       <td><strong>WireMock</strong></td>
+      <td>3.9.2</td>
       <td>HTTP API mocking 및 테스트용 스텁 제공</td>
     </tr>
     <tr>
-      <td>클라우드</td>
-      <td><strong>Spring Cloud AWS (v2.2.6)</strong></td>
-      <td>AWS 서비스와의 통합 지원</td>
+      <td rowspan="4">로깅</td>
+      <td><strong>Logback Classic</strong></td>
+      <td>1.5.11</td>
+      <td>로깅 프레임워크 구현체</td>
+    </tr>
+    <tr>
+      <td><strong>Logback Core</strong></td>
+      <td>1.5.11</td>
+      <td>Logback의 핵심 라이브러리</td>
+    </tr>
+    <tr>
+      <td><strong>SLF4J API</strong></td>
+      <td>2.0.16</td>
+      <td>로깅 API 인터페이스</td>
+    </tr>
+    <tr>
+      <td><strong>AspectJ Weaver</strong></td>
+      <td>1.9.22.1</td>
+      <td>Aspect-Oriented Programming을 위한 Weaver</td>
+    </tr>
+    <tr>
+      <td rowspan="2">AWS SDK</td>
+      <td><strong>AWS SDK Core</strong></td>
+      <td>1.11.792</td>
+      <td>AWS 서비스와의 통합을 위한 핵심 라이브러리</td>
+    </tr>
+    <tr>
+      <td><strong>AWS SDK S3</strong></td>
+      <td>1.11.792</td>
+      <td>AWS S3 통합을 위한 라이브러리</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Swagger</td>
+      <td><strong>Swagger Annotations (Jakarta)</strong></td>
+      <td>2.2.15</td>
+      <td>API 문서화를 위한 Swagger Annotations</td>
+    </tr>
+    <tr>
+      <td><strong>Swagger Models (Jakarta)</strong></td>
+      <td>2.2.15</td>
+      <td>Swagger API 모델 정의 라이브러리</td>
+    </tr>
+    <tr>
+      <td>서버</td>
+      <td><strong>Tomcat Embed Core</strong></td>
+      <td>10.1.31</td>
+      <td>Spring Boot 내장 Tomcat 서버</td>
     </tr>
   </tbody>
 </table>
+
+
 
 <br>
 
