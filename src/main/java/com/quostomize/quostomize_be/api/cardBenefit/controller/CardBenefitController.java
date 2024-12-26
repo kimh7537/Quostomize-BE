@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.api.cardBenefit.dto.CardBenefitResponse;
 import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.cardBenefit.service.CardBenefitService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/benefit-change")
 @RequiredArgsConstructor
+@Tag(name = "카드 혜택 API", description = "카드 혜택 조회 및 변경을 제공")
 public class CardBenefitController {
     private final CardBenefitService cardBenefitService;
 
