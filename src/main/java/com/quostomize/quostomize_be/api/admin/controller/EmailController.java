@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Tag(name = "이메일 인증", description = "이메일 인증 관련 API")
+@Tag(name = "이메일 인증 API", description = "이메일 인증 및 ADMIN 권한으로 회원 이메일 발송 기능을 제공")
 @RestController
 @RequestMapping("/v1/api/admin/email")
 @RequiredArgsConstructor
