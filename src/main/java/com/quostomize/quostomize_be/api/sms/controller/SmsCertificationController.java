@@ -3,6 +3,7 @@ package com.quostomize.quostomize_be.api.sms.controller;
 import com.quostomize.quostomize_be.api.sms.dto.SmsRequest;
 import com.quostomize.quostomize_be.common.sms.service.SmsService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/api/sms")
+@Tag(name = "SMS 사용자 인증 API", description = "coolSMS API를 통해 사용자 문자 인증을 진행")
 public class SmsCertificationController {
 
     private final SmsService smsService;
