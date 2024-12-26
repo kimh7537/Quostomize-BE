@@ -9,6 +9,7 @@ import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.common.jwt.JwtTokenProvider;
 import com.quostomize.quostomize_be.domain.auth.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/member")
 @RequiredArgsConstructor
+@Tag(name = "회원 관련 API", description = "회원가입 한 사용자 정보를 조회 및 변경할 수 있음")
 public class MemberController {
 
     private final MemberService memberService;
