@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/my-card")
 @RequiredArgsConstructor
-@Tag(name = "나의 카드 페이지 관련 API", description = "나의 카드 관련 API 모음")
+@Tag(name = "나의 카드 페이지 API", description = "나의 카드 정보 조회 및 포인트 사용처 변경 기능 제공")
 public class PointUsageMethodController {
     private final PointUsageMethodService pointUsageMethodService;
 
