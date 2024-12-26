@@ -46,31 +46,31 @@
 
 ## 🔧 주요 기능
 **1. 카드 혜택 - 혜택 선택의 자유**
-![34](https://github.com/user-attachments/assets/169c99d9-17cd-4d44-b4b2-476fafd96a86)
+![34](https://github.com/user-attachments/assets/45f26a26-4ea8-4665-ba64-71f5dee50723)
 
    - 상위분류 혜택: 5가지 상위분류 선택 시 모든 가맹점에서 3% 적립
    - 맞춤형 혜택: 세부 가맹점 그룹 선택 시 최대 4% 적립
    - 유연한 변경: 30일마다 혜택 변경 가능
 
 **2. 포인트 사용처 - 포인트 사용의 다양성**
-![33](https://github.com/user-attachments/assets/232873f0-1275-4ef4-a2e6-3441331fd3a8)
+![33](https://github.com/user-attachments/assets/a24f648f-080b-4a57-828f-b4a5c10d9164)
 
    - 페이백: 카드 결제일에 포인트를 현금처럼 사용
    - 조각투자: 원하는 주식을 설정하고 포인트로 주식 매수
    - 일일복권: 매일 자정 추첨으로 최대 1만 포인트 지급
 
 **3. 카드 생성 - 실제 카드 생성 프로세스와 멱등성을 적용한 생성 기능**
-![커스터 마이징 서비스 (2)](https://github.com/user-attachments/assets/21f776ea-d0e6-4ff1-86a2-b4ab0807902b)
+![커스터 마이징 서비스 (2)](https://github.com/user-attachments/assets/7fafc8e3-ef21-4904-8dcc-689ec89de78f)
 
 **4. 주식 기능**
-![커스터 마이징 서비스 (3)](https://github.com/user-attachments/assets/cd6526f6-cc32-4161-a033-87d44d88365e)
+![커스터 마이징 서비스 (3)](https://github.com/user-attachments/assets/a01242ad-aee2-40d1-83af-632f27f15966)
 
    - RestClient를 활용한한국투자증권 OPENAPI와 연동
    - Access Token 발급 & 보유 주식 정보 기능
    - S3를 활용한 주식 이미지 다운로드
 
 **5. 복권 기능**
-![커스터 마이징 서비스 (4)](https://github.com/user-attachments/assets/5640c409-79a2-42f8-84c9-dc1ab16c1a29)
+![커스터 마이징 서비스 (4)](https://github.com/user-attachments/assets/05ed9643-defd-4d5c-9454-72345272d7c6)
 
    - Spring Batch를 활용해 복권 기능을 활성화한 사용자 집계
    - 자정(00:00)에 1/1000 확률로 포인트 획득
@@ -100,31 +100,31 @@
 ## 🔧 주요 기능
 - **정보 조회**: 관리자가 다양한 정보(이용자, 카드, 가맹점 등)를 조회할 수 있습니다.
 - **알림 메일 발송**: 관리자가 이메일을 통해 알림을 발송할 수 있는 기능입니다.
-![커스터 마이징 서비스 (5)](https://github.com/user-attachments/assets/f9334aa2-84f1-4ad4-81fd-7540a9389de2)
+![커스터 마이징 서비스 (5)](https://github.com/user-attachments/assets/30e41714-ea14-475e-af8a-370fd970cda3)
 
 
 - **서비스 관리**: 이용자, 카드, 가맹점 관리 기능을 제공합니다.
-![커스터 마이징 서비스 (6)](https://github.com/user-attachments/assets/1d3c9ccf-d4eb-473a-8656-a91c3b1b8ced)
+![커스터 마이징 서비스 (6)](https://github.com/user-attachments/assets/1b8cbbf3-1a14-47df-bca3-5d73073fef26)
 
 
 - **로그 관리**: MDC(Mapped Diagnostic Context) 필터를 적용하여 로그를 순차적으로 관리하고 분석할 수 있습니다.
-![53](https://github.com/user-attachments/assets/95f2690a-ea8e-4560-8123-2c48c2ab60f8)
-
-![54](https://github.com/user-attachments/assets/3473ca5d-82a8-46d9-971e-89c27271a158)
+![53](https://github.com/user-attachments/assets/d2bc7807-dbe0-4eb2-8dc2-96fda778b072)
+![54](https://github.com/user-attachments/assets/e537c5f8-eec2-4c03-b740-002a7ccb05ea)
 
 
 <br>
 
 ## 🌟 추가 구현사항 
 - **모니터링**: Grafana를 통해 시스템 상태를 실시간으로 모니터링하고 문제를 즉시 대응할 수 있도록 합니다.
-![커스터 마이징 서비스 (7)](https://github.com/user-attachments/assets/649bf739-7335-4c6d-a5a0-f8a64315e1d0)
+![커스터 마이징 서비스 (7)](https://github.com/user-attachments/assets/314f1451-b8ab-4e09-89f2-d342515b01d6)
 
 
 <br>
 
+---
 
 ## ⚙️ 기술 스택
-![커스터 마이징 서비스](https://github.com/user-attachments/assets/e39930b0-e8e0-450d-a3cb-465df691d9ef)
+![커스터 마이징 서비스](https://github.com/user-attachments/assets/dce3885d-09f8-4315-8b4e-1e97bddf059d)
 <br>
 
 ## 🌐 백엔드 배포 파이프라인
@@ -149,10 +149,10 @@
 <br>  
 위 과정을 통해 코드 푸시부터 배포까지의 작업이 자동화되어 빠르고 효율적으로 운영되고 있습니다.  
 
-## 🖥️ 인프라 구조도
+## 📊 인프라 구조도
 ![image](https://github.com/user-attachments/assets/aeb76baa-ece2-40fd-8ed6-18205d223d69)
 
-## 🖥️ ERD
+## 💽 ERD
 ![커스터 마이징 서비스 (1)](https://github.com/user-attachments/assets/a312fc9f-7c6f-47cd-b9e7-c6fff3264214)
 
 
@@ -219,6 +219,216 @@
 - **메인 기능 API**: 2024.11.07 - 2024.11.15
 - **배치 API**: 2024.11.01 - 2024.11.15
 - **관리자 페이지 API**: 2024.12.02 - 2024.12.09
+<br>
+
+
+## 💻 개발 환경
+<table>
+  <thead>
+    <tr>
+      <th>카테고리</th>
+      <th>라이브러리</th>
+      <th>버전</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="7">프레임워크 & 코어</td>
+      <td><strong>Spring Boot</strong></td>
+      <td>3.3.5</td>
+      <td>Spring 기반의 애플리케이션 프레임워크로 RESTful API 및 다양한 Starter 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Security</strong></td>
+      <td>6.3.4</td>
+      <td>보안 관련 인증 및 권한 관리를 위한 프레임워크</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Data JPA</strong></td>
+      <td>3.3.5</td>
+      <td>JPA를 활용한 데이터베이스 연동과 ORM 기능 제공</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Data Redis</strong></td>
+      <td>3.3.5</td>
+      <td>Redis를 활용한 데이터 캐싱 및 세션 관리</td>
+    </tr>
+    <tr>
+      <td><strong>Spring AOP</strong></td>
+      <td>6.1.14</td>
+      <td>관점 지향 프로그래밍(AOP)을 통한 로깅 및 트랜잭션 관리</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Cloud AWS</strong></td>
+      <td>2.2.6</td>
+      <td>AWS 서비스와의 통합 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Actuator</strong></td>
+      <td>3.3.5</td>
+      <td>애플리케이션 상태 모니터링 및 관리</td>
+    </tr>
+    <tr>
+      <td rowspan="6">데이터베이스 & ORM</td>
+      <td><strong>MySQL Connector</strong></td>
+      <td>8.3.0</td>
+      <td>MySQL 데이터베이스 연결을 위한 JDBC 드라이버</td>
+    </tr>
+    <tr>
+      <td><strong>QueryDSL</strong></td>
+      <td>5.0.0</td>
+      <td>타입 세이프한 방식으로 동적 SQL 생성 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Hibernate Core</strong></td>
+      <td>6.5.3.Final</td>
+      <td>JPA 구현체로 ORM 매핑 지원</td>
+    </tr>
+    <tr>
+      <td><strong>p6spy</strong></td>
+      <td>3.9.0</td>
+      <td>SQL 로깅 및 성능 모니터링 도구</td>
+    </tr>
+    <tr>
+      <td><strong>HikariCP</strong></td>
+      <td>5.1.0</td>
+      <td>고성능 데이터베이스 커넥션 풀 라이브러리</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Data Commons</strong></td>
+      <td>3.3.5</td>
+      <td>공통 데이터베이스 작업을 지원하는 스프링 모듈</td>
+    </tr>
+    <tr>
+      <td>문서화</td>
+      <td><strong>SpringDoc OpenAPI</strong></td>
+      <td>2.2.0</td>
+      <td>Swagger UI를 활용한 API 문서화 지원</td>
+    </tr>
+    <tr>
+      <td rowspan="4">보안 & 인증</td>
+      <td><strong>JWT (jjwt)</strong></td>
+      <td>0.9.1</td>
+      <td>JSON Web Token 기반 인증 및 토큰 생성/검증</td>
+    </tr>
+    <tr>
+      <td><strong>JAXB</strong></td>
+      <td>2.3.0</td>
+      <td>XML 데이터 처리와 직렬화/역직렬화 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Security Core</strong></td>
+      <td>6.3.4</td>
+      <td>Spring Security의 핵심 기능 제공</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Security Test</strong></td>
+      <td>6.3.4</td>
+      <td>보안 관련 테스트 지원</td>
+    </tr>
+    <tr>
+      <td rowspan="5">유틸리티</td>
+      <td><strong>Jackson Core</strong></td>
+      <td>2.17.2</td>
+      <td>JSON 직렬화 및 역직렬화의 핵심 라이브러리</td>
+    </tr>
+    <tr>
+      <td><strong>Jackson Databind</strong></td>
+      <td>2.14.3</td>
+      <td>JSON 데이터 매핑 및 변환 기능 제공</td>
+    </tr>
+    <tr>
+      <td><strong>Jackson JSR310</strong></td>
+      <td>2.17.2</td>
+      <td>Java 8 날짜 및 시간 API 지원</td>
+    </tr>
+    <tr>
+      <td><strong>Commons IO</strong></td>
+      <td>2.17.0</td>
+      <td>입출력 스트림 처리 및 파일 관리</td>
+    </tr>
+    <tr>
+      <td><strong>CoolSMS SDK</strong></td>
+      <td>4.3.0</td>
+      <td>SMS 발송 기능 지원</td>
+    </tr>
+    <tr>
+      <td rowspan="2">모니터링</td>
+      <td><strong>Micrometer Prometheus</strong></td>
+      <td>1.13.6</td>
+      <td>Prometheus 기반 메트릭 수집 및 모니터링</td>
+    </tr>
+    <tr>
+      <td><strong>Spring Actuator</strong></td>
+      <td>3.3.5</td>
+      <td>애플리케이션 상태 모니터링 및 관리</td>
+    </tr>
+    <tr>
+      <td rowspan="2">테스트</td>
+      <td><strong>Mockito</strong></td>
+      <td>4.11.0</td>
+      <td>Mock 객체를 활용한 유닛 테스트 지원</td>
+    </tr>
+    <tr>
+      <td><strong>WireMock</strong></td>
+      <td>3.9.2</td>
+      <td>HTTP API mocking 및 테스트용 스텁 제공</td>
+    </tr>
+    <tr>
+      <td rowspan="4">로깅</td>
+      <td><strong>Logback Classic</strong></td>
+      <td>1.5.11</td>
+      <td>로깅 프레임워크 구현체</td>
+    </tr>
+    <tr>
+      <td><strong>Logback Core</strong></td>
+      <td>1.5.11</td>
+      <td>Logback의 핵심 라이브러리</td>
+    </tr>
+    <tr>
+      <td><strong>SLF4J API</strong></td>
+      <td>2.0.16</td>
+      <td>로깅 API 인터페이스</td>
+    </tr>
+    <tr>
+      <td><strong>AspectJ Weaver</strong></td>
+      <td>1.9.22.1</td>
+      <td>Aspect-Oriented Programming을 위한 Weaver</td>
+    </tr>
+    <tr>
+      <td rowspan="2">AWS SDK</td>
+      <td><strong>AWS SDK Core</strong></td>
+      <td>1.11.792</td>
+      <td>AWS 서비스와의 통합을 위한 핵심 라이브러리</td>
+    </tr>
+    <tr>
+      <td><strong>AWS SDK S3</strong></td>
+      <td>1.11.792</td>
+      <td>AWS S3 통합을 위한 라이브러리</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Swagger</td>
+      <td><strong>Swagger Annotations (Jakarta)</strong></td>
+      <td>2.2.15</td>
+      <td>API 문서화를 위한 Swagger Annotations</td>
+    </tr>
+    <tr>
+      <td><strong>Swagger Models (Jakarta)</strong></td>
+      <td>2.2.15</td>
+      <td>Swagger API 모델 정의 라이브러리</td>
+    </tr>
+    <tr>
+      <td>서버</td>
+      <td><strong>Tomcat Embed Core</strong></td>
+      <td>10.1.31</td>
+      <td>Spring Boot 내장 Tomcat 서버</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
 <br>
 
 
@@ -311,6 +521,51 @@ Feat/input : 비밀번호 숨김 처리
         <img src="https://github.com/kimh7537.png" alt="김현우" width="150" height="150"/>
       </a>
     </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Kee0304">
+        <b>기남석</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/newgamer11">
+        <b>김영성</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/kimh7537">
+        <b>김현우</b>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">총괄 팀장<br/>Frontend 팀장<br/>FullStack 개발</td>
+    <td align="center">FullStack 개발 팀원</td>
+    <td align="center">Backend 팀장<br/>FullStack 개발</td>
+  </tr>
+  <tr>
+    <td align="center">
+      스프링 배치 복권 기능 구현 <br>
+      JPA dirty checking을 고려한 API 통합 <br>
+      JUnit을 통한 단위테스트 코드 작성
+    </td>
+    <td align="center">
+      - <br>
+      - <br>
+      -
+    </td>
+    <td align="center">
+      백엔드 프로젝트 세팅 <br>
+      CICD & 인프라 구축 <br>
+      인증, 인가 구현 <br>
+      외부 API 연결(한국투자증권OPENAPI, SMTP) <br>
+      카드 생성 과정에서 멱등성 적용
+    </td>
+  </tr>
+</table>
+<table>
+  <tr>
     <td align="center">
       <a href="https://github.com/bangsk2">
         <img src="https://github.com/bangsk2.png" alt="방성경" width="150" height="150"/>
@@ -327,22 +582,7 @@ Feat/input : 비밀번호 숨김 처리
       </a>
     </td>
   </tr>
-   <tr>
-    <td align="center">
-      <a href="https://github.com/Kee0304">
-        <b>기남석</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/newgamer11">
-        <b>김영성</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/kimh7537">
-        <b>김현우</b>
-      </a>
-    </td>
+  <tr>
     <td align="center">
       <a href="https://github.com/bangsk2">
         <b>방성경</b>
@@ -360,70 +600,36 @@ Feat/input : 비밀번호 숨김 처리
     </td>
   </tr>
   <tr>
-   <td align="center">총괄 팀장<br/>Frontend 팀장<br/>FullStack 개발</td>
-   <td align="center">FullStack 개발 팀원</td>
-   <td align="center">Backend 팀장<br/>FullStack 개발</td>
-   <td align="center">FullStack 개발 팀원</td>
-   <td align="center">PM 팀장<br/>FullStack 개발 팀원</td>
-   <td align="center">FullStack 개발 팀원</td>
- </tr>
+    <td align="center">FullStack 개발 팀원</td>
+    <td align="center">PM<br/>FullStack 개발 팀원</td>
+    <td align="center">FullStack 개발 팀원</td>
+  </tr>
   <tr>
     <td align="center">
-      스프링 배치 복권 기능 구현 <br>
-      내용 입력 <br>
-      내용 입력
+      - <br>
+      - <br>
+      -
     </td>
     <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
+      ELB 세팅, ERD 설계 등 인프라 구축 <br>
+      @Scheduled를 활용한 혜택 예약 API 개발 <br>
+      관리자 페이지 기능을 위한 전체 API 개발
     </td>
     <td align="center">
-      인증, 인가 구현 <br>
-      CICD & 인프라 구축 <br>
-      백엔드 프로젝트 세팅
-    </td>
-    <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
-    </td>
-    <td align="center">
-      내용 입력 <br>
-      내용 입력 <br>
-      내용 입력
-    </td>
-    <td align="center">
-      MDC 로깅 구현 <br>
-      내용 입력 <br>
-      내용 입력
+      복권 참여자, 카드 생성 API <br>
+      SMS 사용자 2차 인증 구현 <br>
+      MDC 활용한 로그 추적 구현 <br>
+      Spring AOP 사용자 활동 로깅
     </td>
   </tr>
 </table>
 
 <br>
 
-## 👥 팀원 개인별 회고
+---
 
-### 기남석
-- ~
-  
-### 김영성
-- ~
-
-### 김현우
-- ~
-
-### 방성경
-- ~
-
-### 오선민
-- ~
-
-### 홍찬의
-- ~
-
-<br>
+## 📝 회고
+[팀원 최종 회고 작성](https://ohsanman.notion.site/b60218a5e80f4dc494dd02e4a0a0f976?pvs=4)
 
 ---
 [요구사항 정의서.pdf](https://github.com/user-attachments/files/18225291/default.pdf)
