@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/stocks")
 @RequiredArgsConstructor
-@Tag(name = "위시리스트 API", description = "위시리스트를 조회, 변경, 수정할 수 있는 api 입니다.")
+@Tag(name = "주식 위시리스트 API", description = "위시리스트를 조회, 변경, 수정 기능 제공")
 public class StockInterestController {
 
 
@@ -26,7 +26,7 @@ public class StockInterestController {
 
     // 조회 기능
     @GetMapping("/select")
-    @Operation(summary = "위시리스토 조회",description = "현재 적용 되어있는 위시리스트를 조회합니다.")
+    @Operation(summary = "위시리스트 조회",description = "현재 적용 되어있는 위시리스트를 조회합니다.")
     public ResponseEntity<ResponseDTO<List<StockInterestDto>>> getStockWishList(@RequestParam Long cardId) {
         List<StockInterestDto> stockWishList = stockInterestService.getStockWishList(cardId);
         return ResponseEntity.ok(new ResponseDTO<>(stockWishList));
@@ -34,7 +34,7 @@ public class StockInterestController {
 
     // 삭제 기능
     @DeleteMapping("/select")
-    @Operation(summary = "위시리스토 삭제",description = "선택한 위시항목에 대해서 삭제합니다.")
+    @Operation(summary = "위시리스트 삭제",description = "선택한 위시항목에 대해서 삭제합니다.")
     public ResponseEntity<Void> deleteStock(@RequestParam int order, @RequestParam Long cardId){
         stockInterestService.deleteStock(order,cardId);
         return ResponseEntity.noContent().build();
@@ -42,7 +42,7 @@ public class StockInterestController {
 
     // 순위 변경 기능
     @PatchMapping("/select/change-rank")
-    @Operation(summary = "위시리스토 순위변경",description = "선택 되어있는 위시리스트의 순위(priority)를 변경 합니다.")
+    @Operation(summary = "위시리스트 순위변경",description = "선택 되어있는 위시리스트의 순위(priority)를 변경 합니다.")
     public ResponseEntity<Void> switchingStock(@RequestBody List<StockInterestRequestDto> dtos){
         stockInterestService.switchStock(dtos);
         return  ResponseEntity.noContent().build();
