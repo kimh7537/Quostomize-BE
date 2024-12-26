@@ -13,6 +13,7 @@ import com.quostomize.quostomize_be.domain.auth.enums.MemberRole;
 import com.quostomize.quostomize_be.domain.customizer.card.enums.CardStatus;
 import com.quostomize.quostomize_be.domain.customizer.payment.enums.RecordSearchType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/api/admin")
+@Tag(name = "관리자 API", description = "ADMIN 권한으로 카드, 멤버, 결제내역 관리 기능을 제공")
 public class AdminController {
 
     private final AdminService adminService;
