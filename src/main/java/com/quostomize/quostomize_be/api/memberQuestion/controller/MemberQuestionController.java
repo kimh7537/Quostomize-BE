@@ -9,6 +9,7 @@ import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.auth.entity.Member;
 import com.quostomize.quostomize_be.domain.customizer.memberQuestion.service.MemberQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/api/qnas")
+@Tag(name = "회원 Q&A API", description = "사용자 Q&A 등록, 조회할 수 있음")
 public class MemberQuestionController {
 
     private final MemberQuestionService memberQuestionService;
