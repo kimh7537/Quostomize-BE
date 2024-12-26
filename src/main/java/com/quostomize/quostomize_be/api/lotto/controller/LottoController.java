@@ -8,6 +8,7 @@ import com.quostomize.quostomize_be.domain.customizer.lotto.service.DailyLottoWi
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.LottoService;
 import com.quostomize.quostomize_be.domain.customizer.lotto.service.LottoWinnerRecordService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/lottery")
 @RequiredArgsConstructor
+@Tag(name = "복권 관련 API", description = "복권 참여자 및 당첨자를 관리할 수 있음")
 public class LottoController {
 
     private final LottoService lottoService;
