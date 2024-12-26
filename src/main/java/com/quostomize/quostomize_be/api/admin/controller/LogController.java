@@ -5,6 +5,7 @@ import com.quostomize.quostomize_be.domain.admin.service.AdminService;
 import com.quostomize.quostomize_be.domain.log.entity.SystemLog;
 import com.quostomize.quostomize_be.domain.log.enums.LogType;
 import com.quostomize.quostomize_be.domain.log.repository.SystemLogRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/admin/logs")
 @RequiredArgsConstructor
+@Tag(name = "로그 관리 API", description = "ADMIN 권한으로 시스템 로그 조회 기능을 제공")
 public class LogController {
 
     private final SystemLogRepository systemLogRepository;
