@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/v1/api/card-applicants")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "카드 신청 API", description = "카드를 신청을 생성하거나 정보를 조회하는 API입니다.")
+@Tag(name = "카드 신청 API", description = "카드를 신청을 생성하거나 신청 정보 조회 기능 제공")
 public class CardApplicantInfoController {
 
     private final CardApplicantInfoService cardApplicantInfoService;
