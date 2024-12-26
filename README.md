@@ -157,7 +157,7 @@
 
 ## ♻️ API
 ### 👉🏻 [Swagger (현재 AWS 다운으로 localhost 접속 가능)](http://13.124.43.174:8080/swagger-ui/index.html)
-![커스터 마이징 서비스 (2)](https://github.com/user-attachments/assets/576eab2f-2af2-4c37-beb6-809ebb16c5fc)
+![커스터 마이징 서비스 (2)](https://github.com/user-attachments/assets/be6608e0-420d-4ffa-8114-459379940c82)
 
 ## 🗂️ 주요 폴더 구조
 **백엔드**
