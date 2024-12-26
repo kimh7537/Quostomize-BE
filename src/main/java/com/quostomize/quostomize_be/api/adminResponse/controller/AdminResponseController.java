@@ -6,6 +6,7 @@ import com.quostomize.quostomize_be.common.dto.ResponseDTO;
 import com.quostomize.quostomize_be.domain.customizer.adminResponse.entity.AdminResponse;
 import com.quostomize.quostomize_be.domain.customizer.adminResponse.service.AdminResponseService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/api/qnas")
+@Tag(name = "관리자 Q&A API", description = "관리자 Q&A 답변 등록, 조회할 수 있음")
 public class AdminResponseController {
 
     private AdminResponseService adminResponseService;
