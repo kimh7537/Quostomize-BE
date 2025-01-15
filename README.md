@@ -553,9 +553,8 @@ Feat/input : 비밀번호 숨김 처리
       JUnit을 통한 단위테스트 코드 작성
     </td>
     <td align="center">
-      - <br>
-      - <br>
-      -
+      투자 페이지 API 개발 <br>
+      회원가입 페이지 API 개발 <br>
     </td>
     <td align="center">
       백엔드 프로젝트 세팅 <br>
